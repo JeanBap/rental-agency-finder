@@ -5,6 +5,13 @@
   <url><loc>https://www.rentalagencyfinder.com/for-agencies/</loc><lastmod>2026-04-30</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.rentalagencyfinder.com/blog/</loc><lastmod>2026-04-30</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
   <url><loc>https://www.rentalagencyfinder.com/about/</loc><lastmod>2026-04-30</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <!-- Blog posts -->
+  <url><loc>https://www.rentalagencyfinder.com/blog/complete-guide-rental-agencies-europe</loc><lastmod>2026-04-30</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.rentalagencyfinder.com/blog/best-rental-agencies-barcelona</loc><lastmod>2026-04-30</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.rentalagencyfinder.com/blog/best-rental-agencies-berlin</loc><lastmod>2026-04-30</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.rentalagencyfinder.com/blog/best-rental-agencies-lisbon</loc><lastmod>2026-04-30</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.rentalagencyfinder.com/blog/best-rental-agencies-paris</loc><lastmod>2026-04-30</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.rentalagencyfinder.com/blog/best-rental-agencies-amsterdam</loc><lastmod>2026-04-30</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <!-- Country pages -->
   <url><loc>https://www.rentalagencyfinder.com/agencies/spain/</loc><lastmod>2026-04-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://www.rentalagencyfinder.com/agencies/portugal/</loc><lastmod>2026-04-30</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
