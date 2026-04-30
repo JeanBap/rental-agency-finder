@@ -184,36 +184,152 @@ function initSearch() {
 }
 
 // === AGENCIES PAGE ===
+const AGENCIES_PER_PAGE = 24;
+let currentPage = 1;
+let totalAgencies = 0;
+let currentFilters = {};
+
 async function loadAgenciesPage() {
   const path = window.location.pathname.replace('/agencies', '').replace(/^\//, '').replace(/\/$/, '');
   const parts = path.split('/').filter(Boolean);
   const params = new URLSearchParams(window.location.search);
   const type = params.get('type');
+  const page = parseInt(params.get('page')) || 1;
+  currentPage = page;
 
   let countrySlug = parts[0] || null;
   let citySlug = parts[1] || null;
+  let countryName = null, cityName = null, countryFlag = '';
 
-  // Load data
+  // Build base query
   let query = sb.from('raf_agencies')
-    .select('*, raf_cities(name, slug), raf_countries(name, slug, flag_emoji)')
+    .select('*, raf_cities(name, slug), raf_countries(name, slug, flag_emoji)', { count: 'exact' })
     .eq('status', 'active')
     .order('featured', { ascending: false })
     .order('our_rating', { ascending: false, nullsFirst: false });
 
   if (countrySlug) {
     const { data: country } = await sb.from('raf_countries').select('*').eq('slug', countrySlug).single();
-    if (country) query = query.eq('country_id', country.id);
+    if (country) {
+      query = query.eq('country_id', country.id);
+      countryName = country.name;
+      countryFlag = country.flag_emoji || '';
+    }
   }
   if (citySlug) {
     const { data: city } = await sb.from('raf_cities').select('*').eq('slug', citySlug).single();
-    if (city) query = query.eq('city_id', city.id);
+    if (city) {
+      query = query.eq('city_id', city.id);
+      cityName = city.name;
+    }
   }
   if (type) {
     query = query.contains('rental_types', [type]);
   }
 
-  const { data: agencies } = await query.limit(50);
+  currentFilters = { countrySlug, citySlug, type };
+
+  // Paginated fetch
+  const from = (currentPage - 1) * AGENCIES_PER_PAGE;
+  const to = from + AGENCIES_PER_PAGE - 1;
+  const { data: agencies, count } = await query.range(from, to);
+  totalAgencies = count || 0;
+
+  // Dynamic page title, breadcrumb, meta
+  updatePageHeader(countryName, cityName, countryFlag, countrySlug, citySlug, type);
   renderAgencyList(agencies || [], countrySlug, citySlug, type);
+  renderPagination();
+}
+
+function updatePageHeader(countryName, cityName, countryFlag, countrySlug, citySlug, type) {
+  const titleEl = document.getElementById('pageTitle');
+  const descEl = document.getElementById('pageDesc');
+  const breadEl = document.getElementById('breadcrumb');
+  const typeLabel = type ? type.replace('_', '-') : null;
+
+  // Build title
+  let title = 'Browse Rental Agencies Across Europe';
+  let desc = `Find and compare rental agencies in 36 countries and 64 cities`;
+  if (cityName && countryName) {
+    title = typeLabel ? `${capitalize(typeLabel)} Rental Agencies in ${cityName}, ${countryName}` : `Rental Agencies in ${cityName}, ${countryName}`;
+    desc = `${totalAgencies} ${typeLabel || ''} rental agencies in ${cityName}. Compare, read reviews, and find the right agency for your rental needs.`;
+  } else if (countryName) {
+    title = typeLabel ? `${capitalize(typeLabel)} Rental Agencies in ${countryName}` : `${countryFlag} Rental Agencies in ${countryName}`;
+    desc = `${totalAgencies} ${typeLabel || ''} rental agencies across ${countryName}. Browse by city, read reviews, and compare.`;
+  } else if (typeLabel) {
+    title = `${capitalize(typeLabel)} Rental Agencies in Europe`;
+    desc = `Browse ${totalAgencies} ${typeLabel} rental agencies across Europe.`;
+  }
+
+  if (titleEl) titleEl.textContent = title;
+  if (descEl) descEl.textContent = desc.trim();
+  document.title = `${title} | Rental Agency Finder`;
+
+  // Build breadcrumb
+  if (breadEl) {
+    let crumbs = '<a href="/">Home</a> / <a href="/agencies">Agencies</a>';
+    if (countryName) crumbs += ` / <a href="/agencies/${countrySlug}">${countryName}</a>`;
+    if (cityName) crumbs += ` / <a href="/agencies/${countrySlug}/${citySlug}">${cityName}</a>`;
+    if (typeLabel) crumbs += ` / <span>${capitalize(typeLabel)}</span>`;
+    else if (!cityName && !countryName) crumbs = '<a href="/">Home</a> / <span>Agencies</span>';
+    breadEl.innerHTML = crumbs;
+  }
+}
+
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function renderPagination() {
+  const totalPages = Math.ceil(totalAgencies / AGENCIES_PER_PAGE);
+  if (totalPages <= 1) return;
+
+  const container = document.querySelector('.agency-list') || document.querySelector('main .container');
+  if (!container) return;
+
+  const { countrySlug, citySlug, type } = currentFilters;
+  let baseUrl = '/agencies';
+  if (countrySlug) baseUrl += `/${countrySlug}`;
+  if (citySlug) baseUrl += `/${citySlug}`;
+  const typeParam = type ? `type=${type}&` : '';
+
+  let html = '<div class="pagination" style="display:flex;justify-content:center;gap:8px;margin-top:32px;flex-wrap:wrap;">';
+
+  if (currentPage > 1) {
+    html += `<a href="${baseUrl}?${typeParam}page=${currentPage - 1}" class="btn btn-sm btn-secondary">Previous</a>`;
+  }
+
+  const maxVisible = 7;
+  let startPage = Math.max(1, currentPage - 3);
+  let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+  if (endPage - startPage < maxVisible - 1) startPage = Math.max(1, endPage - maxVisible + 1);
+
+  if (startPage > 1) {
+    html += `<a href="${baseUrl}?${typeParam}page=1" class="btn btn-sm btn-secondary">1</a>`;
+    if (startPage > 2) html += '<span style="padding:8px 4px;color:var(--text-light);">...</span>';
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
+    if (i === currentPage) {
+      html += `<span class="btn btn-sm btn-primary" style="pointer-events:none;">${i}</span>`;
+    } else {
+      html += `<a href="${baseUrl}?${typeParam}page=${i}" class="btn btn-sm btn-secondary">${i}</a>`;
+    }
+  }
+
+  if (endPage < totalPages) {
+    if (endPage < totalPages - 1) html += '<span style="padding:8px 4px;color:var(--text-light);">...</span>';
+    html += `<a href="${baseUrl}?${typeParam}page=${totalPages}" class="btn btn-sm btn-secondary">${totalPages}</a>`;
+  }
+
+  if (currentPage < totalPages) {
+    html += `<a href="${baseUrl}?${typeParam}page=${currentPage + 1}" class="btn btn-sm btn-secondary">Next</a>`;
+  }
+
+  html += '</div>';
+  html += `<p style="text-align:center;color:var(--text-light);margin-top:12px;font-size:0.9rem;">Showing ${(currentPage-1)*AGENCIES_PER_PAGE+1}-${Math.min(currentPage*AGENCIES_PER_PAGE, totalAgencies)} of ${totalAgencies} agencies</p>`;
+
+  container.insertAdjacentHTML('beforeend', html);
 }
 
 function renderAgencyList(agencies, country, city, type) {
