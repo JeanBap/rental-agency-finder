@@ -151,11 +151,21 @@ function renderCityGrid() {
 }
 
 async function loadStats() {
-  const { count: agencyCount } = await sb.from('raf_agencies').select('*', { count: 'exact', head: true });
-  const { count: reviewCount } = await sb.from('raf_reviews').select('*', { count: 'exact', head: true }).eq('status', 'approved');
   const el = (id) => document.getElementById(id);
-  if (el('statAgencies')) el('statAgencies').textContent = agencyCount || '0';
-  if (el('statReviews')) el('statReviews').textContent = reviewCount || '0';
+  try {
+    const [agencyRes, reviewRes, countryRes, cityRes] = await Promise.all([
+      sb.from('raf_agencies').select('id', { count: 'exact', head: true }),
+      sb.from('raf_reviews').select('id', { count: 'exact', head: true }),
+      sb.from('raf_countries').select('id', { count: 'exact', head: true }),
+      sb.from('raf_cities').select('id', { count: 'exact', head: true })
+    ]);
+    if (el('statAgencies')) el('statAgencies').textContent = (agencyRes.count || 0).toLocaleString();
+    if (el('statReviews')) el('statReviews').textContent = (reviewRes.count || 0).toLocaleString();
+    if (el('statCountries')) el('statCountries').textContent = countryRes.count || 0;
+    if (el('statCities')) el('statCities').textContent = cityRes.count || 0;
+  } catch (e) {
+    console.error('Stats load error:', e);
+  }
 }
 
 function initSearch() {
