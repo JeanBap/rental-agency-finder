@@ -1,0 +1,22 @@
+# Rental Agency Finder
+> The first European-wide directory for finding, comparing, and reviewing rental agencies.
+
+Rental Agency Finder helps tenants find trustworthy rental agencies across 36 European countries. Unlike property listing sites (Airbnb, Booking.com, Flatio), we focus on the agencies themselves. Users can browse agencies by country, city, and rental type (short-term, mid-term, long-term), read verified reviews from real tenants, and access contact details.
+
+## Key pages
+- Homepage: https://www.rentalagencyfinder.com/
+- Browse agencies: https://www.rentalagencyfinder.com/agencies/
+- For agencies (pricing): https://www.rentalagencyfinder.com/for-agencies/
+- Blog: https://www.rentalagencyfinder.com/blog/
+
+## Coverage
+36 European countries, 60+ cities, covering short-term (days/weeks), mid-term (1-11 months), and long-term (12+ months) rental agencies.
+
+## Countries covered
+Spain, Portugal, Italy, Greece, France, Germany, Netherlands, United Kingdom, Ireland, Belgium, Austria, Switzerland, Czech Republic, Poland, Hungary, Croatia, Slovenia, Malta, Cyprus, Sweden, Denmark, Norway, Finland, Estonia, Latvia, Lithuania, Romania, Bulgaria, Slovakia, Luxembourg, Iceland, Serbia, Montenegro, Albania, North Macedonia, Turkey.
+
+## For agencies
+Rental agencies can list for free or subscribe to paid plans (Starter EUR 29/mo, Advanced EUR 79/mo, Pro EUR 199/mo) for featured placement, verified badges, referral leads, and blog coverage.
+
+## Contact
+info@rentalagencyfinder.com
