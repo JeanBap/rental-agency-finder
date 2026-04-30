@@ -422,13 +422,19 @@ function checkUserUnlock() {
 
 // === BLOG ===
 async function loadBlogPage() {
+  const grid = document.querySelector('.blog-grid');
+  if (!grid) return;
+
+  // If static blog cards already exist in the HTML, keep them
+  if (grid.querySelectorAll('.blog-card').length > 0) return;
+
+  // Otherwise try loading from DB
   const { data: posts } = await sb.from('raf_blog_posts')
     .select('*')
     .eq('status', 'published')
     .order('published_at', { ascending: false });
 
-  const grid = document.querySelector('.blog-grid');
-  if (!grid || !posts) return;
+  if (!posts || posts.length === 0) return;
 
   grid.innerHTML = posts.map(p => `
     <a href="/blog/${p.slug}" class="blog-card">
