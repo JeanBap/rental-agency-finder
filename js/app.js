@@ -208,12 +208,14 @@ async function loadAgenciesPage() {
     .order('featured', { ascending: false })
     .order('our_rating', { ascending: false, nullsFirst: false });
 
+  let countryData = null, cityData = null;
   if (countrySlug) {
     const { data: country } = await sb.from('raf_countries').select('*').eq('slug', countrySlug).single();
     if (country) {
       query = query.eq('country_id', country.id);
       countryName = country.name;
       countryFlag = country.flag_emoji || '';
+      countryData = country;
     }
   }
   if (citySlug) {
@@ -221,6 +223,7 @@ async function loadAgenciesPage() {
     if (city) {
       query = query.eq('city_id', city.id);
       cityName = city.name;
+      cityData = city;
     }
   }
   if (type) {
@@ -235,27 +238,37 @@ async function loadAgenciesPage() {
   const { data: agencies, count } = await query.range(from, to);
   totalAgencies = count || 0;
 
-  // Dynamic page title, breadcrumb, meta
-  updatePageHeader(countryName, cityName, countryFlag, countrySlug, citySlug, type);
+  // Dynamic page title, breadcrumb, meta, SEO intro
+  updatePageHeader(countryName, cityName, countryFlag, countrySlug, citySlug, type, countryData, cityData);
   renderAgencyList(agencies || [], countrySlug, citySlug, type);
   renderPagination();
 }
 
-function updatePageHeader(countryName, cityName, countryFlag, countrySlug, citySlug, type) {
+function updatePageHeader(countryName, cityName, countryFlag, countrySlug, citySlug, type, countryData, cityData) {
   const titleEl = document.getElementById('pageTitle');
   const descEl = document.getElementById('pageDesc');
   const breadEl = document.getElementById('breadcrumb');
   const typeLabel = type ? type.replace('_', '-') : null;
 
-  // Build title
+  // Build title and description, preferring DB seo fields
   let title = 'Browse Rental Agencies Across Europe';
-  let desc = `Find and compare rental agencies in 36 countries and 64 cities`;
+  let desc = 'Find and compare rental agencies in 36 countries and 64 cities';
+  let seoIntro = '';
+
   if (cityName && countryName) {
-    title = typeLabel ? `${capitalize(typeLabel)} Rental Agencies in ${cityName}, ${countryName}` : `Rental Agencies in ${cityName}, ${countryName}`;
-    desc = `${totalAgencies} ${typeLabel || ''} rental agencies in ${cityName}. Compare, read reviews, and find the right agency for your rental needs.`;
+    title = (cityData && cityData.seo_title) ? cityData.seo_title
+      : typeLabel ? `${capitalize(typeLabel)} Rental Agencies in ${cityName}, ${countryName}`
+      : `Rental Agencies in ${cityName}, ${countryName}`;
+    desc = (cityData && cityData.seo_description) ? cityData.seo_description
+      : `${totalAgencies} ${typeLabel || ''} rental agencies in ${cityName}. Compare, read reviews, and find the right agency for your rental needs.`;
+    seoIntro = (cityData && cityData.seo_intro) ? cityData.seo_intro : '';
   } else if (countryName) {
-    title = typeLabel ? `${capitalize(typeLabel)} Rental Agencies in ${countryName}` : `${countryFlag} Rental Agencies in ${countryName}`;
-    desc = `${totalAgencies} ${typeLabel || ''} rental agencies across ${countryName}. Browse by city, read reviews, and compare.`;
+    title = (countryData && countryData.seo_title) ? countryData.seo_title
+      : typeLabel ? `${capitalize(typeLabel)} Rental Agencies in ${countryName}`
+      : `${countryFlag} Rental Agencies in ${countryName}`;
+    desc = (countryData && countryData.seo_description) ? countryData.seo_description
+      : `${totalAgencies} ${typeLabel || ''} rental agencies across ${countryName}. Browse by city, read reviews, and compare.`;
+    seoIntro = (countryData && countryData.seo_intro) ? countryData.seo_intro : '';
   } else if (typeLabel) {
     title = `${capitalize(typeLabel)} Rental Agencies in Europe`;
     desc = `Browse ${totalAgencies} ${typeLabel} rental agencies across Europe.`;
@@ -265,6 +278,22 @@ function updatePageHeader(countryName, cityName, countryFlag, countrySlug, cityS
   if (descEl) descEl.textContent = desc.trim();
   document.title = `${title} | Rental Agency Finder`;
 
+  // Update meta description
+  let metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) metaDesc.setAttribute('content', desc.trim());
+
+  // Render SEO intro paragraph
+  let introEl = document.getElementById('seoIntro');
+  if (!introEl && seoIntro) {
+    introEl = document.createElement('p');
+    introEl.id = 'seoIntro';
+    introEl.className = 'seo-intro';
+    introEl.style.cssText = 'max-width:800px;margin:0 auto 24px;font-size:15px;line-height:1.7;color:#555;text-align:center;';
+    const headerSection = document.querySelector('.page-header .container') || descEl?.parentElement;
+    if (headerSection) headerSection.appendChild(introEl);
+  }
+  if (introEl) introEl.textContent = seoIntro || '';
+
   // Build breadcrumb
   if (breadEl) {
     let crumbs = '<a href="/">Home</a> / <a href="/agencies">Agencies</a>';
@@ -273,6 +302,41 @@ function updatePageHeader(countryName, cityName, countryFlag, countrySlug, cityS
     if (typeLabel) crumbs += ` / <span>${capitalize(typeLabel)}</span>`;
     else if (!cityName && !countryName) crumbs = '<a href="/">Home</a> / <span>Agencies</span>';
     breadEl.innerHTML = crumbs;
+  }
+
+  // Inject CollectionPage + BreadcrumbList JSON-LD
+  if (countryName || cityName) {
+    const pageUrl = citySlug
+      ? `https://www.rentalagencyfinder.com/agencies/${countrySlug}/${citySlug}`
+      : `https://www.rentalagencyfinder.com/agencies/${countrySlug}`;
+    const breadcrumbItems = [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.rentalagencyfinder.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Agencies", "item": "https://www.rentalagencyfinder.com/agencies" }
+    ];
+    if (countryName) {
+      breadcrumbItems.push({ "@type": "ListItem", "position": 3, "name": countryName, "item": `https://www.rentalagencyfinder.com/agencies/${countrySlug}` });
+    }
+    if (cityName) {
+      breadcrumbItems.push({ "@type": "ListItem", "position": 4, "name": cityName, "item": pageUrl });
+    }
+
+    const jsonLd = [
+      { "@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": breadcrumbItems },
+      { "@context": "https://schema.org", "@type": "CollectionPage", "name": title, "description": desc.trim(), "url": pageUrl,
+        "numberOfItems": totalAgencies,
+        "isPartOf": { "@type": "WebSite", "name": "Rental Agency Finder", "url": "https://www.rentalagencyfinder.com/" }
+      }
+    ];
+
+    // Remove previous dynamic JSON-LD if any
+    document.querySelectorAll('script[data-raf-jsonld]').forEach(el => el.remove());
+    jsonLd.forEach(obj => {
+      const s = document.createElement('script');
+      s.type = 'application/ld+json';
+      s.setAttribute('data-raf-jsonld', 'true');
+      s.textContent = JSON.stringify(obj);
+      document.head.appendChild(s);
+    });
   }
 }
 
