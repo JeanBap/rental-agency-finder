@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Browse Rental Agencies Across Europe | Rental Agency Finder</title>
+  <meta name="description" content="Browse and compare rental agencies across 36 European countries. Filter by country, city, and rental type. Read verified reviews from real tenants.">
+  <link rel="canonical" href="https://www.rentalagencyfinder.com/agencies/">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Browse Rental Agencies Across Europe">
+  <meta property="og:description" content="Browse and compare rental agencies across 36 European countries.">
+  <meta property="og:url" content="https://www.rentalagencyfinder.com/agencies/">
+  <meta property="og:image" content="https://www.rentalagencyfinder.com/images/og-image.png">
+  <meta property="og:site_name" content="Rental Agency Finder">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Rental Agencies in Europe",
+    "description": "Browse and compare rental agencies across 36 European countries.",
+    "url": "https://www.rentalagencyfinder.com/agencies/",
+    "isPartOf": {"@type": "WebSite", "name": "Rental Agency Finder", "url": "https://www.rentalagencyfinder.com/"}
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.rentalagencyfinder.com/"},
+      {"@type": "ListItem", "position": 2, "name": "Agencies", "item": "https://www.rentalagencyfinder.com/agencies/"}
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#1a56db"/><path d="M7 20V10l7-4 7 4v10l-7 4-7-4z" stroke="#fff" stroke-width="1.5" fill="none"/><circle cx="14" cy="14" r="3" fill="#fff"/></svg>
+        <span>RentalAgencyFinder</span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="/">Home</a>
+        <a href="/agencies">Browse Agencies</a>
+        <a href="/blog">Blog</a>
+        <a href="/for-agencies" class="nav-cta">For Agencies</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <section class="page-header">
+    <div class="container">
+      <div class="breadcrumb" id="breadcrumb"><a href="/">Home</a> / <span>Agencies</span></div>
+      <h1 id="pageTitle">Browse Rental Agencies Across Europe</h1>
+      <p id="pageDesc">Find and compare rental agencies in 36 countries and 60+ cities</p>
+    </div>
+  </section>
+
+  <main>
+    <div class="container">
+      <!-- Filters -->
+      <div class="search-box" style="margin-top: -30px; margin-bottom: 32px; position: relative; z-index: 10;">
+        <div class="search-field">
+          <label for="filterCountry">Country</label>
+          <select id="filterCountry"><option value="">All countries</option></select>
+        </div>
+        <div class="search-field">
+          <label for="filterCity">City</label>
+          <select id="filterCity" disabled><option value="">Select country first</option></select>
+        </div>
+        <div class="search-field">
+          <label for="filterType">Rental Type</label>
+          <select id="filterType">
+            <option value="">Any type</option>
+            <option value="short_term">Short-term</option>
+            <option value="mid_term">Mid-term</option>
+            <option value="long_term">Long-term</option>
+          </select>
+        </div>
+        <button class="btn btn-primary search-btn" id="filterBtn">Filter</button>
+      </div>
+
+      <div class="agency-list" id="agencyList">
+        <div class="empty-state">
+          <p>Loading agencies...</p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- REVIEW MODAL (same as homepage) -->
+  <div class="modal-overlay" id="reviewModal">
+    <div class="modal">
+      <button class="modal-close" id="closeReviewModal">&times;</button>
+      <h2>Write a Review</h2>
+      <p>Share your experience with a rental agency to unlock contact details for all agencies.</p>
+      <form id="reviewForm">
+        <div class="form-group"><label for="revAgency">Which agency did you use?</label><input type="text" id="revAgency" placeholder="Agency name" required></div>
+        <div class="form-group"><label for="revCity">In which city?</label><input type="text" id="revCity" placeholder="City" required></div>
+        <div class="form-group"><label for="revType">Rental type</label><select id="revType" required><option value="">Select</option><option value="short_term">Short-term</option><option value="mid_term">Mid-term</option><option value="long_term">Long-term</option></select></div>
+        <div class="form-group"><label>Rating</label><div class="star-rating" id="starRating"><span data-val="1">&#9733;</span><span data-val="2">&#9733;</span><span data-val="3">&#9733;</span><span data-val="4">&#9733;</span><span data-val="5">&#9733;</span></div><input type="hidden" id="revRating" value="0"></div>
+        <div class="form-group"><label for="revTitle">Review title</label><input type="text" id="revTitle" placeholder="Summarize your experience" required></div>
+        <div class="form-group"><label for="revBody">Your review</label><textarea id="revBody" rows="4" placeholder="What was your experience like?" required></textarea></div>
+        <div class="form-row"><div class="form-group"><label for="revPros">Pros</label><input type="text" id="revPros" placeholder="Best things"></div><div class="form-group"><label for="revCons">Cons</label><input type="text" id="revCons" placeholder="Could improve"></div></div>
+        <div class="form-group"><label for="revName">Your name</label><input type="text" id="revName" placeholder="First name" required></div>
+        <div class="form-group"><label for="revEmail">Your email (not public)</label><input type="email" id="revEmail" placeholder="email@example.com" required></div>
+        <div class="form-group"><label class="checkbox-label"><input type="checkbox" id="revRecommend" checked> I would recommend this agency</label></div>
+        <button type="submit" class="btn btn-primary btn-full">Submit Review & Unlock Contact Details</button>
+      </form>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-col"><h4>Rental Agency Finder</h4><p>The first European-wide directory for finding and reviewing rental agencies.</p></div>
+      <div class="footer-col"><h4>Browse</h4><a href="/agencies">All Agencies</a><a href="/agencies?type=short_term">Short-Term</a><a href="/agencies?type=mid_term">Mid-Term</a><a href="/agencies?type=long_term">Long-Term</a></div>
+      <div class="footer-col"><h4>Resources</h4><a href="/blog">Blog</a><a href="/about">About</a><a href="/for-agencies">For Agencies</a></div>
+      <div class="footer-col"><h4>Popular</h4><a href="/agencies/spain">Spain</a><a href="/agencies/italy">Italy</a><a href="/agencies/portugal">Portugal</a><a href="/agencies/greece">Greece</a></div>
+    </div>
+    <div class="container footer-bottom"><p>&copy; 2026 Rental Agency Finder. All rights reserved.</p></div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="/js/app.js"></script>
+  <script>
+    // Agencies page init
+    (async () => {
+      await loadCountries();
+      // Populate filter dropdown
+      const sel = document.getElementById('filterCountry');
+      countries.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.slug;
+        opt.textContent = `${c.flag_emoji} ${c.name}`;
+        sel.appendChild(opt);
+      });
+      // City dropdown on country change
+      sel.addEventListener('change', async () => {
+        const citySel = document.getElementById('filterCity');
+        citySel.innerHTML = '<option value="">Loading...</option>';
+        citySel.disabled = true;
+        if (!sel.value) { citySel.innerHTML = '<option value="">Select country first</option>'; return; }
+        const country = countries.find(c => c.slug === sel.value);
+        if (!country) return;
+        const { data } = await sb.from('raf_cities').select('name, slug').eq('country_id', country.id).order('name');
+        citySel.innerHTML = '<option value="">All cities</option>';
+        if (data) data.forEach(c => { const o = document.createElement('option'); o.value = c.slug; o.textContent = c.name; citySel.appendChild(o); });
+        citySel.disabled = false;
+      });
+      // Set initial from URL
+      const path = window.location.pathname.replace('/agencies', '').replace(/^\//, '').replace(/\/$/, '');
+      const parts = path.split('/').filter(Boolean);
+      if (parts[0]) { sel.value = parts[0]; sel.dispatchEvent(new Event('change')); }
+      // Filter button
+      document.getElementById('filterBtn').addEventListener('click', () => {
+        const c = document.getElementById('filterCountry').value;
+        const ci = document.getElementById('filterCity').value;
+        const t = document.getElementById('filterType').value;
+        let url = '/agencies';
+        if (c) url += `/${c}`;
+        if (ci) url += `/${ci}`;
+        if (t) url += `?type=${t}`;
+        window.location.href = url;
+      });
+      // Load agencies
+      await loadAgenciesPage();
+    })();
+  </script>
+</body>
+</html>
