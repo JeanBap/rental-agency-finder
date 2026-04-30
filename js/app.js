@@ -547,6 +547,67 @@ function renderAgencyDetail(agency, reviews) {
         </aside>
       </div>
     </div>`;
+
+  // Inject LocalBusiness JSON-LD
+  const cityName = agency.raf_cities?.name || '';
+  const countryName = agency.raf_countries?.name || '';
+  const localBiz = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": agency.name,
+    "url": agency.website || `https://www.rentalagencyfinder.com/agency/${agency.slug}`,
+    "description": agency.description || `Rental agency in ${cityName}, ${countryName}`,
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": cityName,
+      "addressCountry": countryName
+    }
+  };
+  if (agency.address) localBiz.address.streetAddress = agency.address;
+  if (agency.phone) localBiz.telephone = agency.phone;
+  if (agency.email) localBiz.email = agency.email;
+  if (agency.our_rating) {
+    localBiz.aggregateRating = {
+      "@type": "AggregateRating",
+      "ratingValue": agency.our_rating,
+      "reviewCount": agency.our_review_count || 1,
+      "bestRating": 5,
+      "worstRating": 1
+    };
+  }
+  if (agency.year_founded) localBiz.foundingDate = String(agency.year_founded);
+
+  // BreadcrumbList for detail page
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.rentalagencyfinder.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Agencies", "item": "https://www.rentalagencyfinder.com/agencies" }
+    ]
+  };
+  if (agency.raf_countries) {
+    breadcrumbLd.itemListElement.push({ "@type": "ListItem", "position": 3, "name": countryName, "item": `https://www.rentalagencyfinder.com/agencies/${agency.raf_countries.slug}` });
+  }
+  if (agency.raf_cities) {
+    breadcrumbLd.itemListElement.push({ "@type": "ListItem", "position": 4, "name": cityName, "item": `https://www.rentalagencyfinder.com/agencies/${agency.raf_countries?.slug}/${agency.raf_cities.slug}` });
+  }
+  breadcrumbLd.itemListElement.push({ "@type": "ListItem", "position": breadcrumbLd.itemListElement.length + 1, "name": agency.name, "item": `https://www.rentalagencyfinder.com/agency/${agency.slug}` });
+
+  document.querySelectorAll('script[data-raf-jsonld]').forEach(el => el.remove());
+  [localBiz, breadcrumbLd].forEach(obj => {
+    const s = document.createElement('script');
+    s.type = 'application/ld+json';
+    s.setAttribute('data-raf-jsonld', 'true');
+    s.textContent = JSON.stringify(obj);
+    document.head.appendChild(s);
+  });
+
+  // Update meta description for agency page
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) {
+    metaDesc.setAttribute('content', `${agency.name} in ${cityName}, ${countryName}. Read reviews, compare ratings, and get contact details. ${agency.description ? agency.description.substring(0, 120) : ''}`);
+  }
 }
 
 // === STAR RATING ===
