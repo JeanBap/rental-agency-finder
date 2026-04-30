@@ -12,7 +12,7 @@
     { "source": "/agency/:slug/", "destination": "/agencies.html" },
     { "source": "/blog", "destination": "/blog.html" },
     { "source": "/blog/", "destination": "/blog.html" },
-    { "source": "/blog/:slug", "destination": "/blog.html" },
+    { "source": "/blog/:slug", "destination": "/blog/:slug.html" },
     { "source": "/about", "destination": "/about.html" },
     { "source": "/about/", "destination": "/about.html" },
     { "source": "/contact", "destination": "/contact.html" },
