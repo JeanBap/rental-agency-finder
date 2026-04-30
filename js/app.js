@@ -292,8 +292,81 @@ async function loadAgencyDetail() {
 }
 
 function renderAgencyDetail(agency, reviews) {
-  // This will be used when we have the agency detail page template
-  console.log('Agency detail:', agency, reviews);
+  const main = document.querySelector('main');
+  if (!main) return;
+
+  // Update page title
+  document.title = `${agency.name} - ${agency.raf_cities?.name || ''}, ${agency.raf_countries?.name || ''} | Rental Agency Finder`;
+
+  const stars = agency.our_rating ? '&#9733;'.repeat(Math.round(agency.our_rating)) + '&#9734;'.repeat(5 - Math.round(agency.our_rating)) : 'No ratings yet';
+  const rentalBadges = (agency.rental_types || []).map(t => `<span class="agency-tag ${t === 'short_term' ? 'short' : t === 'mid_term' ? 'mid' : 'long'}">${t.replace('_', '-')}</span>`).join('');
+  const langs = (agency.languages || []).join(', ') || 'Not specified';
+
+  const reviewsHtml = reviews.length > 0 ? reviews.map(r => `
+    <div class="review-card" style="border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+        <strong>${r.reviewer_name || 'Anonymous'}</strong>
+        <span class="stars" style="color:#f59e0b;">${'&#9733;'.repeat(r.rating)}${'&#9734;'.repeat(5-r.rating)}</span>
+      </div>
+      <h4 style="margin-bottom:4px;">${r.title || ''}</h4>
+      <p style="color:var(--text-light);line-height:1.6;">${r.body || ''}</p>
+      ${r.pros ? `<p style="color:#16a34a;"><strong>Pros:</strong> ${r.pros}</p>` : ''}
+      ${r.cons ? `<p style="color:#dc2626;"><strong>Cons:</strong> ${r.cons}</p>` : ''}
+      <small style="color:var(--text-lighter);">${new Date(r.created_at).toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'})}</small>
+    </div>`).join('') : '<p style="color:var(--text-light);">No reviews yet. Be the first to review this agency!</p>';
+
+  main.innerHTML = `
+    <div class="container section">
+      <div class="breadcrumb" style="margin-bottom:24px;">
+        <a href="/">Home</a> / <a href="/agencies">Agencies</a>
+        ${agency.raf_countries ? ` / <a href="/agencies/${agency.raf_countries.slug}">${agency.raf_countries.name}</a>` : ''}
+        ${agency.raf_cities ? ` / <a href="/agencies/${agency.raf_countries?.slug}/${agency.raf_cities.slug}">${agency.raf_cities.name}</a>` : ''}
+        / <span>${agency.name}</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 320px;gap:32px;align-items:start;">
+        <div>
+          <div style="display:flex;align-items:center;gap:20px;margin-bottom:24px;">
+            <div style="width:80px;height:80px;border-radius:var(--radius);background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:700;">${agency.name.charAt(0)}</div>
+            <div>
+              <h1 style="font-size:1.8rem;margin-bottom:4px;">${agency.name}</h1>
+              <p style="color:var(--text-light);">${agency.raf_countries?.flag_emoji || ''} ${agency.raf_cities?.name || ''}, ${agency.raf_countries?.name || ''}</p>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:8px;margin-bottom:16px;">${rentalBadges}</div>
+          <div style="margin-bottom:16px;"><span class="stars" style="color:#f59e0b;font-size:1.2rem;">${stars}</span> <span style="color:var(--text-light);">(${agency.our_review_count || 0} reviews)</span></div>
+
+          ${agency.description ? `<div style="margin-bottom:24px;"><h3 style="margin-bottom:8px;">About</h3><p style="color:var(--text-light);line-height:1.7;">${agency.description}</p></div>` : ''}
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px;">
+            ${agency.year_founded ? `<div><strong>Founded</strong><p style="color:var(--text-light);">${agency.year_founded}</p></div>` : ''}
+            ${agency.properties_managed ? `<div><strong>Properties</strong><p style="color:var(--text-light);">${agency.properties_managed}+</p></div>` : ''}
+            <div><strong>Languages</strong><p style="color:var(--text-light);">${langs}</p></div>
+            ${agency.google_rating ? `<div><strong>Google Rating</strong><p style="color:var(--text-light);">${agency.google_rating}/5 (${agency.google_review_count || 0} reviews)</p></div>` : ''}
+          </div>
+
+          <h2 style="margin-bottom:16px;">Reviews (${reviews.length})</h2>
+          ${reviewsHtml}
+          <button class="btn btn-primary" onclick="openReviewModal()" style="margin-top:16px;">Write a Review</button>
+        </div>
+
+        <aside style="position:sticky;top:80px;">
+          <div style="border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;">
+            <h3 style="margin-bottom:16px;">Contact Details</h3>
+            ${userUnlocked ? `
+              ${agency.website ? `<p style="margin-bottom:8px;"><strong>Website:</strong> <a href="${agency.website}" target="_blank" rel="noopener">${agency.website.replace(/https?:\/\//, '').replace(/\/$/, '')}</a></p>` : ''}
+              ${agency.email ? `<p style="margin-bottom:8px;"><strong>Email:</strong> <a href="mailto:${agency.email}">${agency.email}</a></p>` : ''}
+              ${agency.phone ? `<p style="margin-bottom:8px;"><strong>Phone:</strong> ${agency.phone}</p>` : ''}
+              ${agency.address ? `<p style="margin-bottom:8px;"><strong>Address:</strong> ${agency.address}</p>` : ''}
+            ` : `
+              <p style="color:var(--text-light);margin-bottom:16px;">Submit a review to unlock contact details for all agencies.</p>
+              <button class="btn btn-primary btn-full" onclick="openReviewModal()">Unlock Contact Details</button>
+            `}
+          </div>
+        </aside>
+      </div>
+    </div>`;
 }
 
 // === STAR RATING ===

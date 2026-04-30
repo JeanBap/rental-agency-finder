@@ -10,7 +10,7 @@ Rental Agency Finder helps tenants find trustworthy rental agencies across 36 Eu
 - Blog: https://www.rentalagencyfinder.com/blog/
 
 ## Coverage
-36 European countries, 60+ cities, covering short-term (days/weeks), mid-term (1-11 months), and long-term (12+ months) rental agencies.
+36 European countries, 64 cities, covering short-term (days/weeks), mid-term (1-11 months), and long-term (12+ months) rental agencies.
 
 ## Countries covered
 Spain, Portugal, Italy, Greece, France, Germany, Netherlands, United Kingdom, Ireland, Belgium, Austria, Switzerland, Czech Republic, Poland, Hungary, Croatia, Slovenia, Malta, Cyprus, Sweden, Denmark, Norway, Finland, Estonia, Latvia, Lithuania, Romania, Bulgaria, Slovakia, Luxembourg, Iceland, Serbia, Montenegro, Albania, North Macedonia, Turkey.
