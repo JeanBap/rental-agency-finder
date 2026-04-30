@@ -1,0 +1,38 @@
+{
+  "rewrites": [
+    { "source": "/for-agencies", "destination": "/for-agencies.html" },
+    { "source": "/for-agencies/", "destination": "/for-agencies.html" },
+    { "source": "/agencies", "destination": "/agencies.html" },
+    { "source": "/agencies/", "destination": "/agencies.html" },
+    { "source": "/agencies/:country", "destination": "/agencies.html" },
+    { "source": "/agencies/:country/", "destination": "/agencies.html" },
+    { "source": "/agencies/:country/:city", "destination": "/agencies.html" },
+    { "source": "/agencies/:country/:city/", "destination": "/agencies.html" },
+    { "source": "/agency/:slug", "destination": "/agencies.html" },
+    { "source": "/agency/:slug/", "destination": "/agencies.html" },
+    { "source": "/blog", "destination": "/blog.html" },
+    { "source": "/blog/", "destination": "/blog.html" },
+    { "source": "/blog/:slug", "destination": "/blog.html" },
+    { "source": "/about", "destination": "/about.html" },
+    { "source": "/about/", "destination": "/about.html" },
+    { "source": "/contact", "destination": "/contact.html" },
+    { "source": "/contact/", "destination": "/contact.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(html|css|js)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600, s-maxage=86400, stale-while-revalidate=86400" }
+      ]
+    }
+  ]
+}
