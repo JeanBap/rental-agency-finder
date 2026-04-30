@@ -1,0 +1,10 @@
+{
+  "name": "rental-agency-finder",
+  "version": "1.0.0",
+  "private": true,
+  "description": "European rental agency directory and review platform",
+  "dependencies": {
+    "stripe": "^14.0.0",
+    "@supabase/supabase-js": "^2.39.0"
+  }
+}
