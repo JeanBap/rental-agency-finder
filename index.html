@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rental Agency Finder - Find & Review Rental Agencies Across Europe</title>
+  <meta name="description" content="Find, compare, and review rental agencies across 36 European countries. Short-term, mid-term, and long-term rental agencies rated by real tenants.">
+  <meta name="keywords" content="rental agency Europe, find rental agency, rental agency reviews, short term rental, long term rental, European rental, apartment rental agency">
+  <link rel="canonical" href="https://www.rentalagencyfinder.com/">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph (C1) -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Rental Agency Finder - Find & Review Rental Agencies Across Europe">
+  <meta property="og:description" content="Find, compare, and review rental agencies across 36 European countries. Rated by real tenants.">
+  <meta property="og:url" content="https://www.rentalagencyfinder.com/">
+  <meta property="og:image" content="https://www.rentalagencyfinder.com/images/og-image.png">
+  <meta property="og:site_name" content="Rental Agency Finder">
+
+  <!-- Twitter (C2) -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Rental Agency Finder - Find & Review Rental Agencies Across Europe">
+  <meta name="twitter:description" content="Find, compare, and review rental agencies across 36 European countries.">
+  <meta name="twitter:image" content="https://www.rentalagencyfinder.com/images/og-image.png">
+
+  <!-- JSON-LD: WebSite (B1, B9 compliant - no SearchAction) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Rental Agency Finder",
+    "url": "https://www.rentalagencyfinder.com/",
+    "description": "Find, compare, and review rental agencies across 36 European countries. Short-term, mid-term, and long-term rental agencies rated by real tenants.",
+    "inLanguage": "en"
+  }
+  </script>
+  <!-- JSON-LD: Organization (K1, K4, K5) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "@id": "https://www.rentalagencyfinder.com/#org",
+    "name": "Rental Agency Finder",
+    "url": "https://www.rentalagencyfinder.com/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.rentalagencyfinder.com/images/logo.svg"
+    },
+    "founder": {
+      "@type": "Person",
+      "name": "Yanni Papoutsis",
+      "url": "https://www.rentalagencyfinder.com/about",
+      "sameAs": ["https://www.linkedin.com/in/yannispapoutsis/"]
+    },
+    "foundingDate": "2026-04-30",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "email": "info@rentalagencyfinder.com",
+      "contactType": "customer service"
+    },
+    "sameAs": [
+      "https://www.linkedin.com/in/yannispapoutsis/"
+    ],
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "GR"
+    }
+  }
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- NAV -->
+  <nav class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#1a56db"/><path d="M7 20V10l7-4 7 4v10l-7 4-7-4z" stroke="#fff" stroke-width="1.5" fill="none"/><circle cx="14" cy="14" r="3" fill="#fff"/></svg>
+        <span>RentalAgencyFinder</span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="/">Home</a>
+        <a href="/agencies">Browse Agencies</a>
+        <a href="/blog">Blog</a>
+        <a href="/for-agencies" class="nav-cta">For Agencies</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="container">
+      <h1>Find the Right <span class="accent">Rental Agency</span> in Europe</h1>
+      <p class="hero-sub">Search, compare, and read real reviews of rental agencies across 36 European countries. Short-term, mid-term, or long-term.</p>
+      <div class="search-box" id="searchBox">
+        <div class="search-field">
+          <label for="searchCountry">Country</label>
+          <select id="searchCountry">
+            <option value="">All countries</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label for="searchCity">City</label>
+          <select id="searchCity" disabled>
+            <option value="">Select country first</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label for="searchType">Rental Type</label>
+          <select id="searchType">
+            <option value="">Any type</option>
+            <option value="short_term">Short-term</option>
+            <option value="mid_term">Mid-term</option>
+            <option value="long_term">Long-term</option>
+          </select>
+        </div>
+        <button class="btn btn-primary search-btn" id="searchBtn">Search Agencies</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BAR -->
+  <section class="trust-bar">
+    <div class="container trust-inner">
+      <div class="trust-stat"><strong id="statAgencies">0</strong><span>Agencies Listed</span></div>
+      <div class="trust-stat"><strong id="statReviews">0</strong><span>Reviews Submitted</span></div>
+      <div class="trust-stat"><strong id="statCountries">36</strong><span>Countries Covered</span></div>
+      <div class="trust-stat"><strong id="statCities">60</strong><span>Cities</span></div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="howItWorks">
+    <div class="container">
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-sub">Find your perfect rental agency in 3 simple steps</p>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <h3>Search</h3>
+          <p>Browse agencies by country, city, and rental type. Filter by rating, reviews, and services offered.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <h3>Read Reviews</h3>
+          <p>See what real tenants say about each agency. Ratings on responsiveness, fairness, and property quality.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <h3>Get Contact Details</h3>
+          <p>Submit a review of an agency you've used, and unlock contact details for all agencies for 30 days.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POPULAR COUNTRIES -->
+  <section class="section section-alt" id="popularCountries">
+    <div class="container">
+      <h2 class="section-title">Browse by Country</h2>
+      <p class="section-sub">Explore rental agencies across Europe</p>
+      <div class="country-grid" id="countryGrid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- POPULAR CITIES -->
+  <section class="section" id="popularCities">
+    <div class="container">
+      <h2 class="section-title">Popular Cities</h2>
+      <p class="section-sub">Top rental markets with the most agencies</p>
+      <div class="city-grid" id="cityGrid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- RECENT REVIEWS -->
+  <section class="section section-alt" id="recentReviews">
+    <div class="container">
+      <h2 class="section-title">Recent Reviews</h2>
+      <p class="section-sub">What tenants are saying about agencies across Europe</p>
+      <div class="reviews-grid" id="reviewsGrid">
+        <div class="empty-state">
+          <p>Be the first to review a rental agency! Your review helps other renters find trustworthy agencies.</p>
+          <a href="/agencies" class="btn btn-primary">Browse Agencies</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA SECTION -->
+  <section class="section cta-section">
+    <div class="container cta-inner">
+      <div class="cta-content">
+        <h2>Are You a Rental Agency?</h2>
+        <p>Get listed, collect reviews, and receive qualified tenant referrals. Plans start free.</p>
+        <a href="/for-agencies" class="btn btn-white">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>What is Rental Agency Finder?</summary>
+          <p>Rental Agency Finder is the first European-wide directory that helps renters find, compare, and review rental agencies. Unlike property listing sites, we focus on the agencies themselves, helping you find trustworthy partners for your rental search.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Why do I need to submit a review to see contact details?</summary>
+          <p>Our review-gating system ensures we build a genuine, helpful database of agency reviews. By sharing your experience with one agency, you help other renters make better decisions, and in return you get full access to contact details across all listed agencies for 30 days.</p>
+        </details>
+        <details class="faq-item">
+          <summary>Is it free for renters?</summary>
+          <p>Yes, completely free. Browse agencies, read reviews, and access contact details after submitting one review. No sign-up fees, no hidden costs.</p>
+        </details>
+        <details class="faq-item">
+          <summary>How do you verify agencies?</summary>
+          <p>We cross-reference agency data with local business registries, check their online presence, and verify through Google Maps listings. Agencies on paid tiers undergo additional verification. Reviews from verified tenants are marked accordingly.</p>
+        </details>
+        <details class="faq-item">
+          <summary>What countries do you cover?</summary>
+          <p>We cover 36 European countries including Spain, Portugal, Italy, Greece, France, Germany, Netherlands, UK, and more. We are continuously expanding our city coverage within each country.</p>
+        </details>
+      </div>
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {"@type": "Question", "name": "What is Rental Agency Finder?", "acceptedAnswer": {"@type": "Answer", "text": "Rental Agency Finder is the first European-wide directory that helps renters find, compare, and review rental agencies across 36 countries."}},
+          {"@type": "Question", "name": "Is it free for renters?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, completely free. Browse agencies, read reviews, and access contact details after submitting one review."}},
+          {"@type": "Question", "name": "What countries do you cover?", "acceptedAnswer": {"@type": "Answer", "text": "We cover 36 European countries including Spain, Portugal, Italy, Greece, France, Germany, Netherlands, UK, and more."}}
+        ]
+      }
+      </script>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-col">
+        <h4>Rental Agency Finder</h4>
+        <p>The first European-wide directory for finding and reviewing rental agencies.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Browse</h4>
+        <a href="/agencies">All Agencies</a>
+        <a href="/agencies?type=short_term">Short-Term Rentals</a>
+        <a href="/agencies?type=mid_term">Mid-Term Rentals</a>
+        <a href="/agencies?type=long_term">Long-Term Rentals</a>
+      </div>
+      <div class="footer-col">
+        <h4>Resources</h4>
+        <a href="/blog">Blog</a>
+        <a href="/about">About Us</a>
+        <a href="/contact">Contact</a>
+        <a href="/for-agencies">For Agencies</a>
+      </div>
+      <div class="footer-col">
+        <h4>Popular Countries</h4>
+        <a href="/agencies/spain">Spain</a>
+        <a href="/agencies/italy">Italy</a>
+        <a href="/agencies/portugal">Portugal</a>
+        <a href="/agencies/greece">Greece</a>
+        <a href="/agencies/france">France</a>
+        <a href="/agencies/germany">Germany</a>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Rental Agency Finder. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- REVIEW MODAL -->
+  <div class="modal-overlay" id="reviewModal">
+    <div class="modal">
+      <button class="modal-close" id="closeReviewModal">&times;</button>
+      <h2>Write a Review</h2>
+      <p>Share your experience with a rental agency to unlock contact details for all agencies.</p>
+      <form id="reviewForm">
+        <div class="form-group">
+          <label for="revAgency">Which agency did you use?</label>
+          <input type="text" id="revAgency" placeholder="Agency name" required>
+        </div>
+        <div class="form-group">
+          <label for="revCity">In which city?</label>
+          <input type="text" id="revCity" placeholder="City" required>
+        </div>
+        <div class="form-group">
+          <label for="revType">Rental type</label>
+          <select id="revType" required>
+            <option value="">Select</option>
+            <option value="short_term">Short-term (days/weeks)</option>
+            <option value="mid_term">Mid-term (1-11 months)</option>
+            <option value="long_term">Long-term (12+ months)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Rating</label>
+          <div class="star-rating" id="starRating">
+            <span data-val="1">&#9733;</span>
+            <span data-val="2">&#9733;</span>
+            <span data-val="3">&#9733;</span>
+            <span data-val="4">&#9733;</span>
+            <span data-val="5">&#9733;</span>
+          </div>
+          <input type="hidden" id="revRating" value="0">
+        </div>
+        <div class="form-group">
+          <label for="revTitle">Review title</label>
+          <input type="text" id="revTitle" placeholder="Summarize your experience" required>
+        </div>
+        <div class="form-group">
+          <label for="revBody">Your review</label>
+          <textarea id="revBody" rows="4" placeholder="What was your experience like?" required></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="revPros">Pros</label>
+            <input type="text" id="revPros" placeholder="Best things about this agency">
+          </div>
+          <div class="form-group">
+            <label for="revCons">Cons</label>
+            <input type="text" id="revCons" placeholder="Things they could improve">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="revName">Your name</label>
+          <input type="text" id="revName" placeholder="First name or nickname" required>
+        </div>
+        <div class="form-group">
+          <label for="revEmail">Your email (not displayed publicly)</label>
+          <input type="email" id="revEmail" placeholder="email@example.com" required>
+        </div>
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="revRecommend" checked>
+            I would recommend this agency
+          </label>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Submit Review & Unlock Contact Details</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
