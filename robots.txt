@@ -3,6 +3,9 @@ Allow: /
 
 Sitemap: https://www.rentalagencyfinder.com/sitemap.xml
 
+# LLM-friendly site description
+# https://www.rentalagencyfinder.com/llms.txt
+
 # AI crawlers welcome
 User-agent: GPTBot
 Allow: /
