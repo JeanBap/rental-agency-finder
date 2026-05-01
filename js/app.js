@@ -62,6 +62,8 @@ async function loadHomepage() {
   renderCityGrid();
   loadStats();
   initSearch();
+  initQuickSearch();
+  initNewsletter();
 }
 
 async function loadCountries() {
@@ -181,6 +183,76 @@ function initSearch() {
     if (city) url += `/${city}`;
     if (type) url += `?type=${type}`;
     window.location.href = url;
+  });
+}
+
+// === NEWSLETTER SIGNUP ===
+function initNewsletter() {
+  const form = document.getElementById('newsletterForm');
+  if (!form) return;
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('newsletterEmail').value.trim();
+    const msg = document.getElementById('newsletterMsg');
+    if (!email) return;
+    try {
+      const { error } = await sb.from('raf_subscribers').insert({ email, source: window.location.pathname === '/blog/' || window.location.pathname === '/blog' ? 'blog' : 'homepage' });
+      if (error && error.code === '23505') {
+        msg.textContent = 'You are already subscribed!';
+        msg.style.color = 'var(--primary)';
+      } else if (error) {
+        throw error;
+      } else {
+        msg.textContent = 'Thanks for subscribing!';
+        msg.style.color = 'var(--success)';
+        document.getElementById('newsletterEmail').value = '';
+      }
+      msg.style.display = 'block';
+    } catch (err) {
+      console.error('Newsletter error:', err);
+      msg.textContent = 'Something went wrong. Please try again.';
+      msg.style.color = 'var(--error)';
+      msg.style.display = 'block';
+    }
+  });
+}
+
+// === QUICK SEARCH AUTOCOMPLETE ===
+function initQuickSearch() {
+  const input = document.getElementById('agencyQuickSearch');
+  const results = document.getElementById('quickResults');
+  if (!input || !results) return;
+
+  let debounceTimer;
+  input.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    const q = input.value.trim();
+    if (q.length < 2) { results.style.display = 'none'; return; }
+    debounceTimer = setTimeout(async () => {
+      try {
+        const { data, error } = await sb.from('raf_agencies')
+          .select('name, slug, raf_cities(name), raf_countries(name)')
+          .ilike('name', `%${q}%`)
+          .limit(8);
+        if (error || !data || data.length === 0) {
+          results.innerHTML = '<div style="padding:16px;color:#6b7280;font-size:0.9rem;">No agencies found</div>';
+          results.style.display = 'block';
+          return;
+        }
+        results.innerHTML = data.map(a => `<a href="/agency/${a.slug}" style="display:flex;align-items:center;gap:12px;padding:12px 16px;text-decoration:none;color:#1f2937;border-bottom:1px solid #f3f4f6;transition:background 0.15s;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">
+          <div style="width:36px;height:36px;background:#eff6ff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#1a56db;flex-shrink:0;">${a.name.charAt(0)}</div>
+          <div><div style="font-weight:500;font-size:0.95rem;">${a.name.length > 40 ? a.name.substring(0,37) + '...' : a.name}</div><div style="font-size:0.8rem;color:#6b7280;">${a.raf_cities?.name || ''}, ${a.raf_countries?.name || ''}</div></div>
+        </a>`).join('');
+        results.style.display = 'block';
+      } catch (err) { console.error('Quick search error:', err); }
+    }, 250);
+  });
+
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const q = input.value.trim();
+      if (q) window.location.href = `/agencies?q=${encodeURIComponent(q)}`;
+    }
   });
 }
 
