@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find the Right Rental Agency for You | Rental Agency Finder</title>
+  <meta name="description" content="Answer 5 quick questions and get matched with the right type of rental agency for your situation. Covers short-term, mid-term, and long-term rentals across Europe.">
+  <link rel="canonical" href="https://www.rentalagencyfinder.com/tools/find-an-agency">
+  <link rel="icon" href="/favicon.ico">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Find the Right Rental Agency for You">
+  <meta property="og:description" content="Answer 5 questions to find the right type of rental agency for your European rental search.">
+  <meta property="og:url" content="https://www.rentalagencyfinder.com/tools/find-an-agency">
+  <meta property="og:image" content="https://www.rentalagencyfinder.com/images/og-image.png">
+  <meta property="og:site_name" content="Rental Agency Finder">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"Find the Right Rental Agency","description":"Interactive decision tree to match renters with the right type of rental agency across Europe.","url":"https://www.rentalagencyfinder.com/tools/find-an-agency","applicationCategory":"LifestyleApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"}}
+  </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.rentalagencyfinder.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://www.rentalagencyfinder.com/tools/"},{"@type":"ListItem","position":3,"name":"Find an Agency","item":"https://www.rentalagencyfinder.com/tools/find-an-agency"}]}
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .tree-container { max-width: 640px; margin: 0 auto; }
+    .tree-progress { display: flex; gap: 6px; margin-bottom: 32px; }
+    .tree-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); transition: background 0.3s; }
+    .tree-dot.active { background: var(--primary); }
+    .tree-dot.done { background: var(--success, #16a34a); }
+    .tree-question { font-size: 1.25rem; font-weight: 600; margin-bottom: 24px; line-height: 1.4; }
+    .tree-options { display: flex; flex-direction: column; gap: 12px; }
+    .tree-option { display: block; width: 100%; padding: 16px 20px; border: 2px solid var(--border); border-radius: var(--radius-lg); background: var(--bg); cursor: pointer; text-align: left; font-size: 0.95rem; line-height: 1.5; transition: all 0.2s; color: var(--text); }
+    .tree-option:hover { border-color: var(--primary-light); background: var(--bg-alt, #f8fafc); transform: translateY(-1px); }
+    .tree-option:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+    .tree-option strong { display: block; margin-bottom: 2px; }
+    .tree-back { display: inline-flex; align-items: center; gap: 6px; padding: 8px 0; border: none; background: none; color: var(--text-light); font-size: 0.9rem; cursor: pointer; margin-bottom: 16px; }
+    .tree-back:hover { color: var(--primary); }
+    .tree-back svg { width: 16px; height: 16px; }
+    .result-card { padding: 32px; border: 2px solid var(--primary); border-radius: var(--radius-lg); background: var(--bg); }
+    .result-card h2 { color: var(--primary); margin-bottom: 8px; font-size: 1.3rem; }
+    .result-card .result-type { font-size: 0.85rem; color: var(--text-lighter); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+    .result-card p { margin-bottom: 16px; line-height: 1.7; }
+    .result-tips { background: var(--bg-alt, #f8fafc); padding: 20px; border-radius: var(--radius); margin: 20px 0; }
+    .result-tips h3 { font-size: 1rem; margin-bottom: 8px; }
+    .result-tips li { margin-bottom: 6px; font-size: 0.9rem; }
+    .result-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+    .result-links a { display: inline-block; padding: 10px 18px; border-radius: var(--radius); font-size: 0.9rem; font-weight: 500; text-decoration: none; }
+    .result-links .btn-primary { background: var(--primary); color: #fff; }
+    .result-links .btn-outline { border: 1px solid var(--border); color: var(--text); }
+    .result-links .btn-outline:hover { border-color: var(--primary-light); color: var(--primary); }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <nav class="nav" id="nav" aria-label="Main navigation"><div class="container nav-inner"><a href="/" class="nav-logo"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#1a56db"/><path d="M7 20V10l7-4 7 4v10l-7 4-7-4z" stroke="#fff" stroke-width="1.5" fill="none"/><circle cx="14" cy="14" r="3" fill="#fff"/></svg><span>RentalAgencyFinder</span></a><div class="nav-links" id="navLinks"><a href="/">Home</a><a href="/agencies">Browse Agencies</a><a href="/blog">Blog</a><a href="/tools">Tools</a><a href="/for-agencies" class="nav-cta">For Agencies</a></div><button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button></div></nav>
+
+  <section class="page-header"><div class="container"><div class="breadcrumb"><a href="/">Home</a> / <a href="/tools">Tools</a> / <span>Find an Agency</span></div><h1>Find the Right Rental Agency</h1><p>Answer 5 quick questions and we will match you with the right type of agency for your situation.</p></div></section>
+
+  <main id="main-content">
+    <div class="container section">
+      <div class="tree-container">
+        <div class="tree-progress" id="progress" aria-label="Progress"></div>
+        <div id="treeContent" aria-live="polite"></div>
+      </div>
+    </div>
+  </main>
+
+  <section class="section section-alt">
+    <div class="container" style="max-width:780px;">
+      <h2 class="section-title">How This Tool Works</h2>
+      <p style="color:var(--text-light);line-height:1.7;margin-bottom:16px;">This decision tree considers five factors: your rental duration, budget sensitivity, language needs, whether you are relocating internationally, and what type of property you need. Based on your combination of answers, it recommends one of eight agency profiles and links you directly to filtered results in our directory.</p>
+      <p style="color:var(--text-light);line-height:1.7;">The recommendations are based on our <a href="/tools/agency-scoring-methodology">agency scoring methodology</a>, which evaluates agencies across seven criteria including response time, fee transparency, and language support. For a deeper understanding of costs, try our <a href="/tools/rental-cost-calculator">rental cost calculator</a>.</p>
+    </div>
+  </section>
+
+  <footer class="footer"><div class="container footer-inner"><div class="footer-col"><h4>Rental Agency Finder</h4><p>The first European-wide directory for finding and reviewing rental agencies.</p></div><div class="footer-col"><h4>Browse</h4><a href="/agencies">All Agencies</a><a href="/agencies?type=short_term">Short-Term</a><a href="/agencies?type=long_term">Long-Term</a></div><div class="footer-col"><h4>Resources</h4><a href="/blog">Blog</a><a href="/about">About</a><a href="/for-agencies">For Agencies</a></div><div class="footer-col"><h4>Popular</h4><a href="/agencies/spain">Spain</a><a href="/agencies/italy">Italy</a><a href="/agencies/greece">Greece</a></div></div><div class="container footer-bottom"><p>&copy; 2026 Rental Agency Finder. All rights reserved. <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p></div></footer>
+
+  <script>
+  document.getElementById('navToggle')?.addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));
+
+  const QUESTIONS = [
+    {
+      id: 'duration',
+      q: 'How long do you need the rental for?',
+      opts: [
+        { label: 'Short-term', desc: 'Less than 3 months (vacation, project, trial period)', value: 'short' },
+        { label: 'Mid-term', desc: '3 to 12 months (semester, contract, relocation settling-in)', value: 'mid' },
+        { label: 'Long-term', desc: 'More than 12 months (permanent move, family home)', value: 'long' }
+      ]
+    },
+    {
+      id: 'budget',
+      q: 'How important is keeping costs low?',
+      opts: [
+        { label: 'Top priority', desc: 'I need the lowest total cost, including agency fees', value: 'low' },
+        { label: 'Balanced', desc: 'I want fair value but will pay for good service', value: 'mid' },
+        { label: 'Not a concern', desc: 'I want premium service and quality, cost is secondary', value: 'high' }
+      ]
+    },
+    {
+      id: 'language',
+      q: 'Do you speak the local language of your destination country?',
+      opts: [
+        { label: 'Yes, fluently', desc: 'I can read contracts and negotiate in the local language', value: 'fluent' },
+        { label: 'Somewhat', desc: 'Basic conversation but not confident with legal documents', value: 'basic' },
+        { label: 'No', desc: 'I need English-speaking support throughout the process', value: 'none' }
+      ]
+    },
+    {
+      id: 'relocation',
+      q: 'Are you relocating from another country?',
+      opts: [
+        { label: 'Yes, from outside Europe', desc: 'I need help with visas, registration, and local setup', value: 'international' },
+        { label: 'Yes, from another European country', desc: 'EU/EEA move, some bureaucracy involved', value: 'eu' },
+        { label: 'No, staying in the same country', desc: 'Domestic move, familiar with local processes', value: 'domestic' }
+      ]
+    },
+    {
+      id: 'property',
+      q: 'What type of property are you looking for?',
+      opts: [
+        { label: 'Shared room or flatshare', desc: 'A room in a shared apartment to keep costs down', value: 'shared' },
+        { label: 'Studio or one-bedroom', desc: 'A self-contained apartment for one or two people', value: 'studio' },
+        { label: 'Family apartment or house', desc: 'Two or more bedrooms, space for a family', value: 'family' },
+        { label: 'Furnished corporate housing', desc: 'Move-in ready, utilities included, professional standard', value: 'corporate' }
+      ]
+    }
+  ];
+
+  const RESULTS = {
+    'short-low': {
+      title: 'Budget Short-Stay Agency',
+      type: 'Short-term, cost-focused',
+      desc: 'You need a no-frills agency that specialises in short-term furnished rentals at competitive rates. Look for agencies with transparent fee structures and no hidden charges. Many short-term agencies bundle utilities into the rent, which simplifies budgeting.',
+      tips: ['Compare total cost (rent + fees + deposit), not just monthly rent', 'Ask if utilities are included before signing', 'Check cancellation policies carefully for short stays'],
+      filter: '?type=short_term',
+      guides: ['/blog/budget-rentals-europe', '/blog/short-stay-airbnb-alternatives-europe']
+    },
+    'short-mid': {
+      title: 'Short-Stay Serviced Apartment Agency',
+      type: 'Short-term, balanced',
+      desc: 'Serviced apartment agencies are your best match. They offer furnished, utility-included rentals with flexible terms. Expect a higher monthly rate than a long-term lease but less hassle with setup and paperwork. Many offer online booking and digital contracts.',
+      tips: ['Book 4-6 weeks ahead for the best selection', 'Ask about weekly and monthly discounts', 'Check if cleaning is included or optional'],
+      filter: '?type=short_term',
+      guides: ['/blog/furnished-apartments-europe', '/blog/short-stay-airbnb-alternatives-europe']
+    },
+    'short-high': {
+      title: 'Premium Short-Stay Agency',
+      type: 'Short-term, premium',
+      desc: 'Look for agencies that offer premium serviced apartments or corporate housing. These provide hotel-level service with the space and privacy of an apartment: concierge, cleaning, high-speed internet, and central locations. Ideal for executive relocations or extended business travel.',
+      tips: ['Ask about dedicated account managers for your stay', 'Check if the agency handles airport transfers and local orientation', 'Request references from previous corporate clients'],
+      filter: '?type=short_term',
+      guides: ['/blog/corporate-housing-europe', '/blog/luxury-rentals-europe']
+    },
+    'mid-low': {
+      title: 'Student and Budget Mid-Term Agency',
+      type: 'Mid-term, cost-focused',
+      desc: 'Agencies catering to students and young professionals offer the best value for mid-term stays. Many have partnerships with universities and can access housing not listed on public platforms. Shared apartments and studios near campuses or transit hubs offer the lowest costs.',
+      tips: ['Ask about semester-aligned lease terms', 'Check if the deposit can be paid in instalments', 'Look for agencies with no-fee or low-fee models'],
+      filter: '?type=mid_term',
+      guides: ['/blog/student-housing-europe', '/blog/budget-rentals-europe']
+    },
+    'mid-mid': {
+      title: 'Relocation-Focused Mid-Term Agency',
+      type: 'Mid-term, balanced',
+      desc: 'You need an agency that understands the mid-term rental market and can help with the transition. These agencies typically offer furnished options with flexible lease lengths, handle contract translation, and assist with address registration. A good mid-term agency bridges the gap between temporary and permanent housing.',
+      tips: ['Ask if the lease can be extended or converted to long-term', 'Check the notice period for early termination', 'Request help with local registration (Anmeldung, empadronamiento, etc.)'],
+      filter: '?type=mid_term',
+      guides: ['/blog/mid-term-rentals-europe', '/blog/expat-relocation-rental-guide']
+    },
+    'mid-high': {
+      title: 'Executive Relocation Agency',
+      type: 'Mid-term, premium',
+      desc: 'Executive relocation agencies handle everything: property search, viewing accompaniment, contract negotiation, move-in coordination, and local settling-in support. They command higher fees but save significant time and stress, especially for international relocations with tight timelines.',
+      tips: ['Get a fixed-fee quote upfront rather than percentage-based', 'Ask what happens if the first property does not work out', 'Check if settling-in services (bank account, phone, utilities) are included'],
+      filter: '?type=mid_term',
+      guides: ['/blog/corporate-housing-europe', '/blog/relocation-services-europe']
+    },
+    'long-low': {
+      title: 'Direct-Listing Long-Term Agency',
+      type: 'Long-term, cost-focused',
+      desc: 'For long-term rentals on a budget, look for agencies with low or no tenant-side fees. In some countries (Germany, France, Belgium), the landlord pays the agency fee by law. Focus on agencies that list unfurnished apartments in well-connected but less central neighbourhoods.',
+      tips: ['Ask who pays the agency fee; in some countries it is the landlord', 'Unfurnished rentals are cheaper long-term even if you need to buy basics', 'Negotiate the deposit amount if it is above the legal minimum'],
+      filter: '?type=long_term',
+      guides: ['/blog/budget-rentals-europe', '/blog/furnished-vs-unfurnished-europe']
+    },
+    'long-mid': {
+      title: 'Full-Service Long-Term Agency',
+      type: 'Long-term, balanced',
+      desc: 'A full-service agency will manage the property search, arrange viewings, review the contract, and handle the handover. This is the standard agency experience in most European markets. Expect to pay one month\'s rent as a fee (where legally permitted) and receive ongoing support for maintenance issues.',
+      tips: ['Read the contract in full before signing; request an English translation', 'Document everything at move-in with the condition report', 'Ask about the agency\'s role during the tenancy (ongoing support vs. one-time)'],
+      filter: '?type=long_term',
+      guides: ['/blog/rental-contracts-explained-europe', '/blog/condition-reports-europe']
+    },
+    'long-high': {
+      title: 'Premium Property Management Agency',
+      type: 'Long-term, premium',
+      desc: 'Premium agencies offer curated property portfolios, dedicated property managers, and white-glove service. They handle everything from finding the perfect property to managing maintenance, renewals, and disputes. Ideal for professionals who want a hands-off experience in a high-quality home.',
+      tips: ['Ask if the agency provides ongoing property management throughout your tenancy', 'Check if emergency maintenance is handled 24/7', 'Request a portfolio viewing rather than individual listings'],
+      filter: '?type=long_term',
+      guides: ['/blog/luxury-rentals-europe', '/blog/relocation-services-europe']
+    }
+  };
+
+  let answers = [];
+  const progressEl = document.getElementById('progress');
+  const contentEl = document.getElementById('treeContent');
+
+  function init() {
+    progressEl.innerHTML = QUESTIONS.map((_, i) => `<div class="tree-dot" data-step="${i}"></div>`).join('');
+    renderQuestion(0);
+  }
+
+  function updateProgress(step) {
+    document.querySelectorAll('.tree-dot').forEach((dot, i) => {
+      dot.className = 'tree-dot' + (i < step ? ' done' : i === step ? ' active' : '');
+    });
+  }
+
+  function renderQuestion(step) {
+    updateProgress(step);
+    const q = QUESTIONS[step];
+    let html = '';
+    if (step > 0) {
+      html += `<button class="tree-back" onclick="goBack(${step})" aria-label="Go back to previous question"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Back</button>`;
+    }
+    html += `<p class="tree-question">${q.q}</p><div class="tree-options" role="radiogroup" aria-label="${q.q}">`;
+    q.opts.forEach(opt => {
+      html += `<button class="tree-option" onclick="answer(${step},'${opt.value}')" role="radio" aria-checked="false"><strong>${opt.label}</strong>${opt.desc}</button>`;
+    });
+    html += '</div>';
+    contentEl.innerHTML = html;
+    contentEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function answer(step, value) {
+    answers[step] = value;
+    answers.length = step + 1;
+    if (step < QUESTIONS.length - 1) {
+      renderQuestion(step + 1);
+    } else {
+      showResult();
+    }
+  }
+
+  function goBack(step) {
+    answers.length = step;
+    renderQuestion(step - 1);
+  }
+
+  function showResult() {
+    updateProgress(QUESTIONS.length);
+    document.querySelectorAll('.tree-dot').forEach(d => d.className = 'tree-dot done');
+
+    const dur = answers[0];
+    const bud = answers[1];
+    const lang = answers[2];
+    const reloc = answers[3];
+    const prop = answers[4];
+
+    // Determine result key
+    let key = dur + '-' + bud;
+    // Override for corporate housing seekers
+    if (prop === 'corporate') {
+      key = dur === 'short' ? 'short-high' : 'mid-high';
+    }
+    // Boost budget tier if relocating internationally with no language
+    if (reloc === 'international' && lang === 'none' && bud === 'low') {
+      key = dur + '-mid';
+    }
+
+    const r = RESULTS[key] || RESULTS['long-mid'];
+
+    let extras = '';
+    if (reloc === 'international') {
+      extras += '<p style="margin-top:12px;"><strong>Since you are relocating from outside Europe:</strong> prioritise agencies that offer visa and registration support. Read our <a href="/blog/visa-requirements-renters-europe">visa requirements guide</a> and <a href="/blog/moving-to-europe-checklist">moving to Europe checklist</a>.</p>';
+    }
+    if (lang === 'none') {
+      extras += '<p style="margin-top:12px;"><strong>Since you need English-speaking support:</strong> filter for agencies with high language support scores. Our <a href="/tools/agency-scoring-methodology">scoring system</a> weights language support at 15%.</p>';
+    }
+    if (prop === 'shared') {
+      extras += '<p style="margin-top:12px;"><strong>For shared housing:</strong> check our <a href="/blog/flatsharing-europe">flatsharing guide</a> for tips on finding reliable flatmates and avoiding scams.</p>';
+    }
+    if (prop === 'family') {
+      extras += '<p style="margin-top:12px;"><strong>For family housing:</strong> see our <a href="/blog/renting-with-children-europe">renting with children guide</a> for school catchment areas and family-specific requirements.</p>';
+    }
+
+    let html = `<button class="tree-back" onclick="init()" aria-label="Start over"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg> Start over</button>`;
+    html += `<div class="result-card">
+      <p class="result-type">${r.type}</p>
+      <h2>${r.title}</h2>
+      <p>${r.desc}</p>
+      ${extras}
+      <div class="result-tips"><h3>Tips for your search</h3><ul>${r.tips.map(t => `<li>${t}</li>`).join('')}</ul></div>
+      <div class="result-links">
+        <a href="/agencies${r.filter}" class="btn-primary result-link">Browse matching agencies</a>
+        ${r.guides.map(g => {
+          const name = g.split('/').pop().replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+          return `<a href="${g}" class="btn-outline">${name}</a>`;
+        }).join('')}
+      </div>
+    </div>`;
+
+    contentEl.innerHTML = html;
+    contentEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  init();
+  </script>
+</body>
+</html>

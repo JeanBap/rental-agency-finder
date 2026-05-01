@@ -29,6 +29,8 @@
     { "source": "/tools/deposit-law-comparison/", "destination": "/tools/deposit-law-comparison.html" },
     { "source": "/tools/agency-scoring-methodology", "destination": "/tools/agency-scoring-methodology.html" },
     { "source": "/tools/agency-scoring-methodology/", "destination": "/tools/agency-scoring-methodology.html" },
+    { "source": "/tools/find-an-agency", "destination": "/tools/find-an-agency.html" },
+    { "source": "/tools/find-an-agency/", "destination": "/tools/find-an-agency.html" },
     { "source": "/tools", "destination": "/tools/index.html" },
     { "source": "/tools/", "destination": "/tools/index.html" }
   ],
