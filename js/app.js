@@ -383,6 +383,7 @@ async function loadAgenciesPage() {
   updatePageHeader(countryName, cityName, countryFlag, countrySlug, citySlug, type, countryData, cityData);
   renderAgencyList(agencies || [], countrySlug, citySlug, type);
   renderPagination();
+  renderRecentlyViewed();
 
   // Internal linking: related cities + blog posts
   if (countryData) {
@@ -889,6 +890,69 @@ function buildCompareRow(label, values, isHeader = false, isFooter = false) {
   `;
 }
 
+// === RECENTLY VIEWED ===
+function trackRecentlyViewed(agency) {
+  try {
+    let recent = JSON.parse(localStorage.getItem('raf_recent') || '[]');
+    // Remove if already exists
+    recent = recent.filter(r => r.slug !== agency.slug);
+    // Add to front
+    recent.unshift({
+      slug: agency.slug,
+      name: agency.name,
+      city: agency.raf_cities?.name || '',
+      country: agency.raf_countries?.name || '',
+      flag: agency.raf_countries?.flag_emoji || '',
+      rating: agency.our_rating,
+      reviewCount: agency.our_review_count || 0,
+      viewedAt: Date.now()
+    });
+    // Keep max 10
+    recent = recent.slice(0, 10);
+    localStorage.setItem('raf_recent', JSON.stringify(recent));
+  } catch (e) { /* localStorage not available */ }
+}
+
+function renderRecentlyViewed() {
+  try {
+    const recent = JSON.parse(localStorage.getItem('raf_recent') || '[]');
+    if (recent.length === 0) return;
+
+    const container = document.querySelector('.agency-list') || document.querySelector('main .container');
+    if (!container) return;
+
+    const html = `
+      <div class="recently-viewed" style="margin-bottom:32px;padding:20px 24px;background:var(--bg-muted,#f8fafc);border-radius:var(--radius-lg);border:1px solid var(--border);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <h3 style="font-size:1rem;margin:0;display:flex;align-items:center;gap:8px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Recently Viewed
+          </h3>
+          <button onclick="clearRecentlyViewed()" style="background:none;border:none;color:var(--text-light);font-size:0.8rem;cursor:pointer;text-decoration:underline;">Clear</button>
+        </div>
+        <div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;">
+          ${recent.slice(0, 5).map(r => `
+            <a href="/agency/${r.slug}" style="flex-shrink:0;display:flex;align-items:center;gap:10px;padding:8px 14px;background:#fff;border:1px solid var(--border);border-radius:var(--radius);text-decoration:none;color:var(--text);font-size:0.85rem;transition:border-color 0.2s;min-width:180px;">
+              <div style="width:32px;height:32px;border-radius:var(--radius);background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:0.9rem;">${r.name.charAt(0)}</div>
+              <div style="min-width:0;">
+                <div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px;">${r.name}</div>
+                <div style="font-size:0.75rem;color:var(--text-light);">${r.flag} ${r.city}</div>
+              </div>
+            </a>
+          `).join('')}
+        </div>
+      </div>`;
+    container.insertAdjacentHTML('afterbegin', html);
+  } catch (e) { /* localStorage not available */ }
+}
+
+function clearRecentlyViewed() {
+  localStorage.removeItem('raf_recent');
+  const el = document.querySelector('.recently-viewed');
+  if (el) el.remove();
+}
+window.clearRecentlyViewed = clearRecentlyViewed;
+
 // === AGENCY DETAIL ===
 async function loadAgencyDetail() {
   const main = document.querySelector('main');
@@ -914,6 +978,7 @@ async function loadAgencyDetail() {
     .eq('status', 'approved')
     .order('created_at', { ascending: false });
 
+  trackRecentlyViewed(agency);
   await renderAgencyDetail(agency, reviews || []);
   } catch (err) {
     console.error('Agency detail error:', err);
