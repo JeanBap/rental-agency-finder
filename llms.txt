@@ -11,6 +11,10 @@ Rental Agency Finder helps tenants find trustworthy rental agencies across 36 Eu
 - About: https://www.rentalagencyfinder.com/about/
 - Contact: https://www.rentalagencyfinder.com/contact/
 
+## Interactive tools
+- Rental Cost Calculator: https://www.rentalagencyfinder.com/tools/rental-cost-calculator (estimate total move-in costs across 20 European countries with legally sourced deposit limits, agency fee rules, utility setup, and insurance estimates)
+- Deposit Law Comparison: https://www.rentalagencyfinder.com/tools/deposit-law-comparison (compare rental deposit laws across 30 European countries: maximum limits, refund deadlines, protection schemes, interest requirements, all with legal citations)
+
 ## Coverage
 - 36 European countries
 - 64 cities

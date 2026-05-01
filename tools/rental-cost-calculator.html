@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rental Cost Calculator - Estimate Your Total Move-In Costs in Europe | Rental Agency Finder</title>
+  <meta name="description" content="Calculate your total rental move-in costs across 20 European countries. Includes deposit limits, agency fees, first month's rent, utility setup, and insurance estimates with legal sources.">
+  <link rel="canonical" href="https://www.rentalagencyfinder.com/tools/rental-cost-calculator">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Rental Cost Calculator - Estimate Move-In Costs in Europe">
+  <meta property="og:description" content="Calculate deposit, agency fees, first month's rent, utility setup and insurance for 20 European countries. Sourced from local tenancy laws.">
+  <meta property="og:url" content="https://www.rentalagencyfinder.com/tools/rental-cost-calculator">
+  <meta property="og:image" content="https://www.rentalagencyfinder.com/images/og-image.png">
+  <meta property="og:site_name" content="Rental Agency Finder">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">
+  [{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.rentalagencyfinder.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://www.rentalagencyfinder.com/tools/"},{"@type":"ListItem","position":3,"name":"Rental Cost Calculator","item":"https://www.rentalagencyfinder.com/tools/rental-cost-calculator"}]},{"@context":"https://schema.org","@type":"WebApplication","name":"Rental Cost Calculator","description":"Calculate your total rental move-in costs across 20 European countries, including legally sourced deposit limits, agency fees, and utility setup estimates.","url":"https://www.rentalagencyfinder.com/tools/rental-cost-calculator","applicationCategory":"FinanceApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"author":{"@type":"Organization","name":"Rental Agency Finder","url":"https://www.rentalagencyfinder.com"}}]
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .calc-container { max-width: 720px; margin: 0 auto; }
+    .calc-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px; margin-bottom: 24px; }
+    .calc-field { margin-bottom: 20px; }
+    .calc-field label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; color: var(--text); }
+    .calc-field select, .calc-field input[type="number"] { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 0.95rem; background: var(--bg); color: var(--text); outline: none; }
+    .calc-field select:focus, .calc-field input:focus { border-color: var(--primary-light); }
+    .calc-toggle { display: flex; gap: 8px; }
+    .calc-toggle button { flex: 1; padding: 10px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg); color: var(--text-light); font-size: 0.9rem; cursor: pointer; transition: all var(--transition); }
+    .calc-toggle button.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .calc-btn { width: 100%; padding: 14px; background: var(--primary); color: #fff; border: none; border-radius: var(--radius); font-size: 1rem; font-weight: 600; cursor: pointer; transition: background var(--transition); }
+    .calc-btn:hover { background: var(--primary-dark); }
+    .calc-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .results-card { background: var(--bg); border: 2px solid var(--primary-light); border-radius: var(--radius-lg); padding: 28px; display: none; }
+    .results-card.visible { display: block; }
+    .result-row { display: flex; justify-content: space-between; align-items: baseline; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .result-row:last-of-type { border-bottom: none; }
+    .result-label { font-size: 0.9rem; color: var(--text-light); }
+    .result-value { font-weight: 600; font-size: 0.95rem; }
+    .result-source { font-size: 0.75rem; color: var(--text-lighter); margin-top: 2px; }
+    .result-total { display: flex; justify-content: space-between; align-items: baseline; padding: 16px 0 0; margin-top: 8px; border-top: 2px solid var(--primary); }
+    .result-total .result-label { font-weight: 700; font-size: 1rem; color: var(--text); }
+    .result-total .result-value { font-size: 1.25rem; color: var(--primary); }
+    .result-note { font-size: 0.8rem; color: var(--text-lighter); margin-top: 16px; line-height: 1.5; }
+    .related-links { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-top: 32px; }
+    .related-link { display: block; padding: 16px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); color: var(--text); font-size: 0.9rem; font-weight: 500; transition: all var(--transition); }
+    .related-link:hover { border-color: var(--primary-light); transform: translateY(-1px); box-shadow: var(--shadow); color: var(--text); }
+    @media (max-width: 480px) { .calc-card { padding: 20px; } .related-links { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <a href="#calculator" class="skip-link">Skip to calculator</a>
+  <nav class="nav" id="nav" aria-label="Main navigation">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#1a56db"/><path d="M7 20V10l7-4 7 4v10l-7 4-7-4z" stroke="#fff" stroke-width="1.5" fill="none"/><circle cx="14" cy="14" r="3" fill="#fff"/></svg><span>RentalAgencyFinder</span></a>
+      <div class="nav-links" id="navLinks"><a href="/">Home</a><a href="/agencies">Browse Agencies</a><a href="/blog">Blog</a><a href="/for-agencies" class="nav-cta">For Agencies</a></div>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <section class="page-header">
+    <div class="container">
+      <div class="breadcrumb"><a href="/">Home</a> / <a href="/tools/">Tools</a> / <span>Rental Cost Calculator</span></div>
+      <h1>Rental Cost Calculator</h1>
+      <p>Estimate your total move-in costs across 20 European countries, with legally sourced deposit limits, agency fee rules, and utility estimates.</p>
+    </div>
+  </section>
+  <main id="main-content">
+    <div class="container section">
+      <div class="calc-container">
+        <div class="calc-card" id="calculator">
+          <div class="calc-field">
+            <label for="country">Country</label>
+            <select id="country"><option value="">Select a country</option></select>
+          </div>
+          <div class="calc-field">
+            <label for="rent">Monthly Rent (&euro;)</label>
+            <input type="number" id="rent" min="100" max="50000" step="50" placeholder="e.g. 1200">
+          </div>
+          <div class="calc-field">
+            <label>Rental Type</label>
+            <div class="calc-toggle" id="typeToggle">
+              <button class="active" data-val="unfurnished">Unfurnished</button>
+              <button data-val="furnished">Furnished</button>
+            </div>
+          </div>
+          <div class="calc-field">
+            <label>Using a Rental Agency?</label>
+            <div class="calc-toggle" id="agencyToggle">
+              <button class="active" data-val="yes">Yes</button>
+              <button data-val="no">No</button>
+            </div>
+          </div>
+          <button class="calc-btn" id="calcBtn" disabled>Calculate Total Move-In Cost</button>
+        </div>
+
+        <div class="results-card" id="results" aria-live="polite">
+          <h2 style="font-size:1.1rem;margin-bottom:16px;">Your Estimated Move-In Costs</h2>
+          <div id="resultRows"></div>
+          <div class="result-total">
+            <span class="result-label">Total Estimated Cost</span>
+            <span class="result-value" id="totalCost"></span>
+          </div>
+          <p class="result-note" id="resultNote"></p>
+        </div>
+
+        <div class="related-links">
+          <a href="/blog/rental-deposit-rights-europe" class="related-link">Deposit Rights by Country</a>
+          <a href="/blog/rental-agency-fees-europe" class="related-link">Agency Fee Rules Explained</a>
+          <a href="/blog/first-apartment-europe" class="related-link">First Apartment Checklist</a>
+          <a href="/blog/utility-setup-guide-europe" class="related-link">Utility Setup Guide</a>
+          <a href="/blog/tenant-insurance-europe" class="related-link">Tenant Insurance Guide</a>
+          <a href="/agencies" class="related-link">Browse Agencies by City</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-col"><h4>Rental Agency Finder</h4><p>The first European-wide directory for finding and reviewing rental agencies.</p></div>
+      <div class="footer-col"><h4>Browse</h4><a href="/agencies">All Agencies</a><a href="/agencies?type=short_term">Short-Term</a><a href="/agencies?type=long_term">Long-Term</a></div>
+      <div class="footer-col"><h4>Resources</h4><a href="/blog">Blog</a><a href="/about">About</a><a href="/for-agencies">For Agencies</a></div>
+      <div class="footer-col"><h4>Popular</h4><a href="/agencies/spain">Spain</a><a href="/agencies/italy">Italy</a><a href="/agencies/greece">Greece</a></div>
+    </div>
+    <div class="container footer-bottom"><p>&copy; 2026 Rental Agency Finder. All rights reserved. <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p></div>
+  </footer>
+
+  <script>
+  document.getElementById('navToggle')?.addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));
+
+  const DATA = {
+    germany: { name:'Germany', deposit:{months:3,source:'BGB §551 (max 3 months cold rent)'}, agency:{pct:0,source:'Bestellerprinzip (2015): tenant pays 0% if landlord hired the agent'}, utility:{setup:200,source:'Avg Stadtwerke connection fees'}, insurance:{monthly:8,source:'Avg Haftpflicht + Hausrat'} },
+    france: { name:'France', deposit:{months:1,source:'Loi ALUR Art 22: 1 month unfurnished, 2 months furnished'}, depositFurnished:2, agency:{pct:0,source:'Loi ALUR (2014): tenant share capped at 12/m² max, often 0 in practice'}, utility:{setup:150,source:'Avg EDF/Engie activation'}, insurance:{monthly:12,source:'Assurance habitation (mandatory)'} },
+    spain: { name:'Spain', deposit:{months:1,source:'LAU Art 36: 1 month for residential leases'}, agency:{pct:1,source:'Typically 1 month rent + VAT (varies by region)'}, utility:{setup:180,source:'Avg Endesa/Iberdrola alta fees'}, insurance:{monthly:10,source:'Seguro de hogar estimate'} },
+    italy: { name:'Italy', deposit:{months:3,source:'Codice Civile Art 1608: typically 2-3 months'}, agency:{pct:1,source:'Standard: 1 month rent + VAT (22%)'}, utility:{setup:160,source:'Avg Enel/A2A voltura fees'}, insurance:{monthly:9,source:'Assicurazione casa estimate'} },
+    portugal: { name:'Portugal', deposit:{months:2,source:'NRAU Art 1076: max 2 months'}, agency:{pct:1,source:'Standard: 1 month rent + VAT (23%)'}, utility:{setup:120,source:'Avg EDP/Galp activation'}, insurance:{monthly:7,source:'Seguro multirriscos estimate'} },
+    netherlands: { name:'Netherlands', deposit:{months:2,source:'Common practice: 1-2 months (no statutory cap pre-2023)'}, agency:{pct:0,source:'Since Jan 2023: agents cannot charge tenants (Wet Goed Verhuurderschap)'}, utility:{setup:100,source:'Avg Vattenfall/Eneco setup'}, insurance:{monthly:15,source:'Inboedel + aansprakelijkheid'} },
+    uk: { name:'United Kingdom', deposit:{months:5,source:'Tenant Fees Act 2019: max 5 weeks rent'}, depositWeeks:5, agency:{pct:0,source:'Tenant Fees Act 2019: agents cannot charge tenants'}, utility:{setup:80,source:'Avg utility switching fees'}, insurance:{monthly:12,source:'Contents insurance estimate'} },
+    ireland: { name:'Ireland', deposit:{months:1,source:'RTA 2004 s 12: typically 1 month'}, agency:{pct:0,source:'Agents typically charge landlords, not tenants'}, utility:{setup:100,source:'Avg ESB/Bord Gais setup'}, insurance:{monthly:14,source:'Contents insurance estimate'} },
+    belgium: { name:'Belgium', deposit:{months:2,source:'Woninghuurwet: 2 months on blocked account (3 with bank guarantee)'}, agency:{pct:1,source:'Typically 1 month rent (regional rules apply)'}, utility:{setup:120,source:'Avg Engie/Luminus setup'}, insurance:{monthly:10,source:'Brandverzekering (mandatory for tenant in most regions)'} },
+    austria: { name:'Austria', deposit:{months:3,source:'MRG: typically 3 months (6 months max in some cases)'}, agency:{pct:2,source:'ImmoZV §17: max 2 months rent for up to 3yr lease'}, utility:{setup:140,source:'Avg Wien Energie setup'}, insurance:{monthly:9,source:'Haushaltsversicherung estimate'} },
+    greece: { name:'Greece', deposit:{months:2,source:'Civil Code Art 601: typically 2 months'}, agency:{pct:1,source:'Standard: 1 month rent + VAT (24%)'}, utility:{setup:100,source:'Avg DEI/EYDAP activation'}, insurance:{monthly:6,source:'Home insurance estimate'} },
+    switzerland: { name:'Switzerland', deposit:{months:3,source:'OR Art 257e: max 3 months on blocked account'}, agency:{pct:0,source:'Agents typically charge landlords'}, utility:{setup:180,source:'Avg SBB/cantonal utility setup'}, insurance:{monthly:25,source:'Haftpflicht + Hausrat (quasi-mandatory)'} },
+    czech_republic: { name:'Czech Republic', deposit:{months:3,source:'Civil Code §2254: max 3 months since 2014'}, agency:{pct:1,source:'Typically 1 month rent'}, utility:{setup:80,source:'Avg CEZ/PRE activation'}, insurance:{monthly:5,source:'Pojisteni domacnosti estimate'} },
+    poland: { name:'Poland', deposit:{months:1,source:'Tenant Protection Act Art 6: max 12x monthly rent, typically 1-2 months'}, agency:{pct:1,source:'Standard: 1 month rent'}, utility:{setup:60,source:'Avg PGE/Tauron setup'}, insurance:{monthly:4,source:'Ubezpieczenie mieszkania estimate'} },
+    hungary: { name:'Hungary', deposit:{months:2,source:'Civil Code: typically 2 months (negotiable)'}, agency:{pct:1,source:'Standard: 1 month rent + VAT'}, utility:{setup:50,source:'Avg ELMUE/FOEGAZ setup'}, insurance:{monthly:4,source:'Lakasbiztositas estimate'} },
+    sweden: { name:'Sweden', deposit:{months:0,source:'Deposits are uncommon in Sweden (Hyreslagen)'}, agency:{pct:0,source:'Rental agencies rarely used for primary market; queues instead'}, utility:{setup:100,source:'Avg Vattenfall setup'}, insurance:{monthly:10,source:'Hemforsakring (standard)'} },
+    denmark: { name:'Denmark', deposit:{months:3,source:'Lejeloven §34: max 3 months'}, agency:{pct:0,source:'Agents rarely charge tenants (boligformidling regulated)'}, utility:{setup:120,source:'Avg Orsted/HOFOR setup'}, insurance:{monthly:12,source:'Indboforsikring estimate'} },
+    croatia: { name:'Croatia', deposit:{months:2,source:'Common practice: 1-2 months (no statutory cap)'}, agency:{pct:1,source:'Standard: 1 month rent + PDV'}, utility:{setup:60,source:'Avg HEP/Gradska Plinara setup'}, insurance:{monthly:4,source:'Osiguranje kucanstva estimate'} },
+    finland: { name:'Finland', deposit:{months:2,source:'AHVL Ch 2 §8: max 2 months equivalent'}, agency:{pct:0,source:'Agents typically charge landlords'}, utility:{setup:80,source:'Avg Helen/Fortum setup'}, insurance:{monthly:12,source:'Kotivakuutus estimate'} },
+    malta: { name:'Malta', deposit:{months:1,source:'Private Residential Leases Act 2020: max 1 month'}, agency:{pct:0.5,source:'Standard: 50% of 1 month rent (shared with landlord)'}, utility:{setup:70,source:'Avg ARMS/Enemalta setup'}, insurance:{monthly:6,source:'Home insurance estimate'} }
+  };
+
+  // Populate country select
+  const countrySelect = document.getElementById('country');
+  Object.entries(DATA).sort((a,b) => a[1].name.localeCompare(b[1].name)).forEach(([k,v]) => {
+    const opt = document.createElement('option');
+    opt.value = k; opt.textContent = v.name;
+    countrySelect.appendChild(opt);
+  });
+
+  // Toggle buttons
+  let rentalType = 'unfurnished', useAgency = true;
+  document.querySelectorAll('.calc-toggle').forEach(group => {
+    group.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        group.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        if (group.id === 'typeToggle') rentalType = btn.dataset.val;
+        if (group.id === 'agencyToggle') useAgency = btn.dataset.val === 'yes';
+        checkReady();
+      });
+    });
+  });
+
+  // Enable button when ready
+  const rentInput = document.getElementById('rent');
+  const calcBtn = document.getElementById('calcBtn');
+  function checkReady() {
+    calcBtn.disabled = !(countrySelect.value && rentInput.value && parseFloat(rentInput.value) > 0);
+  }
+  countrySelect.addEventListener('change', checkReady);
+  rentInput.addEventListener('input', checkReady);
+
+  // Calculate
+  calcBtn.addEventListener('click', () => {
+    const c = DATA[countrySelect.value];
+    if (!c) return;
+    const rent = parseFloat(rentInput.value);
+    const rows = document.getElementById('resultRows');
+    const results = document.getElementById('results');
+
+    let items = [];
+    // First month
+    items.push({ label:'First month\'s rent', value:rent, source:'Due on signing' });
+
+    // Deposit
+    let depMonths = c.deposit.months;
+    if (rentalType === 'furnished' && c.depositFurnished) depMonths = c.depositFurnished;
+    let depValue = rent * depMonths;
+    if (c.depositWeeks) { depValue = (rent / 4.33) * c.depositWeeks; }
+    if (depValue > 0) items.push({ label:`Security deposit (${c.depositWeeks ? c.depositWeeks + ' weeks' : depMonths + ' month' + (depMonths>1?'s':'')})`, value:depValue, source:c.deposit.source });
+
+    // Agency fee
+    if (useAgency && c.agency.pct > 0) {
+      const agencyFee = rent * c.agency.pct;
+      items.push({ label:`Agency fee (${c.agency.pct} month${c.agency.pct>1?'s':''} rent)`, value:agencyFee, source:c.agency.source });
+    } else if (useAgency && c.agency.pct === 0) {
+      items.push({ label:'Agency fee', value:0, source:c.agency.source });
+    }
+
+    // Utility setup
+    items.push({ label:'Utility setup (electricity, gas, water)', value:c.utility.setup, source:c.utility.source });
+
+    // Insurance (first month)
+    items.push({ label:'Insurance (first month)', value:c.insurance.monthly, source:c.insurance.source });
+
+    const total = items.reduce((s, i) => s + i.value, 0);
+
+    rows.innerHTML = items.map(i => `
+      <div class="result-row">
+        <div><span class="result-label">${i.label}</span><div class="result-source">${i.source}</div></div>
+        <span class="result-value">&euro;${i.value.toLocaleString('en',{minimumFractionDigits:0,maximumFractionDigits:0})}</span>
+      </div>`).join('');
+
+    document.getElementById('totalCost').innerHTML = `&euro;${total.toLocaleString('en',{minimumFractionDigits:0,maximumFractionDigits:0})}`;
+    document.getElementById('resultNote').textContent = `Estimates for ${c.name} based on a monthly rent of €${rent.toLocaleString()}. Deposit limits and agency fee rules are sourced from national tenancy legislation as of 2025. Utility setup and insurance costs are regional averages and may vary. Always confirm exact amounts with your agency or landlord.`;
+    results.classList.add('visible');
+    results.scrollIntoView({ behavior:'smooth', block:'start' });
+  });
+  </script>
+</body>
+</html>

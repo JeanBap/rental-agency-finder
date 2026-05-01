@@ -22,7 +22,11 @@
     { "source": "/terms", "destination": "/terms.html" },
     { "source": "/terms/", "destination": "/terms.html" },
     { "source": "/saved", "destination": "/saved.html" },
-    { "source": "/saved/", "destination": "/saved.html" }
+    { "source": "/saved/", "destination": "/saved.html" },
+    { "source": "/tools/rental-cost-calculator", "destination": "/tools/rental-cost-calculator.html" },
+    { "source": "/tools/rental-cost-calculator/", "destination": "/tools/rental-cost-calculator.html" },
+    { "source": "/tools/deposit-law-comparison", "destination": "/tools/deposit-law-comparison.html" },
+    { "source": "/tools/deposit-law-comparison/", "destination": "/tools/deposit-law-comparison.html" }
   ],
   "headers": [
     {
