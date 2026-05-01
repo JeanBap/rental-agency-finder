@@ -128,6 +128,44 @@
     </div>
   </section>
 
+  <!-- CONTACT FORM -->
+  <section class="section">
+    <div class="container" style="max-width:600px;">
+      <h2 class="section-title">Send a Message</h2>
+      <p style="text-align:center;color:var(--text-light);margin-bottom:24px;">Fill out the form and we'll get back to you within 24-48 hours.</p>
+      <form id="contactForm" style="display:flex;flex-direction:column;gap:16px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <label for="contactName" style="display:block;font-size:0.85rem;font-weight:600;margin-bottom:4px;color:var(--text);">Name *</label>
+            <input type="text" id="contactName" name="name" required style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius);font-size:0.9rem;outline:none;" onfocus="this.style.borderColor='var(--primary-light)'" onblur="this.style.borderColor='var(--border)'">
+          </div>
+          <div>
+            <label for="contactEmail" style="display:block;font-size:0.85rem;font-weight:600;margin-bottom:4px;color:var(--text);">Email *</label>
+            <input type="email" id="contactEmail" name="email" required style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius);font-size:0.9rem;outline:none;" onfocus="this.style.borderColor='var(--primary-light)'" onblur="this.style.borderColor='var(--border)'">
+          </div>
+        </div>
+        <div>
+          <label for="contactSubject" style="display:block;font-size:0.85rem;font-weight:600;margin-bottom:4px;color:var(--text);">Subject</label>
+          <select id="contactSubject" name="subject" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius);font-size:0.9rem;outline:none;background:var(--bg);" onfocus="this.style.borderColor='var(--primary-light)'" onblur="this.style.borderColor='var(--border)'">
+            <option value="General Inquiry">General Inquiry</option>
+            <option value="Report an Issue">Report an Issue</option>
+            <option value="Request Agency Addition">Request Agency Addition</option>
+            <option value="Agency Listing">Agency Listing / Paid Plans</option>
+            <option value="Partnership">Partnership Opportunity</option>
+            <option value="Feature Request">Feature Request</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div>
+          <label for="contactMessage" style="display:block;font-size:0.85rem;font-weight:600;margin-bottom:4px;color:var(--text);">Message *</label>
+          <textarea id="contactMessage" name="message" required rows="5" style="width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius);font-size:0.9rem;outline:none;resize:vertical;font-family:inherit;" onfocus="this.style.borderColor='var(--primary-light)'" onblur="this.style.borderColor='var(--border)'" placeholder="How can we help?"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" id="contactSubmitBtn" style="align-self:flex-start;padding:12px 32px;">Send Message</button>
+        <p id="contactMsg" style="font-size:0.85rem;display:none;margin:0;"></p>
+      </form>
+    </div>
+  </section>
+
   <!-- TWO COLUMNS: RENTERS & AGENCIES -->
   <section class="section section-alt">
     <div class="container">
@@ -268,6 +306,62 @@
     </div>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="/js/app.js"></script>
+  <script>
+    document.getElementById('navToggle')?.addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));
+
+    // Contact form submission
+    document.getElementById('contactForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('contactSubmitBtn');
+      const msg = document.getElementById('contactMsg');
+      const name = document.getElementById('contactName').value.trim();
+      const email = document.getElementById('contactEmail').value.trim();
+      const subject = document.getElementById('contactSubject').value;
+      const message = document.getElementById('contactMessage').value.trim();
+
+      if (!name || !email || !message) {
+        msg.textContent = 'Please fill in all required fields.';
+        msg.style.color = '#ef4444';
+        msg.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      try {
+        const SUPABASE_URL = 'https://dciiqcoinlaradmjnkxv.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaWlxY29pbmxhcmFkbWpua3h2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3OTE1MjksImV4cCI6MjA4OTM2NzUyOX0.wT5Eg40gCnNzNKNfIZj7ge6eDxmXL2vFr-FAw6CTqVc';
+
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/raf_contact_submissions`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({ name, email, subject, message })
+        });
+
+        if (!res.ok) throw new Error('Failed to send');
+
+        msg.textContent = 'Message sent successfully! We will respond within 24-48 hours.';
+        msg.style.color = '#16a34a';
+        msg.style.display = 'block';
+        document.getElementById('contactForm').reset();
+        btn.textContent = 'Sent!';
+        setTimeout(() => { btn.textContent = 'Send Message'; btn.disabled = false; }, 3000);
+      } catch (err) {
+        msg.textContent = 'Something went wrong. Please email us directly at info@rentalagencyfinder.com';
+        msg.style.color = '#ef4444';
+        msg.style.display = 'block';
+        btn.textContent = 'Send Message';
+        btn.disabled = false;
+      }
+    });
+  </script>
 </body>
 </html>
