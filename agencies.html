@@ -155,7 +155,8 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="/js/app.js"></script>
   <script>
-    // Agencies page init
+    // Agencies page init - skip if on agency detail route
+    if (!window.location.pathname.startsWith('/agency/')) {
     (async () => {
       await loadCountries();
       // Populate filter dropdown
@@ -241,6 +242,7 @@
       const qs = p.toString();
       window.location.href = url + (qs ? '?' + qs : '');
     }
+    } // end if not agency detail route
   </script>
 </body>
 </html>
