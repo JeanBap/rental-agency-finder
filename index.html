@@ -85,8 +85,9 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+  <a href="#hero" class="skip-link">Skip to main content</a>
   <!-- NAV -->
-  <nav class="nav" id="nav">
+  <nav class="nav" id="nav" aria-label="Main navigation">
     <div class="container nav-inner">
       <a href="/" class="nav-logo">
         <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#1a56db"/><path d="M7 20V10l7-4 7 4v10l-7 4-7-4z" stroke="#fff" stroke-width="1.5" fill="none"/><circle cx="14" cy="14" r="3" fill="#fff"/></svg>
@@ -104,6 +105,7 @@
     </div>
   </nav>
 
+  <main id="main-content">
   <!-- HERO -->
   <section class="hero" id="hero">
     <div class="container">
@@ -296,6 +298,7 @@
       <h2 class="section-title">Stay Updated</h2>
       <p style="color:var(--text-light);margin-bottom:20px;">Get the latest European rental market insights, new city guides, and agency reviews delivered to your inbox.</p>
       <form id="newsletterForm" style="display:flex;gap:8px;max-width:480px;margin:0 auto;">
+        <label for="newsletterEmail" class="sr-only">Email address</label>
         <input type="email" id="newsletterEmail" placeholder="Your email address" required style="flex:1;padding:12px 16px;border:1px solid var(--border);border-radius:var(--radius);font-size:0.95rem;outline:none;" onfocus="this.style.borderColor='var(--primary-light)'" onblur="this.style.borderColor='var(--border)'">
         <button type="submit" class="btn btn-primary" style="white-space:nowrap;">Subscribe</button>
       </form>
@@ -303,6 +306,8 @@
       <p style="font-size:0.75rem;color:var(--text-lighter);margin-top:8px;">No spam. Unsubscribe anytime.</p>
     </div>
   </section>
+
+  </main>
 
   <!-- FOOTER -->
   <footer class="footer">
