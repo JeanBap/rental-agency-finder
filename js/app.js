@@ -22,14 +22,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   const path = window.location.pathname;
   if (path === '/' || path === '/index.html') {
     await loadHomepage();
+  } else if (path.startsWith('/agency/')) {
+    await loadAgencyDetail();
   } else if (path.startsWith('/agencies')) {
     await loadAgenciesPage();
   } else if (path === '/for-agencies' || path === '/for-agencies/') {
     // Static page, no dynamic data needed
   } else if (path.startsWith('/blog')) {
     await loadBlogPage();
-  } else if (path.startsWith('/agency/')) {
-    await loadAgencyDetail();
   }
 });
 
