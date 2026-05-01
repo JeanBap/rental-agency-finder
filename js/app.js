@@ -28,6 +28,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadAgencyDetail();
   } else if (path.startsWith('/agencies')) {
     await loadAgenciesPage();
+  } else if (path === '/saved' || path === '/saved/') {
+    await loadSavedPage();
   } else if (path === '/for-agencies' || path === '/for-agencies/') {
     // Static page, no dynamic data needed
   } else if (path.startsWith('/blog')) {
@@ -983,6 +985,142 @@ function clearSavedAgencies() {
   if (el) el.remove();
 }
 window.clearSavedAgencies = clearSavedAgencies;
+
+// === SAVED AGENCIES PAGE ===
+async function loadSavedPage() {
+  const container = document.getElementById('savedContent');
+  if (!container) return;
+
+  try {
+    const saved = JSON.parse(localStorage.getItem('raf_saved') || '[]');
+
+    if (saved.length === 0) {
+      container.innerHTML = `
+        <div class="saved-empty">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-lighter)" stroke-width="1.5"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+          <h3>No saved agencies yet</h3>
+          <p>Browse agencies and click the Save button to add them to your shortlist for easy comparison.</p>
+          <a href="/agencies" class="btn btn-primary">Browse Agencies</a>
+        </div>`;
+      return;
+    }
+
+    // Fetch full details for saved agencies from Supabase
+    const slugs = saved.map(s => s.slug);
+    const { data: agencies, error } = await sb
+      .from('raf_agencies')
+      .select('*, raf_cities(name, slug), raf_countries(name, slug, flag_emoji)')
+      .in('slug', slugs);
+
+    if (error) throw error;
+
+    // Order by saved order
+    const ordered = slugs.map(slug => agencies.find(a => a.slug === slug)).filter(Boolean);
+
+    const headerBar = `
+      <div class="saved-header-bar">
+        <h2>${svgBookmark(true)} ${ordered.length} Saved ${ordered.length === 1 ? 'Agency' : 'Agencies'}</h2>
+        <div class="saved-header-actions">
+          ${ordered.length >= 2 ? `<button class="btn btn-primary" onclick="compareSavedAgencies()" style="font-size:0.85rem;padding:8px 16px;display:flex;align-items:center;gap:6px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            Compare All
+          </button>` : ''}
+          <button class="btn btn-outline" onclick="clearAllSaved()" style="font-size:0.85rem;padding:8px 16px;">Clear All</button>
+        </div>
+      </div>`;
+
+    const cards = ordered.map(a => {
+      const city = a.raf_cities?.name || '';
+      const country = a.raf_countries?.name || '';
+      const flag = a.raf_countries?.flag_emoji || '';
+      const rating = a.our_rating || 0;
+      const reviewCount = a.our_review_count || 0;
+      const googleRating = a.google_rating || null;
+      const types = (a.rental_types || []).map(t => `<span class="tag">${t.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</span>`).join('');
+      const languages = (a.languages || []).slice(0, 4).join(', ') + ((a.languages || []).length > 4 ? '...' : '');
+      const stars = '&#9733;'.repeat(Math.round(rating));
+
+      return `
+        <div class="saved-card" data-slug="${a.slug}">
+          <button class="saved-remove" onclick="removeSavedAgency('${a.slug}')" title="Remove from saved">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+          <div class="saved-card-header">
+            <div class="saved-card-avatar">${a.name.charAt(0)}</div>
+            <div>
+              <div class="saved-card-name">${a.name}</div>
+              <div class="saved-card-location">${flag} ${city}${city && country ? ', ' : ''}${country}</div>
+            </div>
+          </div>
+          <div class="saved-card-meta">
+            ${rating > 0 ? `<span style="color:#f59e0b;">${stars} ${rating.toFixed(1)} (${reviewCount})</span>` : '<span>No reviews yet</span>'}
+            ${googleRating ? `<span>Google: ${googleRating}</span>` : ''}
+            ${languages ? `<span>${languages}</span>` : ''}
+          </div>
+          ${types ? `<div class="saved-card-types">${types}</div>` : ''}
+          <div class="saved-card-actions">
+            <a href="/agency/${a.slug}" class="btn btn-primary" style="font-size:0.8rem;padding:6px 14px;">View Details</a>
+            ${a.website ? `<a href="${a.website}" target="_blank" rel="noopener" class="btn btn-outline" style="font-size:0.8rem;padding:6px 14px;">Website</a>` : ''}
+            <button class="btn btn-outline" onclick="shareAgency('${a.name.replace(/'/g, "\\'")}', '${a.slug}')" style="font-size:0.8rem;padding:6px 14px;display:flex;align-items:center;gap:4px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+              Share
+            </button>
+          </div>
+        </div>`;
+    }).join('');
+
+    container.innerHTML = headerBar + `<div class="saved-grid">${cards}</div>`;
+  } catch (err) {
+    console.error('Saved page error:', err);
+    container.innerHTML = '<div style="text-align:center;padding:40px;color:#666;"><p>Unable to load saved agencies. Please try again.</p><button onclick="location.reload()" class="btn btn-primary" style="margin-top:16px;">Retry</button></div>';
+  }
+}
+
+function removeSavedAgency(slug) {
+  try {
+    let saved = JSON.parse(localStorage.getItem('raf_saved') || '[]');
+    saved = saved.filter(s => s.slug !== slug);
+    localStorage.setItem('raf_saved', JSON.stringify(saved));
+    const card = document.querySelector(`.saved-card[data-slug="${slug}"]`);
+    if (card) {
+      card.style.transition = 'opacity 0.3s, transform 0.3s';
+      card.style.opacity = '0';
+      card.style.transform = 'scale(0.95)';
+      setTimeout(() => {
+        card.remove();
+        // Refresh header count or show empty state
+        if (saved.length === 0) {
+          loadSavedPage();
+        } else {
+          const h2 = document.querySelector('.saved-header-bar h2');
+          if (h2) h2.innerHTML = `${svgBookmark(true)} ${saved.length} Saved ${saved.length === 1 ? 'Agency' : 'Agencies'}`;
+          // Remove compare button if < 2
+          if (saved.length < 2) {
+            const cmpBtn = document.querySelector('.saved-header-actions .btn-primary');
+            if (cmpBtn) cmpBtn.remove();
+          }
+        }
+      }, 300);
+    }
+  } catch (e) {}
+}
+window.removeSavedAgency = removeSavedAgency;
+
+function clearAllSaved() {
+  localStorage.removeItem('raf_saved');
+  loadSavedPage();
+}
+window.clearAllSaved = clearAllSaved;
+
+function compareSavedAgencies() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('raf_saved') || '[]');
+    // Take first 3 for comparison
+    compareList = saved.slice(0, 3).map(s => ({ slug: s.slug, name: s.name }));
+    openCompareModal();
+  } catch (e) {}
+}
+window.compareSavedAgencies = compareSavedAgencies;
 
 function clearRecentlyViewed() {
   localStorage.removeItem('raf_recent');

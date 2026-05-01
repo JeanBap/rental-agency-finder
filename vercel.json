@@ -20,7 +20,9 @@
     { "source": "/privacy", "destination": "/privacy.html" },
     { "source": "/privacy/", "destination": "/privacy.html" },
     { "source": "/terms", "destination": "/terms.html" },
-    { "source": "/terms/", "destination": "/terms.html" }
+    { "source": "/terms/", "destination": "/terms.html" },
+    { "source": "/saved", "destination": "/saved.html" },
+    { "source": "/saved/", "destination": "/saved.html" }
   ],
   "headers": [
     {

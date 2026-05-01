@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saved Agencies - Your Shortlist | Rental Agency Finder</title>
+  <meta name="description" content="View and manage your saved rental agencies. Compare your shortlisted agencies side by side.">
+  <link rel="canonical" href="https://www.rentalagencyfinder.com/saved">
+  <link rel="icon" href="/favicon.ico">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .saved-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+    .saved-card { padding: 24px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); transition: all var(--transition); position: relative; }
+    .saved-card:hover { border-color: var(--primary-light); box-shadow: var(--shadow); }
+    .saved-card-header { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+    .saved-card-avatar { width: 44px; height: 44px; border-radius: var(--radius); background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; flex-shrink: 0; }
+    .saved-card-name { font-size: 1.05rem; font-weight: 700; color: var(--text); }
+    .saved-card-location { font-size: 0.85rem; color: var(--text-light); margin-top: 2px; }
+    .saved-card-meta { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; font-size: 0.85rem; color: var(--text-light); }
+    .saved-card-meta span { display: flex; align-items: center; gap: 4px; }
+    .saved-card-types { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+    .saved-card-types .tag { font-size: 0.75rem; padding: 3px 10px; background: var(--bg-alt); border-radius: 12px; color: var(--text-light); }
+    .saved-card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .saved-card-actions .btn { font-size: 0.8rem; padding: 6px 14px; }
+    .saved-remove { position: absolute; top: 12px; right: 12px; background: none; border: none; cursor: pointer; color: var(--text-lighter); padding: 4px; border-radius: 4px; transition: all var(--transition); }
+    .saved-remove:hover { color: #ef4444; background: #fef2f2; }
+    .saved-empty { text-align: center; padding: 60px 20px; }
+    .saved-empty svg { margin-bottom: 16px; }
+    .saved-empty h3 { font-size: 1.2rem; margin-bottom: 8px; }
+    .saved-empty p { color: var(--text-light); margin-bottom: 20px; max-width: 400px; margin-left: auto; margin-right: auto; }
+    .saved-header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 12px; }
+    .saved-header-bar h2 { margin: 0; font-size: 1.1rem; }
+    .saved-header-actions { display: flex; gap: 8px; }
+    @media (max-width: 480px) { .saved-grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <nav class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#1a56db"/><path d="M7 20V10l7-4 7 4v10l-7 4-7-4z" stroke="#fff" stroke-width="1.5" fill="none"/><circle cx="14" cy="14" r="3" fill="#fff"/></svg><span>RentalAgencyFinder</span></a>
+      <div class="nav-links" id="navLinks"><a href="/">Home</a><a href="/agencies">Browse Agencies</a><a href="/blog">Blog</a><a href="/for-agencies" class="nav-cta">For Agencies</a></div>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+
+  <section class="page-header">
+    <div class="container">
+      <div class="breadcrumb"><a href="/">Home</a> / <a href="/agencies">Agencies</a> / <span>Saved</span></div>
+      <h1>Saved Agencies</h1>
+      <p>Your shortlisted rental agencies, ready for comparison</p>
+    </div>
+  </section>
+
+  <main>
+    <div class="container section" id="savedContent">
+      <!-- Dynamic content loaded by app.js -->
+      <div style="text-align:center;padding:40px;">
+        <div class="skeleton-line" style="width:200px;height:20px;margin:0 auto 16px;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px;"></div>
+        <div class="skeleton-line" style="width:300px;height:14px;margin:0 auto;background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:4px;"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-col"><h4>Rental Agency Finder</h4><p>The first European-wide directory for finding and reviewing rental agencies.</p></div>
+      <div class="footer-col"><h4>Browse</h4><a href="/agencies">All Agencies</a><a href="/agencies?type=short_term">Short-Term</a><a href="/agencies?type=long_term">Long-Term</a></div>
+      <div class="footer-col"><h4>Resources</h4><a href="/blog">Blog</a><a href="/about">About</a><a href="/for-agencies">For Agencies</a></div>
+      <div class="footer-col"><h4>Popular</h4><a href="/agencies/spain">Spain</a><a href="/agencies/italy">Italy</a><a href="/agencies/greece">Greece</a></div>
+    </div>
+    <div class="container footer-bottom"><p>&copy; 2026 Rental Agency Finder. All rights reserved. <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p></div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="/js/app.js"></script>
+  <script>document.getElementById('navToggle')?.addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));</script>
+</body>
+</html>
