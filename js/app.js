@@ -571,12 +571,27 @@ function renderAgencyList(agencies, country, city, type) {
         ${a.website ? `<a href="${a.website}" target="_blank" rel="noopener">Website</a>` : ''}
       </div>` : `<button class="btn btn-sm btn-secondary" onclick="openReviewModal()">Unlock Contact</button>`;
 
+    // Truncate long names
+    const displayName = a.name.length > 45 ? a.name.substring(0, 42) + '...' : a.name;
+    const nameTitle = a.name.length > 45 ? ` title="${a.name.replace(/"/g, '&quot;')}"` : '';
+
+    // Website favicon
+    let logoHtml;
+    if (a.website) {
+      try {
+        const domain = new URL(a.website.startsWith('http') ? a.website : 'https://' + a.website).hostname;
+        logoHtml = `<img class="agency-favicon" src="https://www.google.com/s2/favicons?domain=${domain}&sz=64" alt="" width="32" height="32" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="agency-logo" style="display:none">${a.name.charAt(0)}</div>`;
+      } catch { logoHtml = `<div class="agency-logo">${a.name.charAt(0)}</div>`; }
+    } else {
+      logoHtml = `<div class="agency-logo">${a.name.charAt(0)}</div>`;
+    }
+
     return `
     <div class="agency-card">
-      <div class="agency-logo">${a.name.charAt(0)}</div>
+      <div class="agency-logo-wrap">${logoHtml}</div>
       <div class="agency-info">
-        <h3><a href="/agency/${a.slug}">${a.name}</a></h3>
-        <div class="agency-location">${a.raf_cities?.name || ''}, ${a.raf_countries?.name || ''}</div>
+        <h3${nameTitle}><a href="/agency/${a.slug}">${displayName}</a></h3>
+        <div class="agency-location"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-2px;margin-right:4px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${a.raf_cities?.name || ''}, ${a.raf_countries?.name || ''}</div>
         <div class="agency-tags">${rentalBadges}</div>
         <div class="agency-rating">
           <span class="stars">${stars}</span>

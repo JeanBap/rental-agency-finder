@@ -30,7 +30,15 @@
     .blog-card p { font-size: 0.9rem; color: var(--text-light); margin-bottom: 12px; line-height: 1.6; }
     .blog-date { font-size: 0.8rem; color: var(--text-lighter); }
     .blog-tags { display: flex; gap: 8px; margin-top: 12px; }
-    @media (max-width: 480px) { .blog-grid { grid-template-columns: 1fr; } }
+    .blog-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .filter-btn { padding: 8px 16px; border: 1px solid var(--border); border-radius: 20px; background: var(--bg); color: var(--text-light); font-size: 0.85rem; cursor: pointer; transition: all var(--transition); }
+    .filter-btn:hover { border-color: var(--primary-light); color: var(--primary); }
+    .filter-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .blog-count { font-size: 0.85rem; color: var(--text-lighter); margin-bottom: 20px; }
+    .skeleton-card { pointer-events: none; }
+    .skeleton-line { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; border-radius: 4px; }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+    @media (max-width: 480px) { .blog-grid { grid-template-columns: 1fr; } .blog-filters { gap: 6px; } .filter-btn { font-size: 0.8rem; padding: 6px 12px; } }
   </style>
 </head>
 <body>
@@ -50,67 +58,20 @@
   </section>
   <main>
     <div class="container section">
+      <!-- Category filter tabs -->
+      <div class="blog-filters" id="blogFilters">
+        <button class="filter-btn active" data-filter="all">All Posts</button>
+        <button class="filter-btn" data-filter="pillar">Comprehensive Guide</button>
+        <button class="filter-btn" data-filter="city">City Guides</button>
+        <button class="filter-btn" data-filter="country">Country Guides</button>
+        <button class="filter-btn" data-filter="niche">Niche Guides</button>
+      </div>
+      <p class="blog-count" id="blogCount"></p>
       <div class="blog-grid" id="blogGrid">
-        <a href="/blog/complete-guide-rental-agencies-europe" class="blog-card">
-          <span class="blog-date">April 30, 2026</span>
-          <h3>The Complete Guide to Rental Agencies in Europe (2026)</h3>
-          <p>Everything you need to know about finding, vetting, and working with rental agencies across 35 European countries. Covers tenant rights, fees, scams to avoid, and city-by-city breakdowns.</p>
-          <div class="blog-tags"><span class="tag">Guide</span><span class="tag">Europe</span><span class="tag">Pillar</span></div>
-        </a>
-        <a href="/blog/best-rental-agencies-barcelona" class="blog-card">
-          <span class="blog-date">April 30, 2026</span>
-          <h3>Best Rental Agencies in Barcelona: A Complete Guide for 2026</h3>
-          <p>Navigate Barcelona's competitive rental market with our curated list of trusted agencies. Covers Eixample, Gracia, Born, and more neighbourhoods.</p>
-          <div class="blog-tags"><span class="tag">Barcelona</span><span class="tag">Spain</span></div>
-        </a>
-        <a href="/blog/best-rental-agencies-berlin" class="blog-card">
-          <span class="blog-date">April 30, 2026</span>
-          <h3>Best Rental Agencies in Berlin: A Complete Guide for 2026</h3>
-          <p>Find reliable rental agencies in Berlin. Covers Mietpreisbremse, Anmeldung, WBS housing, and the best agencies by neighbourhood.</p>
-          <div class="blog-tags"><span class="tag">Berlin</span><span class="tag">Germany</span></div>
-        </a>
-        <a href="/blog/best-rental-agencies-lisbon" class="blog-card">
-          <span class="blog-date">April 30, 2026</span>
-          <h3>Best Rental Agencies in Lisbon: A Complete Guide for 2026</h3>
-          <p>Your guide to Lisbon's rental market. From Alfama to Belem, find the right agency for short-term, student, or long-term housing.</p>
-          <div class="blog-tags"><span class="tag">Lisbon</span><span class="tag">Portugal</span></div>
-        </a>
-        <a href="/blog/best-rental-agencies-paris" class="blog-card">
-          <span class="blog-date">April 30, 2026</span>
-          <h3>Best Rental Agencies in Paris: A Complete Guide for 2026</h3>
-          <p>Navigate the Parisian rental market with confidence. Understand agency fees, dossier requirements, and find trusted agencies by arrondissement.</p>
-          <div class="blog-tags"><span class="tag">Paris</span><span class="tag">France</span></div>
-        </a>
-        <a href="/blog/best-rental-agencies-amsterdam" class="blog-card">
-          <span class="blog-date">April 30, 2026</span>
-          <h3>Best Rental Agencies in Amsterdam: A Complete Guide for 2026</h3>
-          <p>Find housing in Amsterdam's tight market. Covers makelaars, rental platforms, and what to expect from Dutch letting agents.</p>
-          <div class="blog-tags"><span class="tag">Amsterdam</span><span class="tag">Netherlands</span></div>
-        </a>
-        <a href="/blog/best-rental-agencies-rome" class="blog-card">
-          <span class="blog-date">April 30, 2026</span>
-          <h3>Best Rental Agencies in Rome: A Complete Guide for 2026</h3>
-          <p>Navigate Rome's rental market from Trastevere to Prati. Covers Tecnocasa, Gabetti, Italian rental law, cedolare secca, and neighbourhood pricing.</p>
-          <div class="blog-tags"><span class="tag">Rome</span><span class="tag">Italy</span></div>
-        </a>
-        <a href="/blog/best-rental-agencies-athens" class="blog-card">
-          <span class="blog-date">April 30, 2026</span>
-          <h3>Best Rental Agencies in Athens: A Complete Guide for 2026</h3>
-          <p>Find trusted rental agencies in Athens. Covers Kolonaki, Exarchia, Koukaki, Greek tenant rights, and tips for expats navigating the market.</p>
-          <div class="blog-tags"><span class="tag">Athens</span><span class="tag">Greece</span></div>
-        </a>
-        <a href="/blog/best-rental-agencies-madrid" class="blog-card">
-          <span class="blog-date">April 30, 2026</span>
-          <h3>Best Rental Agencies in Madrid: A Complete Guide for 2026</h3>
-          <p>Your guide to Madrid's rental agencies. From Salamanca to Malasana, find the right agency and understand Spanish rental law (LAU, fianza).</p>
-          <div class="blog-tags"><span class="tag">Madrid</span><span class="tag">Spain</span></div>
-        </a>
-        <a href="/blog/best-rental-agencies-prague" class="blog-card">
-          <span class="blog-date">April 30, 2026</span>
-          <h3>Best Rental Agencies in Prague: A Complete Guide for 2026</h3>
-          <p>Find housing in Prague from Vinohrady to Karlin. Covers Bezrealitky, Sreality, Czech rental law, and tips for expats and digital nomads.</p>
-          <div class="blog-tags"><span class="tag">Prague</span><span class="tag">Czech Republic</span></div>
-        </a>
+        <!-- Loading skeleton -->
+        <div class="blog-card skeleton-card"><div class="skeleton-line" style="width:40%;height:14px;margin-bottom:12px"></div><div class="skeleton-line" style="width:90%;height:20px;margin-bottom:8px"></div><div class="skeleton-line" style="width:100%;height:14px;margin-bottom:6px"></div><div class="skeleton-line" style="width:70%;height:14px"></div></div>
+        <div class="blog-card skeleton-card"><div class="skeleton-line" style="width:40%;height:14px;margin-bottom:12px"></div><div class="skeleton-line" style="width:90%;height:20px;margin-bottom:8px"></div><div class="skeleton-line" style="width:100%;height:14px;margin-bottom:6px"></div><div class="skeleton-line" style="width:70%;height:14px"></div></div>
+        <div class="blog-card skeleton-card"><div class="skeleton-line" style="width:40%;height:14px;margin-bottom:12px"></div><div class="skeleton-line" style="width:90%;height:20px;margin-bottom:8px"></div><div class="skeleton-line" style="width:100%;height:14px;margin-bottom:6px"></div><div class="skeleton-line" style="width:70%;height:14px"></div></div>
       </div>
     </div>
   </main>
@@ -125,6 +86,63 @@
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="/js/app.js"></script>
-  <script>document.getElementById('navToggle')?.addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));</script>
+  <script>
+    document.getElementById('navToggle')?.addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));
+
+    // Blog index: load all posts from Supabase
+    (async function() {
+      const SUPABASE_URL = 'https://dciiqcoinlaradmjnkxv.supabase.co';
+      const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjaWlxY29pbmxhcmFkbWpua3h2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM3OTE1MjksImV4cCI6MjA4OTM2NzUyOX0.wT5Eg40gCnNzNKNfIZj7ge6eDxmXL2vFr-FAw6CTqVc';
+      const grid = document.getElementById('blogGrid');
+      const countEl = document.getElementById('blogCount');
+
+      try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/raf_blog_posts?select=title,slug,meta_description,tags,published_at&status=eq.published&order=published_at.desc`, {
+          headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+        });
+        if (!res.ok) throw new Error('Failed to load posts');
+        const posts = await res.json();
+
+        // Classify posts into categories
+        const nicheKeywords = ['student', 'nomad', 'expat', 'pet-friendly', 'furnished', 'family', 'seasonal', 'corporate', 'accessible'];
+        posts.forEach(p => {
+          if (p.slug === 'complete-guide-rental-agencies-europe') p._category = 'pillar';
+          else if (p.slug.startsWith('best-rental-agencies-') && !p.slug.includes('guide')) p._category = 'city';
+          else if (p.slug.endsWith('-rental-market-guide') || p.slug.startsWith('rental-agencies-in-')) p._category = 'country';
+          else if (nicheKeywords.some(k => p.slug.includes(k)) || p.slug.includes('renting-with') || p.slug.includes('digital-nomad')) p._category = 'niche';
+          else p._category = 'city'; // default
+        });
+
+        function renderPosts(filter) {
+          const filtered = filter === 'all' ? posts : posts.filter(p => p._category === filter);
+          countEl.textContent = `Showing ${filtered.length} of ${posts.length} posts`;
+          grid.innerHTML = filtered.map(p => {
+            const date = new Date(p.published_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+            const tags = (p.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+            return `<a href="/blog/${p.slug}" class="blog-card">
+              <span class="blog-date">${date}</span>
+              <h3>${p.title}</h3>
+              <p>${p.meta_description || ''}</p>
+              ${tags ? `<div class="blog-tags">${tags}</div>` : ''}
+            </a>`;
+          }).join('');
+        }
+
+        renderPosts('all');
+
+        // Filter tab clicks
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderPosts(btn.dataset.filter);
+          });
+        });
+      } catch (err) {
+        console.error('Blog load error:', err);
+        grid.innerHTML = '<div style="text-align:center;padding:40px;color:#666;"><p>Unable to load blog posts. Please try again later.</p><button onclick="location.reload()" class="btn btn-primary" style="margin-top:16px;">Retry</button></div>';
+      }
+    })();
+  </script>
 </body>
 </html>

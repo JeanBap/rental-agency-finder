@@ -180,8 +180,10 @@ input, select, textarea { font-family: var(--font); font-size: 0.95rem; }
 
 .agency-list { display: grid; gap: 20px; padding: 40px 0; }
 .agency-card { display: flex; gap: 24px; padding: 24px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); transition: all var(--transition); }
-.agency-card:hover { box-shadow: var(--shadow); border-color: var(--primary-light); }
+.agency-card:hover { box-shadow: var(--shadow); border-color: var(--primary-light); transform: translateY(-1px); }
+.agency-card .agency-logo-wrap { width: 80px; height: 80px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
 .agency-card .agency-logo { width: 80px; height: 80px; background: var(--bg-alt); border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 2rem; font-weight: 700; color: var(--primary); }
+.agency-card .agency-favicon { width: 48px; height: 48px; border-radius: var(--radius); object-fit: contain; background: var(--bg-alt); padding: 8px; }
 .agency-card .agency-info { flex: 1; }
 .agency-card .agency-info h3 { font-size: 1.15rem; margin-bottom: 4px; }
 .agency-card .agency-info h3 a { color: var(--text); }
