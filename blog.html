@@ -66,6 +66,9 @@
         <button class="filter-btn" data-filter="country">Country Guides</button>
         <button class="filter-btn" data-filter="niche">Niche Guides</button>
       </div>
+      <div style="margin-bottom:16px;">
+        <input type="text" id="blogSearch" placeholder="Search posts by keyword..." style="width:100%;max-width:400px;padding:10px 14px 10px 36px;border:1px solid var(--border);border-radius:var(--radius);font-size:0.9rem;outline:none;background:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%239ca3af%22 stroke-width=%222%22><circle cx=%2211%22 cy=%2211%22 r=%228%22/><path d=%22M21 21l-4.35-4.35%22/></svg>') no-repeat 10px center;" onfocus="this.style.borderColor='var(--primary-light)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
       <p class="blog-count" id="blogCount"></p>
       <div class="blog-grid" id="blogGrid">
         <!-- Loading skeleton -->
@@ -128,10 +131,21 @@
           else p._category = 'city'; // default
         });
 
-        function renderPosts(filter) {
-          const filtered = filter === 'all' ? posts : posts.filter(p => p._category === filter);
+        let activeFilter = 'all';
+        let searchQuery = '';
+
+        function renderPosts() {
+          let filtered = activeFilter === 'all' ? posts : posts.filter(p => p._category === activeFilter);
+          if (searchQuery) {
+            const q = searchQuery.toLowerCase();
+            filtered = filtered.filter(p =>
+              p.title.toLowerCase().includes(q) ||
+              (p.meta_description || '').toLowerCase().includes(q) ||
+              (p.tags || []).some(t => t.toLowerCase().includes(q))
+            );
+          }
           countEl.textContent = `Showing ${filtered.length} of ${posts.length} posts`;
-          grid.innerHTML = filtered.map(p => {
+          grid.innerHTML = filtered.length > 0 ? filtered.map(p => {
             const date = new Date(p.published_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
             const tags = (p.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
             return `<a href="/blog/${p.slug}" class="blog-card">
@@ -140,19 +154,33 @@
               <p>${p.meta_description || ''}</p>
               ${tags ? `<div class="blog-tags">${tags}</div>` : ''}
             </a>`;
-          }).join('');
+          }).join('') : '<p style="text-align:center;color:var(--text-light);padding:40px 0;">No posts match your search.</p>';
         }
 
-        renderPosts('all');
+        renderPosts();
 
         // Filter tab clicks
         document.querySelectorAll('.filter-btn').forEach(btn => {
           btn.addEventListener('click', () => {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            renderPosts(btn.dataset.filter);
+            activeFilter = btn.dataset.filter;
+            renderPosts();
           });
         });
+
+        // Search input
+        const blogSearchInput = document.getElementById('blogSearch');
+        if (blogSearchInput) {
+          let searchTimer;
+          blogSearchInput.addEventListener('input', () => {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(() => {
+              searchQuery = blogSearchInput.value.trim();
+              renderPosts();
+            }, 200);
+          });
+        }
       } catch (err) {
         console.error('Blog load error:', err);
         grid.innerHTML = '<div style="text-align:center;padding:40px;color:#666;"><p>Unable to load blog posts. Please try again later.</p><button onclick="location.reload()" class="btn btn-primary" style="margin-top:16px;">Retry</button></div>';

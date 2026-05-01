@@ -100,17 +100,17 @@
       <p class="section-sub">Everything you need to attract more tenants, automatically</p>
       <div class="steps-grid">
         <div class="step-card">
-          <div class="step-num" style="background: linear-gradient(135deg, #10b981, #059669);">&#128270;</div>
+          <div class="step-num" style="background: linear-gradient(135deg, #10b981, #059669);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></div>
           <h3>Get Found</h3>
           <p>Tenants searching for "rental agency in [your city]" find your listing. We rank for hundreds of long-tail keywords across Europe.</p>
         </div>
         <div class="step-card">
-          <div class="step-num" style="background: linear-gradient(135deg, #f59e0b, #d97706);">&#11088;</div>
+          <div class="step-num" style="background: linear-gradient(135deg, #f59e0b, #d97706);"><svg width="24" height="24" viewBox="0 0 24 24" fill="#fff" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
           <h3>Build Trust</h3>
           <p>Collect reviews from your tenants. A strong review profile makes you the obvious choice over competitors without reviews.</p>
         </div>
         <div class="step-card">
-          <div class="step-num" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">&#128200;</div>
+          <div class="step-num" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
           <h3>Receive Referrals</h3>
           <p>Qualified tenants actively looking for agencies are sent directly to you. Track views, clicks, and contact requests in your dashboard.</p>
         </div>
@@ -215,6 +215,7 @@
           <input type="url" id="claimWebsite" placeholder="https://youragency.com">
         </div>
         <button type="submit" class="btn btn-primary btn-full">Submit Claim</button>
+        <p id="claimMsg" style="margin-top:12px;font-size:0.9rem;display:none;text-align:center;"></p>
       </form>
     </div>
   </section>
@@ -300,6 +301,8 @@
     // Claim form
     document.getElementById('claimForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
+      const msg = document.getElementById('claimMsg');
+      const btn = e.target.querySelector('button[type="submit"]');
       const agencyName = document.getElementById('claimAgency').value.trim();
       const claim = {
         claimer_name: document.getElementById('claimName').value.trim(),
@@ -307,20 +310,29 @@
         agency_name: agencyName,
         agency_website: document.getElementById('claimWebsite').value.trim() || null
       };
-      const { data: existing } = await sb.from('raf_agencies')
-        .select('id')
-        .ilike('name', `%${agencyName}%`)
-        .limit(1);
-      if (existing && existing.length > 0) {
-        claim.agency_id = existing[0].id;
+      btn.textContent = 'Submitting...';
+      btn.disabled = true;
+      try {
+        const { data: existing } = await sb.from('raf_agencies')
+          .select('id')
+          .ilike('name', `%${agencyName}%`)
+          .limit(1);
+        if (existing && existing.length > 0) {
+          claim.agency_id = existing[0].id;
+        }
+        const { error } = await sb.from('raf_agency_claims').insert([claim]);
+        if (error) throw error;
+        msg.textContent = 'Claim submitted! We will review your request within 48 hours.';
+        msg.style.color = 'var(--success, #16a34a)';
+        msg.style.display = 'block';
+        e.target.reset();
+      } catch (err) {
+        msg.textContent = 'Error submitting claim. Please try again or email info@rentalagencyfinder.com.';
+        msg.style.color = '#dc2626';
+        msg.style.display = 'block';
       }
-      const { error } = await sb.from('raf_agency_claims').insert([claim]);
-      if (error) {
-        alert('Error submitting claim. Please try again.');
-        return;
-      }
-      alert('Claim submitted! We will review your request within 48 hours.');
-      e.target.reset();
+      btn.textContent = 'Submit Claim';
+      btn.disabled = false;
     });
 
     // Stripe checkout buttons
