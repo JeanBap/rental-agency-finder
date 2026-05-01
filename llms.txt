@@ -15,7 +15,7 @@ Rental Agency Finder helps tenants find trustworthy rental agencies across 36 Eu
 - 36 European countries
 - 64 cities
 - 4,253 rental agency listings
-- 48 blog posts (city guides, country guides, niche audience guides, and a comprehensive European rental guide)
+- 51 blog posts (city guides, country guides, niche audience guides, and a comprehensive European rental guide)
 - Structured FAQs for 19 major cities with FAQPage schema
 - Sort by rating, name, or reviews; filter by rental type
 
@@ -23,7 +23,7 @@ Rental Agency Finder helps tenants find trustworthy rental agencies across 36 Eu
 - 1 comprehensive European rental agency guide
 - 19 city-specific guides (Barcelona, Berlin, Lisbon, Paris, Amsterdam, Rome, Athens, Madrid, Prague, London, Dublin, Vienna, Budapest, Stockholm, Copenhagen, Brussels, Zurich, Helsinki, Edinburgh)
 - 10 country-level rental market guides (Germany, France, Spain, Italy, Portugal, Netherlands, Greece, Austria, Sweden, Switzerland)
-- 18 niche audience guides (student housing, digital nomad rentals, expat relocation, pet-friendly rentals, furnished apartments, family rentals, seasonal rentals, corporate housing, accessible rentals, luxury rentals, co-living spaces, retirement housing, budget rentals, remote work visa rentals, short-stay Airbnb alternatives, relocation services, renting without credit history, mid-term rentals)
+- 21 niche audience guides (student housing, digital nomad rentals, expat relocation, pet-friendly rentals, furnished apartments, family rentals, seasonal rentals, corporate housing, accessible rentals, luxury rentals, co-living spaces, retirement housing, budget rentals, remote work visa rentals, short-stay Airbnb alternatives, relocation services, renting without credit history, mid-term rentals, renting as a couple, utility setup, rental scam prevention)
 
 ## Countries covered
 Spain, Portugal, Italy, Greece, France, Germany, Netherlands, United Kingdom, Ireland, Belgium, Austria, Switzerland, Czech Republic, Poland, Hungary, Croatia, Slovenia, Malta, Cyprus, Sweden, Denmark, Norway, Finland, Estonia, Latvia, Lithuania, Romania, Bulgaria, Slovakia, Luxembourg, Iceland, Serbia, Montenegro, Albania, North Macedonia, Turkey.
