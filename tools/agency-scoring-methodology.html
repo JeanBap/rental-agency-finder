@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" href="/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agency Scoring Methodology - How We Rate Rental Agencies | Rental Agency Finder</title>
+  <meta name="description" content="Understand how Rental Agency Finder evaluates and scores rental agencies across Europe. Our transparent methodology covers response time, fee transparency, language support, tenant satisfaction, and more.">
+  <link rel="canonical" href="https://www.rentalagencyfinder.com/tools/agency-scoring-methodology">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Agency Scoring Methodology - How We Rate Rental Agencies">
+  <meta property="og:description" content="Our transparent scoring system for rental agencies: 7 criteria, weighted scoring, verification process.">
+  <meta property="og:url" content="https://www.rentalagencyfinder.com/tools/agency-scoring-methodology">
+  <meta property="og:image" content="https://www.rentalagencyfinder.com/images/og-image.png">
+  <meta property="og:site_name" content="Rental Agency Finder">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">
+  [{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://www.rentalagencyfinder.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://www.rentalagencyfinder.com/tools/"},{"@type":"ListItem","position":3,"name":"Scoring Methodology","item":"https://www.rentalagencyfinder.com/tools/agency-scoring-methodology"}]},{"@context":"https://schema.org","@type":"Article","headline":"How We Score and Rate Rental Agencies","description":"Transparent methodology behind Rental Agency Finder's agency ratings across Europe.","author":{"@type":"Organization","name":"Rental Agency Finder"},"publisher":{"@type":"Organization","name":"Rental Agency Finder","url":"https://www.rentalagencyfinder.com"},"datePublished":"2025-01-15","dateModified":"2025-01-15","mainEntityOfPage":"https://www.rentalagencyfinder.com/tools/agency-scoring-methodology"}]
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .method-content { max-width: 800px; }
+    .method-content h2 { font-size: 1.3rem; margin: 40px 0 12px; color: var(--text); }
+    .method-content h3 { font-size: 1.05rem; margin: 28px 0 8px; color: var(--text); }
+    .method-content p { font-size: 0.95rem; color: var(--text-light); line-height: 1.75; margin-bottom: 16px; }
+    .criteria-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 16px; }
+    .criteria-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .criteria-name { font-weight: 700; font-size: 1rem; }
+    .criteria-weight { background: var(--primary); color: #fff; padding: 3px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; }
+    .criteria-desc { font-size: 0.9rem; color: var(--text-light); line-height: 1.6; margin-bottom: 12px; }
+    .criteria-scale { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; }
+    .scale-item { text-align: center; padding: 8px 4px; background: var(--bg-alt, #f8f9fa); border-radius: var(--radius); font-size: 0.75rem; color: var(--text-lighter); }
+    .scale-item strong { display: block; font-size: 0.85rem; color: var(--text); margin-bottom: 2px; }
+    .weight-bar { height: 8px; border-radius: 4px; background: #e5e7eb; margin: 24px 0; overflow: hidden; display: flex; }
+    .weight-segment { height: 100%; transition: width 0.3s; }
+    .weight-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; }
+    .weight-legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; color: var(--text-light); }
+    .weight-legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+    .process-step { display: flex; gap: 16px; margin-bottom: 20px; }
+    .step-num { width: 32px; height: 32px; min-width: 32px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; margin-top: 2px; }
+    .step-body h4 { font-size: 0.95rem; margin-bottom: 4px; }
+    .step-body p { font-size: 0.88rem; }
+    .faq-item { border-bottom: 1px solid var(--border); padding: 16px 0; }
+    .faq-q { font-weight: 600; font-size: 0.95rem; margin-bottom: 6px; cursor: pointer; }
+    .faq-a { font-size: 0.9rem; color: var(--text-light); line-height: 1.6; }
+    @media (max-width: 480px) { .criteria-scale { grid-template-columns: repeat(3, 1fr); } .process-step { flex-direction: column; gap: 8px; } }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <nav class="nav" id="nav" aria-label="Main navigation">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#1a56db"/><path d="M7 20V10l7-4 7 4v10l-7 4-7-4z" stroke="#fff" stroke-width="1.5" fill="none"/><circle cx="14" cy="14" r="3" fill="#fff"/></svg><span>RentalAgencyFinder</span></a>
+      <div class="nav-links" id="navLinks"><a href="/">Home</a><a href="/agencies">Browse Agencies</a><a href="/blog">Blog</a><a href="/for-agencies" class="nav-cta">For Agencies</a></div>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <section class="page-header">
+    <div class="container">
+      <div class="breadcrumb"><a href="/">Home</a> / <a href="/tools/">Tools</a> / <span>Scoring Methodology</span></div>
+      <h1>How We Score Rental Agencies</h1>
+      <p>A transparent, multi-criteria rating system built for tenants</p>
+    </div>
+  </section>
+  <main id="main-content">
+    <div class="container section">
+      <div class="method-content">
+        <p>Most rental directories sort agencies by price or alphabetically. That tells you nothing about whether an agency will answer your emails, explain their fees clearly, or help you in your language. We built a scoring system that evaluates what actually matters to tenants renting across borders.</p>
+        <p>Every agency listed on Rental Agency Finder is scored on seven criteria, each weighted by how much it affects the tenant experience. The composite score (out of 5.0) appears on every agency card and detail page. Here is exactly how it works.</p>
+
+        <h2>The Seven Scoring Criteria</h2>
+
+        <div class="weight-bar">
+          <div class="weight-segment" style="width:25%;background:#1a56db;" title="Response Time 25%"></div>
+          <div class="weight-segment" style="width:20%;background:#2563eb;" title="Fee Transparency 20%"></div>
+          <div class="weight-segment" style="width:15%;background:#3b82f6;" title="Tenant Reviews 15%"></div>
+          <div class="weight-segment" style="width:15%;background:#60a5fa;" title="Language Support 15%"></div>
+          <div class="weight-segment" style="width:10%;background:#93c5fd;" title="Listing Quality 10%"></div>
+          <div class="weight-segment" style="width:10%;background:#bfdbfe;" title="Contract Clarity 10%"></div>
+          <div class="weight-segment" style="width:5%;background:#dbeafe;" title="Digital Experience 5%"></div>
+        </div>
+        <div class="weight-legend">
+          <div class="weight-legend-item"><span class="weight-legend-dot" style="background:#1a56db;"></span>Response Time (25%)</div>
+          <div class="weight-legend-item"><span class="weight-legend-dot" style="background:#2563eb;"></span>Fee Transparency (20%)</div>
+          <div class="weight-legend-item"><span class="weight-legend-dot" style="background:#3b82f6;"></span>Tenant Reviews (15%)</div>
+          <div class="weight-legend-item"><span class="weight-legend-dot" style="background:#60a5fa;"></span>Language Support (15%)</div>
+          <div class="weight-legend-item"><span class="weight-legend-dot" style="background:#93c5fd;"></span>Listing Quality (10%)</div>
+          <div class="weight-legend-item"><span class="weight-legend-dot" style="background:#bfdbfe;"></span>Contract Clarity (10%)</div>
+          <div class="weight-legend-item"><span class="weight-legend-dot" style="background:#dbeafe;"></span>Digital Experience (5%)</div>
+        </div>
+
+        <div class="criteria-card">
+          <div class="criteria-header"><span class="criteria-name">1. Response Time</span><span class="criteria-weight">25%</span></div>
+          <p class="criteria-desc">How quickly does the agency respond to initial inquiries? We measure email and form response times using mystery-shopper methodology. Agencies that respond within 4 hours on business days score highest. This criterion gets the heaviest weight because an unresponsive agency wastes the most tenant time and is the top complaint in cross-border renting.</p>
+          <div class="criteria-scale">
+            <div class="scale-item"><strong>5</strong>&lt; 4 hours</div>
+            <div class="scale-item"><strong>4</strong>4-12 hours</div>
+            <div class="scale-item"><strong>3</strong>12-24 hours</div>
+            <div class="scale-item"><strong>2</strong>1-3 days</div>
+            <div class="scale-item"><strong>1</strong>&gt; 3 days / no reply</div>
+          </div>
+        </div>
+
+        <div class="criteria-card">
+          <div class="criteria-header"><span class="criteria-name">2. Fee Transparency</span><span class="criteria-weight">20%</span></div>
+          <p class="criteria-desc">Does the agency publish its fees clearly before you engage? We check whether agency fees, commission structures, and any administrative charges are available on the agency's website or provided upfront upon first contact. Hidden fees are the second most common complaint from renters in Europe, particularly for cross-border tenants unfamiliar with local norms.</p>
+          <div class="criteria-scale">
+            <div class="scale-item"><strong>5</strong>Full fees on website</div>
+            <div class="scale-item"><strong>4</strong>Fees on first contact</div>
+            <div class="scale-item"><strong>3</strong>Fees on request</div>
+            <div class="scale-item"><strong>2</strong>Partial disclosure</div>
+            <div class="scale-item"><strong>1</strong>Fees unclear / hidden</div>
+          </div>
+        </div>
+
+        <div class="criteria-card">
+          <div class="criteria-header"><span class="criteria-name">3. Tenant Reviews</span><span class="criteria-weight">15%</span></div>
+          <p class="criteria-desc">What do verified tenants say? We aggregate reviews from our platform, Google Maps, and Trustpilot (where available). The score reflects both the average rating and the volume of reviews. An agency with 50 reviews averaging 4.2 scores higher than one with 3 reviews averaging 4.5, because statistical confidence matters. Reviews older than 24 months are down-weighted.</p>
+          <div class="criteria-scale">
+            <div class="scale-item"><strong>5</strong>4.5+ avg, 20+ reviews</div>
+            <div class="scale-item"><strong>4</strong>4.0-4.4 avg, 10+ reviews</div>
+            <div class="scale-item"><strong>3</strong>3.5-3.9 avg or few reviews</div>
+            <div class="scale-item"><strong>2</strong>3.0-3.4 avg</div>
+            <div class="scale-item"><strong>1</strong>&lt; 3.0 avg or no reviews</div>
+          </div>
+        </div>
+
+        <div class="criteria-card">
+          <div class="criteria-header"><span class="criteria-name">4. Language Support</span><span class="criteria-weight">15%</span></div>
+          <p class="criteria-desc">Can the agency serve you in your language? We assess whether the agency's website, contract materials, and staff can operate in English plus other major European languages. For cross-border renters, language barriers are a deal-breaker. Agencies offering contracts in multiple languages and having multilingual staff score highest.</p>
+          <div class="criteria-scale">
+            <div class="scale-item"><strong>5</strong>4+ languages, contracts translated</div>
+            <div class="scale-item"><strong>4</strong>3 languages, English fluent</div>
+            <div class="scale-item"><strong>3</strong>2 languages</div>
+            <div class="scale-item"><strong>2</strong>Local + basic English</div>
+            <div class="scale-item"><strong>1</strong>Local language only</div>
+          </div>
+        </div>
+
+        <div class="criteria-card">
+          <div class="criteria-header"><span class="criteria-name">5. Listing Quality</span><span class="criteria-weight">10%</span></div>
+          <p class="criteria-desc">Are the agency's property listings accurate, detailed, and up to date? We evaluate whether listings include floor plans, accurate photos (not stock images), energy performance certificates, neighbourhood information, and transparent pricing. Stale listings with outdated availability or misleading photos score poorly.</p>
+          <div class="criteria-scale">
+            <div class="scale-item"><strong>5</strong>Detailed, verified, updated weekly</div>
+            <div class="scale-item"><strong>4</strong>Good detail, mostly current</div>
+            <div class="scale-item"><strong>3</strong>Basic info, some outdated</div>
+            <div class="scale-item"><strong>2</strong>Sparse detail</div>
+            <div class="scale-item"><strong>1</strong>Misleading or severely outdated</div>
+          </div>
+        </div>
+
+        <div class="criteria-card">
+          <div class="criteria-header"><span class="criteria-name">6. Contract Clarity</span><span class="criteria-weight">10%</span></div>
+          <p class="criteria-desc">Does the agency provide clear, fair, and legally compliant rental contracts? We assess whether contracts are available for review before signing, whether they comply with local tenancy law, whether key terms (notice period, deposit return timeline, maintenance responsibilities) are clearly stated, and whether the agency explains terms proactively.</p>
+          <div class="criteria-scale">
+            <div class="scale-item"><strong>5</strong>Plain-language, pre-viewable, compliant</div>
+            <div class="scale-item"><strong>4</strong>Clear, available on request</div>
+            <div class="scale-item"><strong>3</strong>Standard but dense</div>
+            <div class="scale-item"><strong>2</strong>Unclear or one-sided terms</div>
+            <div class="scale-item"><strong>1</strong>Not provided until signing</div>
+          </div>
+        </div>
+
+        <div class="criteria-card">
+          <div class="criteria-header"><span class="criteria-name">7. Digital Experience</span><span class="criteria-weight">5%</span></div>
+          <p class="criteria-desc">Can you handle the rental process online? We evaluate whether the agency supports online applications, digital document submission, virtual tours, electronic lease signing, and online rent payments. While not essential, a strong digital experience matters especially for international renters who cannot visit in person before signing.</p>
+          <div class="criteria-scale">
+            <div class="scale-item"><strong>5</strong>Fully digital end-to-end</div>
+            <div class="scale-item"><strong>4</strong>Most steps online</div>
+            <div class="scale-item"><strong>3</strong>Online inquiries, in-person signing</div>
+            <div class="scale-item"><strong>2</strong>Basic web presence only</div>
+            <div class="scale-item"><strong>1</strong>No online capability</div>
+          </div>
+        </div>
+
+        <h2>How the Composite Score Works</h2>
+        <p>Each criterion is scored from 1 to 5. The composite score is a weighted average using the percentages shown above. For example, an agency scoring 5 on Response Time (weight 25%), 4 on Fee Transparency (20%), 4 on Tenant Reviews (15%), 3 on Language Support (15%), 4 on Listing Quality (10%), 3 on Contract Clarity (10%), and 3 on Digital Experience (5%) would get:</p>
+        <p style="background:var(--bg-alt,#f8f9fa);padding:16px;border-radius:var(--radius);font-family:monospace;font-size:0.9rem;">(5 x 0.25) + (4 x 0.20) + (4 x 0.15) + (3 x 0.15) + (4 x 0.10) + (3 x 0.10) + (3 x 0.05) = 3.90 / 5.0</p>
+        <p>Scores are updated quarterly or whenever significant new review data becomes available.</p>
+
+        <h2>The Evaluation Process</h2>
+
+        <div class="process-step"><div class="step-num">1</div><div class="step-body"><h4>Data Collection</h4><p>We gather agency information from public sources: agency websites, Google Business profiles, Trustpilot, social media presence, and government agency registers where available.</p></div></div>
+        <div class="process-step"><div class="step-num">2</div><div class="step-body"><h4>Mystery Shopping</h4><p>Our team sends standardised inquiry emails to agencies in English, measuring response time, quality of information provided, and fee disclosure. Each agency is contacted at least twice per evaluation cycle.</p></div></div>
+        <div class="process-step"><div class="step-num">3</div><div class="step-body"><h4>Review Aggregation</h4><p>We aggregate reviews from our platform, Google, and Trustpilot, applying recency weighting (reviews from the last 12 months count double) and statistical normalisation for review volume.</p></div></div>
+        <div class="process-step"><div class="step-num">4</div><div class="step-body"><h4>Scoring</h4><p>Each criterion is scored independently by at least one evaluator using the 1-5 scales above. Where data is missing, the criterion receives a neutral score of 3.0 and is flagged for future evaluation.</p></div></div>
+        <div class="process-step"><div class="step-num">5</div><div class="step-body"><h4>Publication and Dispute</h4><p>Scores are published on agency profiles. Agencies can dispute their score by submitting evidence through their <a href="/for-agencies">agency dashboard</a>. Disputes are reviewed within 14 business days.</p></div></div>
+
+        <h2>What This Means for Tenants</h2>
+        <p>Our scoring is designed to protect tenants, not agencies. The weights reflect what cross-border renters tell us matters most: getting a response, knowing the costs upfront, and understanding what previous tenants experienced. An agency with a 4.0+ score has demonstrated strong performance across multiple dimensions that matter for a smooth rental experience.</p>
+        <p>No agency can pay to improve their score. Paid tiers on our platform (Starter, Advanced, Pro) affect placement and visibility, but the scoring criteria and results are completely independent of commercial relationships.</p>
+
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item"><p class="faq-q">Can agencies pay to improve their score?</p><p class="faq-a">No. Paid plans affect listing visibility and badge status, not scoring. The evaluation criteria are applied identically to free and paying agencies.</p></div>
+        <div class="faq-item"><p class="faq-q">How often are scores updated?</p><p class="faq-a">Quarterly for established agencies. New agencies receive their initial score within 30 days of listing. Significant events (many negative reviews, responsiveness changes) can trigger an interim re-evaluation.</p></div>
+        <div class="faq-item"><p class="faq-q">What if an agency disagrees with their score?</p><p class="faq-a">Agencies can submit a dispute through their dashboard with supporting evidence. Common grounds for revision include outdated information, staffing changes that affect language support, or new fee transparency measures. We review disputes within 14 business days.</p></div>
+        <div class="faq-item"><p class="faq-q">Why does response time have the highest weight?</p><p class="faq-a">User research and tenant feedback consistently rank unresponsiveness as the top frustration when searching for rentals abroad. An agency that does not reply wastes the most time and causes the most stress, particularly for tenants on tight relocation timelines.</p></div>
+        <div class="faq-item"><p class="faq-q">What happens when an agency has no reviews?</p><p class="faq-a">The Tenant Reviews criterion receives a neutral 3.0 score. This neither penalises nor rewards the agency. As reviews accumulate, the score adjusts to reflect actual tenant feedback.</p></div>
+
+        <div style="margin-top:40px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;">
+          <a href="/agencies" style="display:block;padding:16px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:0.9rem;font-weight:500;">Browse Agencies by Score</a>
+          <a href="/blog/rental-agency-fees-europe" style="display:block;padding:16px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:0.9rem;font-weight:500;">Agency Fee Transparency Guide</a>
+          <a href="/blog/rental-scam-prevention-europe" style="display:block;padding:16px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:0.9rem;font-weight:500;">Scam Prevention Guide</a>
+          <a href="/for-agencies" style="display:block;padding:16px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:0.9rem;font-weight:500;">For Agencies: Improve Your Score</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-col"><h4>Rental Agency Finder</h4><p>The first European-wide directory for finding and reviewing rental agencies.</p></div>
+      <div class="footer-col"><h4>Browse</h4><a href="/agencies">All Agencies</a><a href="/agencies?type=short_term">Short-Term</a><a href="/agencies?type=long_term">Long-Term</a></div>
+      <div class="footer-col"><h4>Resources</h4><a href="/blog">Blog</a><a href="/about">About</a><a href="/for-agencies">For Agencies</a></div>
+      <div class="footer-col"><h4>Popular</h4><a href="/agencies/spain">Spain</a><a href="/agencies/italy">Italy</a><a href="/agencies/greece">Greece</a></div>
+    </div>
+    <div class="container footer-bottom"><p>&copy; 2026 Rental Agency Finder. All rights reserved. <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p></div>
+  </footer>
+  <script>document.getElementById('navToggle')?.addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));</script>
+</body>
+</html>
