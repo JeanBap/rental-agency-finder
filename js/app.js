@@ -763,8 +763,8 @@ async function renderAgencyDetail(agency, reviews) {
   const rentalBadges = (agency.rental_types || []).map(t => `<span class="agency-tag ${t === 'short_term' ? 'short' : t === 'mid_term' ? 'mid' : 'long'}">${t.replace('_', '-')}</span>`).join('');
   const langs = (agency.languages || []).join(', ') || 'Not specified';
 
-  const reviewsHtml = reviews.length > 0 ? reviews.map(r => `
-    <div class="review-card" style="border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px;">
+  function renderReviewCard(r) {
+    return `<div class="review-card" style="border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px;">
       <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
         <strong>${r.reviewer_name || 'Anonymous'}</strong>
         <span class="stars" style="color:#f59e0b;">${'&#9733;'.repeat(r.rating)}${'&#9734;'.repeat(5-r.rating)}</span>
@@ -774,7 +774,30 @@ async function renderAgencyDetail(agency, reviews) {
       ${r.pros ? `<p style="color:#16a34a;"><strong>Pros:</strong> ${r.pros}</p>` : ''}
       ${r.cons ? `<p style="color:#dc2626;"><strong>Cons:</strong> ${r.cons}</p>` : ''}
       <small style="color:var(--text-lighter);">${new Date(r.created_at).toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'})}</small>
-    </div>`).join('') : '<p style="color:var(--text-light);">No reviews yet. Be the first to review this agency!</p>';
+    </div>`;
+  }
+
+  const reviewControls = reviews.length > 1 ? `
+    <div style="display:flex;gap:12px;align-items:center;margin-bottom:16px;flex-wrap:wrap;">
+      <select id="reviewSort" style="padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:0.85rem;background:var(--bg);color:var(--text);">
+        <option value="newest">Newest first</option>
+        <option value="oldest">Oldest first</option>
+        <option value="highest">Highest rated</option>
+        <option value="lowest">Lowest rated</option>
+      </select>
+      <select id="reviewFilter" style="padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:0.85rem;background:var(--bg);color:var(--text);">
+        <option value="all">All ratings</option>
+        <option value="5">5 stars</option>
+        <option value="4">4 stars</option>
+        <option value="3">3 stars</option>
+        <option value="2">2 stars</option>
+        <option value="1">1 star</option>
+      </select>
+    </div>` : '';
+
+  const reviewsHtml = reviews.length > 0
+    ? reviewControls + '<div id="reviewsList">' + reviews.map(renderReviewCard).join('') + '</div>'
+    : '<p style="color:var(--text-light);">No reviews yet. Be the first to review this agency!</p>';
 
   main.innerHTML = `
     <div class="container section">
@@ -889,6 +912,28 @@ async function renderAgencyDetail(agency, reviews) {
         main.querySelector('.container').insertAdjacentHTML('beforeend', blogHtml);
       }
     }
+  }
+
+  // Review sort/filter controls
+  if (reviews.length > 1) {
+    const sortEl = document.getElementById('reviewSort');
+    const filterEl = document.getElementById('reviewFilter');
+    const listEl = document.getElementById('reviewsList');
+    function updateReviews() {
+      let filtered = [...reviews];
+      const starFilter = filterEl ? filterEl.value : 'all';
+      if (starFilter !== 'all') filtered = filtered.filter(r => r.rating === parseInt(starFilter));
+      const sort = sortEl ? sortEl.value : 'newest';
+      if (sort === 'newest') filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      else if (sort === 'oldest') filtered.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+      else if (sort === 'highest') filtered.sort((a, b) => b.rating - a.rating);
+      else if (sort === 'lowest') filtered.sort((a, b) => a.rating - b.rating);
+      if (listEl) listEl.innerHTML = filtered.length > 0
+        ? filtered.map(renderReviewCard).join('')
+        : '<p style="color:var(--text-light);padding:16px 0;">No reviews match this filter.</p>';
+    }
+    if (sortEl) sortEl.addEventListener('change', updateReviews);
+    if (filterEl) filterEl.addEventListener('change', updateReviews);
   }
 
   // Inject LocalBusiness JSON-LD
