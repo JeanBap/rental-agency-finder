@@ -162,13 +162,55 @@ async function loadStats() {
       sb.from('raf_countries').select('id', { count: 'exact', head: true }),
       sb.from('raf_cities').select('id', { count: 'exact', head: true })
     ]);
-    if (el('statAgencies')) el('statAgencies').textContent = (agencyRes.count || 0).toLocaleString();
-    if (el('statReviews')) el('statReviews').textContent = (reviewRes.count || 0).toLocaleString();
-    if (el('statCountries')) el('statCountries').textContent = countryRes.count || 0;
-    if (el('statCities')) el('statCities').textContent = cityRes.count || 0;
+    const stats = [
+      { id: 'statAgencies', value: agencyRes.count || 0, format: true },
+      { id: 'statReviews', value: reviewRes.count || 0, format: true },
+      { id: 'statCountries', value: countryRes.count || 0, format: false },
+      { id: 'statCities', value: cityRes.count || 0, format: false }
+    ];
+    // Store values as data attributes, show 0 initially
+    stats.forEach(s => {
+      const e = el(s.id);
+      if (e) { e.dataset.target = s.value; e.dataset.format = s.format; e.textContent = '0'; }
+    });
+    // Animate on scroll into view
+    const trustBar = document.querySelector('.trust-bar');
+    if (trustBar && 'IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            animateCounters(stats);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.3 });
+      observer.observe(trustBar);
+    } else {
+      // Fallback: animate immediately
+      animateCounters(stats);
+    }
   } catch (e) {
     console.error('Stats load error:', e);
   }
+}
+
+function animateCounters(stats) {
+  const duration = 1600;
+  const startTime = performance.now();
+  function tick(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    // Ease-out cubic
+    const ease = 1 - Math.pow(1 - progress, 3);
+    stats.forEach(s => {
+      const e = document.getElementById(s.id);
+      if (!e) return;
+      const current = Math.round(ease * s.value);
+      e.textContent = s.format ? current.toLocaleString() : current;
+    });
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
 }
 
 function initSearch() {
