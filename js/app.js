@@ -9,6 +9,7 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 let countries = [];
 let cities = [];
 let userUnlocked = false;
+let compareList = []; // max 3 agencies for comparison
 
 // === INIT ===
 document.addEventListener('DOMContentLoaded', async () => {
@@ -715,9 +716,177 @@ function renderAgencyList(agencies, country, city, type) {
       <div class="agency-actions">
         ${tierBadge}
         ${contactHtml}
+        <button class="btn btn-sm btn-outline compare-btn" data-slug="${a.slug}" data-name="${a.name.replace(/"/g, '&quot;')}" onclick="toggleCompare(this)" style="margin-top:6px;font-size:0.8rem;padding:4px 10px;display:flex;align-items:center;gap:4px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M21 3l-7 7"/><path d="M3 3l7 7"/><path d="M16 21h5v-5"/><path d="M8 21H3v-5"/><path d="M21 21l-7-7"/><path d="M3 21l7-7"/></svg>
+          Compare
+        </button>
       </div>
     </div>`;
   }).join('');
+
+  // Re-highlight any already-selected compare buttons
+  compareList.forEach(item => {
+    const btn = document.querySelector(`.compare-btn[data-slug="${item.slug}"]`);
+    if (btn) btn.classList.add('compare-active');
+  });
+}
+
+// === AGENCY COMPARISON ===
+function toggleCompare(btn) {
+  const slug = btn.dataset.slug;
+  const name = btn.dataset.name;
+  const idx = compareList.findIndex(c => c.slug === slug);
+
+  if (idx > -1) {
+    compareList.splice(idx, 1);
+    btn.classList.remove('compare-active');
+  } else {
+    if (compareList.length >= 3) {
+      showCompareToast('Maximum 3 agencies for comparison');
+      return;
+    }
+    compareList.push({ slug, name });
+    btn.classList.add('compare-active');
+  }
+  updateCompareBar();
+}
+window.toggleCompare = toggleCompare;
+
+function showCompareToast(msg) {
+  let toast = document.getElementById('compareToast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'compareToast';
+    toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:10px 20px;border-radius:8px;font-size:0.9rem;z-index:1001;opacity:0;transition:opacity 0.3s;';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.style.opacity = '1';
+  setTimeout(() => { toast.style.opacity = '0'; }, 2500);
+}
+
+function updateCompareBar() {
+  let bar = document.getElementById('compareBar');
+  if (compareList.length === 0) {
+    if (bar) bar.remove();
+    return;
+  }
+
+  if (!bar) {
+    bar = document.createElement('div');
+    bar.id = 'compareBar';
+    bar.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid var(--primary);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;z-index:1000;box-shadow:0 -4px 20px rgba(0,0,0,0.1);';
+    document.body.appendChild(bar);
+  }
+
+  const pills = compareList.map(c => `
+    <span style="display:inline-flex;align-items:center;gap:6px;background:var(--bg-muted,#f1f5f9);padding:6px 12px;border-radius:20px;font-size:0.85rem;font-weight:500;">
+      ${c.name.length > 25 ? c.name.substring(0, 22) + '...' : c.name}
+      <button onclick="removeFromCompare('${c.slug}')" style="background:none;border:none;cursor:pointer;color:var(--text-light);font-size:1.1rem;line-height:1;padding:0 2px;">&times;</button>
+    </span>
+  `).join('');
+
+  bar.innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <strong style="font-size:0.9rem;white-space:nowrap;">Compare (${compareList.length}/3):</strong>
+      ${pills}
+    </div>
+    <div style="display:flex;gap:8px;flex-shrink:0;">
+      <button class="btn btn-sm btn-secondary" onclick="clearCompare()">Clear</button>
+      <button class="btn btn-sm btn-primary" onclick="openCompareModal()" ${compareList.length < 2 ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>Compare Now</button>
+    </div>`;
+}
+
+function removeFromCompare(slug) {
+  compareList = compareList.filter(c => c.slug !== slug);
+  const btn = document.querySelector(`.compare-btn[data-slug="${slug}"]`);
+  if (btn) btn.classList.remove('compare-active');
+  updateCompareBar();
+}
+window.removeFromCompare = removeFromCompare;
+
+function clearCompare() {
+  compareList.forEach(c => {
+    const btn = document.querySelector(`.compare-btn[data-slug="${c.slug}"]`);
+    if (btn) btn.classList.remove('compare-active');
+  });
+  compareList = [];
+  updateCompareBar();
+}
+window.clearCompare = clearCompare;
+
+async function openCompareModal() {
+  if (compareList.length < 2) return;
+
+  // Fetch full details for selected agencies
+  const slugs = compareList.map(c => c.slug);
+  const { data: agencies } = await sb.from('raf_agencies')
+    .select('*, raf_cities(name, slug), raf_countries(name, slug, flag_emoji)')
+    .in('slug', slugs)
+    .eq('status', 'active');
+
+  if (!agencies || agencies.length < 2) {
+    showCompareToast('Could not load agency details');
+    return;
+  }
+
+  // Sort to match compareList order
+  const sorted = slugs.map(s => agencies.find(a => a.slug === s)).filter(Boolean);
+
+  // Build modal
+  let modal = document.getElementById('compareModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'compareModal';
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1100;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;';
+    modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+    document.body.appendChild(modal);
+  }
+
+  const colWidth = sorted.length === 2 ? '340px' : '280px';
+
+  modal.innerHTML = `
+    <div style="background:#fff;border-radius:12px;max-width:${sorted.length === 2 ? '760px' : '920px'};width:100%;max-height:90vh;overflow-y:auto;padding:32px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+        <h2 style="font-size:1.4rem;margin:0;">Agency Comparison</h2>
+        <button onclick="document.getElementById('compareModal').remove()" style="background:none;border:none;cursor:pointer;font-size:1.5rem;color:var(--text-light);">&times;</button>
+      </div>
+
+      <div style="display:grid;grid-template-columns:140px repeat(${sorted.length}, 1fr);gap:0;border:1px solid var(--border);border-radius:var(--radius);">
+        ${buildCompareRow('', sorted.map(a => `
+          <div style="text-align:center;">
+            <div style="width:48px;height:48px;border-radius:var(--radius);background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.3rem;font-weight:700;margin:0 auto 8px;">${a.name.charAt(0)}</div>
+            <strong style="font-size:0.95rem;">${a.name}</strong>
+          </div>
+        `), true)}
+        ${buildCompareRow('Location', sorted.map(a => `${a.raf_countries?.flag_emoji || ''} ${a.raf_cities?.name || ''}, ${a.raf_countries?.name || ''}`))}
+        ${buildCompareRow('Rating', sorted.map(a => a.our_rating
+          ? `<span style="color:#f59e0b;">${'&#9733;'.repeat(Math.round(a.our_rating))}${'&#9734;'.repeat(5 - Math.round(a.our_rating))}</span> <span style="color:var(--text-light);font-size:0.85rem;">(${a.our_review_count || 0})</span>`
+          : '<span style="color:var(--text-light);">No ratings</span>'
+        ))}
+        ${buildCompareRow('Google Rating', sorted.map(a => a.google_rating
+          ? `${a.google_rating}/5 (${a.google_review_count || 0})`
+          : '<span style="color:var(--text-light);">N/A</span>'
+        ))}
+        ${buildCompareRow('Rental Types', sorted.map(a => (a.rental_types || []).map(t => `<span class="agency-tag ${t === 'short_term' ? 'short' : t === 'mid_term' ? 'mid' : 'long'}" style="font-size:0.75rem;padding:2px 6px;">${t.replace('_', '-')}</span>`).join(' ') || 'N/A'))}
+        ${buildCompareRow('Languages', sorted.map(a => (a.languages || []).join(', ') || 'Not specified'))}
+        ${buildCompareRow('Founded', sorted.map(a => a.year_founded || 'N/A'))}
+        ${buildCompareRow('Properties', sorted.map(a => a.properties_managed ? a.properties_managed + '+' : 'N/A'))}
+        ${buildCompareRow('', sorted.map(a => `<a href="/agency/${a.slug}" class="btn btn-sm btn-primary" style="text-decoration:none;">View Details</a>`), false, true)}
+      </div>
+    </div>`;
+}
+window.openCompareModal = openCompareModal;
+
+function buildCompareRow(label, values, isHeader = false, isFooter = false) {
+  const bgStyle = isHeader ? 'background:var(--bg-muted,#f8fafc);' : isFooter ? 'background:var(--bg-muted,#f8fafc);' : '';
+  const borderStyle = 'border-bottom:1px solid var(--border);';
+  const padStyle = 'padding:12px 16px;';
+
+  return `
+    <div style="${padStyle}${borderStyle}${bgStyle}font-weight:${label ? '600' : 'normal'};font-size:0.85rem;color:var(--text-light);display:flex;align-items:center;">${label}</div>
+    ${values.map((v, i) => `<div style="${padStyle}${borderStyle}${bgStyle}${i > 0 ? 'border-left:1px solid var(--border);' : ''}font-size:0.9rem;">${v}</div>`).join('')}
+  `;
 }
 
 // === AGENCY DETAIL ===
@@ -832,7 +1001,13 @@ async function renderAgencyDetail(agency, reviews) {
 
           <h2 style="margin-bottom:16px;">Reviews (${reviews.length})</h2>
           ${reviewsHtml}
-          <button class="btn btn-primary" onclick="openReviewModal()" style="margin-top:16px;">Write a Review</button>
+          <div style="display:flex;gap:12px;margin-top:16px;">
+            <button class="btn btn-primary" onclick="openReviewModal()">Write a Review</button>
+            <button class="btn btn-outline compare-btn" data-slug="${agency.slug}" data-name="${agency.name.replace(/"/g, '&quot;')}" onclick="toggleCompare(this)" style="display:flex;align-items:center;gap:6px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M21 3l-7 7"/><path d="M3 3l7 7"/><path d="M16 21h5v-5"/><path d="M8 21H3v-5"/><path d="M21 21l-7-7"/><path d="M3 21l7-7"/></svg>
+              Add to Compare
+            </button>
+          </div>
         </div>
 
         <aside style="position:sticky;top:80px;">

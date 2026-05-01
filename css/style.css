@@ -81,6 +81,10 @@ input, select, textarea { font-family: var(--font); font-size: 0.95rem; }
 .btn-secondary:hover { background: var(--primary); color: #fff; }
 .btn-white { background: #fff; color: var(--primary); }
 .btn-white:hover { background: var(--bg-alt); color: var(--primary-dark); }
+.btn-outline { background: transparent; color: var(--text-light); border: 1px solid var(--border); }
+.btn-outline:hover { border-color: var(--primary); color: var(--primary); }
+.compare-active { background: var(--primary) !important; color: #fff !important; border-color: var(--primary) !important; }
+.compare-active:hover { background: var(--primary-dark) !important; }
 .btn-full { width: 100%; }
 .btn-sm { padding: 6px 16px; font-size: 0.85rem; }
 
@@ -244,6 +248,9 @@ input, select, textarea { font-family: var(--font); font-size: 0.95rem; }
   .agency-detail-grid aside { position: static !important; }
   .form-row { grid-template-columns: 1fr; }
   .reviews-grid { grid-template-columns: 1fr; }
+  #compareBar { flex-direction: column; gap: 8px; padding: 10px 16px; }
+  #compareModal > div { padding: 20px; overflow-x: auto; }
+  #compareModal > div > div:last-child { overflow-x: auto; min-width: 500px; }
   .section { padding: 48px 0; }
   .section-title { font-size: 1.6rem; }
 }
