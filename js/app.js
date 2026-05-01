@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initModal();
   initReviewForm();
   checkUserUnlock();
+  initBackToTop();
 
   // Route based on current page
   const path = window.location.pathname;
@@ -190,6 +191,10 @@ let totalAgencies = 0;
 let currentFilters = {};
 
 async function loadAgenciesPage() {
+  // Show loading skeleton
+  const agencyList = document.querySelector('.agency-list');
+  renderLoadingSkeleton(agencyList, 6);
+
   const path = window.location.pathname.replace('/agencies', '').replace(/^\//, '').replace(/\/$/, '');
   const parts = path.split('/').filter(Boolean);
   const params = new URLSearchParams(window.location.search);
@@ -588,14 +593,20 @@ function renderAgencyList(agencies, country, city, type) {
 
 // === AGENCY DETAIL ===
 async function loadAgencyDetail() {
+  const main = document.querySelector('main');
+  // Show loading state
+  if (main) main.innerHTML = '<div class="container section" style="min-height:400px;"><div class="skeleton-card"><div class="skeleton-avatar" style="width:80px;height:80px;"></div><div class="skeleton-lines"><div class="skeleton-line"></div><div class="skeleton-line"></div><div class="skeleton-line"></div></div></div></div>';
+
   const slug = window.location.pathname.replace('/agency/', '').replace(/\/$/, '');
-  const { data: agency } = await sb.from('raf_agencies')
+
+  try {
+  const { data: agency, error } = await sb.from('raf_agencies')
     .select('*, raf_cities(name, slug), raf_countries(name, slug, flag_emoji)')
     .eq('slug', slug)
     .single();
 
-  if (!agency) {
-    document.querySelector('main').innerHTML = '<div class="container section"><h2>Agency not found</h2></div>';
+  if (error || !agency) {
+    if (main) main.innerHTML = '<div class="container section"><div class="error-state"><h3>Agency not found</h3><p>This agency may have been removed or the URL may be incorrect.</p><a href="/agencies" class="btn btn-primary" style="margin-top:16px;">Browse All Agencies</a></div></div>';
     return;
   }
 
@@ -606,6 +617,10 @@ async function loadAgencyDetail() {
     .order('created_at', { ascending: false });
 
   await renderAgencyDetail(agency, reviews || []);
+  } catch (err) {
+    console.error('Agency detail error:', err);
+    renderErrorState(main, 'Unable to load agency details. Please try again.');
+  }
 }
 
 async function renderAgencyDetail(agency, reviews) {
@@ -986,4 +1001,44 @@ function formatDate(dateStr) {
 
 function slugify(str) {
   return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+}
+
+// === BACK TO TOP ===
+function initBackToTop() {
+  const btn = document.createElement('button');
+  btn.className = 'back-to-top';
+  btn.innerHTML = '&#9650;';
+  btn.setAttribute('aria-label', 'Back to top');
+  btn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  document.body.appendChild(btn);
+
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  }, { passive: true });
+}
+
+// === LOADING SKELETON ===
+function renderLoadingSkeleton(container, count) {
+  if (!container) return;
+  container.innerHTML = Array.from({ length: count }, () => `
+    <div class="skeleton-card">
+      <div class="skeleton-avatar"></div>
+      <div class="skeleton-lines">
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line"></div>
+        <div class="skeleton-line"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// === ERROR STATE ===
+function renderErrorState(container, message) {
+  if (!container) return;
+  container.innerHTML = `
+    <div class="error-state">
+      <h3>Something went wrong</h3>
+      <p>${message || 'Unable to load data. Please try again.'}</p>
+      <button class="btn btn-primary" onclick="window.location.reload()">Try Again</button>
+    </div>`;
 }
