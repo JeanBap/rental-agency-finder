@@ -641,7 +641,7 @@ async function renderAgencyDetail(agency, reviews) {
         / <span>${agency.name}</span>
       </div>
 
-      <div style="display:grid;grid-template-columns:1fr 320px;gap:32px;align-items:start;">
+      <div class="agency-detail-grid" style="display:grid;grid-template-columns:1fr 320px;gap:32px;align-items:start;">
         <div>
           <div style="display:flex;align-items:center;gap:20px;margin-bottom:24px;">
             <div style="width:80px;height:80px;border-radius:var(--radius);background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:700;">${agency.name.charAt(0)}</div>
@@ -898,6 +898,9 @@ function initReviewForm() {
     if (agencyId) {
       review.agency_id = agencyId;
     }
+    // Always store submitted names for moderation matching
+    review.agency_name_submitted = agencyName;
+    review.city_submitted = cityName;
 
     // Submit review
     const { error } = await sb.from('raf_reviews').insert([review]);
@@ -911,11 +914,17 @@ function initReviewForm() {
     const email = review.reviewer_email;
     const unlockUntil = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
 
-    // Upsert user
+    // Upsert user: check if exists first to increment count
+    const { data: existingUser } = await sb.from('raf_users')
+      .select('reviews_submitted')
+      .eq('email', email)
+      .single();
+
+    const newCount = (existingUser?.reviews_submitted || 0) + 1;
     await sb.from('raf_users').upsert({
       email: email,
       name: review.reviewer_name,
-      reviews_submitted: 1,
+      reviews_submitted: newCount,
       unlocked_until: unlockUntil
     }, { onConflict: 'email' });
 

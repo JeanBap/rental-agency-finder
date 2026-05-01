@@ -300,11 +300,13 @@
     // Claim form
     document.getElementById('claimForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
+      const agencyName = document.getElementById('claimAgency').value.trim();
       const claim = {
         claimer_name: document.getElementById('claimName').value.trim(),
-        claimer_email: document.getElementById('claimEmail').value.trim()
+        claimer_email: document.getElementById('claimEmail').value.trim(),
+        agency_name: agencyName,
+        agency_website: document.getElementById('claimWebsite').value.trim() || null
       };
-      const agencyName = document.getElementById('claimAgency').value.trim();
       const { data: existing } = await sb.from('raf_agencies')
         .select('id')
         .ilike('name', `%${agencyName}%`)

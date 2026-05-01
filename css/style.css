@@ -238,6 +238,8 @@ input, select, textarea { font-family: var(--font); font-size: 0.95rem; }
   .pricing-card.popular { transform: none; }
   .agency-card { flex-direction: column; }
   .agency-card .agency-actions { flex-direction: row; align-items: center; }
+  .agency-detail-grid { grid-template-columns: 1fr !important; }
+  .agency-detail-grid aside { position: static !important; }
   .form-row { grid-template-columns: 1fr; }
   .reviews-grid { grid-template-columns: 1fr; }
   .section { padding: 48px 0; }
