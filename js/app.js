@@ -383,6 +383,7 @@ async function loadAgenciesPage() {
   updatePageHeader(countryName, cityName, countryFlag, countrySlug, citySlug, type, countryData, cityData);
   renderAgencyList(agencies || [], countrySlug, citySlug, type);
   renderPagination();
+  renderSavedAgencies();
   renderRecentlyViewed();
 
   // Internal linking: related cities + blog posts
@@ -946,12 +947,100 @@ function renderRecentlyViewed() {
   } catch (e) { /* localStorage not available */ }
 }
 
+function renderSavedAgencies() {
+  try {
+    const saved = JSON.parse(localStorage.getItem('raf_saved') || '[]');
+    if (saved.length === 0) return;
+
+    const container = document.querySelector('.agency-list') || document.querySelector('main .container');
+    if (!container) return;
+
+    const html = `
+      <div class="saved-agencies" style="margin-bottom:16px;padding:20px 24px;background:linear-gradient(135deg,#eff6ff,#f0fdf4);border-radius:var(--radius-lg);border:1px solid var(--border);">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <h3 style="font-size:1rem;margin:0;display:flex;align-items:center;gap:8px;">
+            ${svgBookmark(true).replace('width="16"', 'width="16"')}
+            Saved Agencies (${saved.length})
+          </h3>
+          <button onclick="clearSavedAgencies()" style="background:none;border:none;color:var(--text-light);font-size:0.8rem;cursor:pointer;text-decoration:underline;">Clear all</button>
+        </div>
+        <div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;">
+          ${saved.map(s => `
+            <a href="/agency/${s.slug}" style="flex-shrink:0;display:flex;align-items:center;gap:10px;padding:8px 14px;background:#fff;border:1px solid var(--border);border-radius:var(--radius);text-decoration:none;color:var(--text);font-size:0.85rem;min-width:160px;">
+              <div style="width:32px;height:32px;border-radius:var(--radius);background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:0.9rem;">${s.name.charAt(0)}</div>
+              <div style="font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;">${s.name}</div>
+            </a>
+          `).join('')}
+        </div>
+      </div>`;
+    container.insertAdjacentHTML('afterbegin', html);
+  } catch (e) {}
+}
+
+function clearSavedAgencies() {
+  localStorage.removeItem('raf_saved');
+  const el = document.querySelector('.saved-agencies');
+  if (el) el.remove();
+}
+window.clearSavedAgencies = clearSavedAgencies;
+
 function clearRecentlyViewed() {
   localStorage.removeItem('raf_recent');
   const el = document.querySelector('.recently-viewed');
   if (el) el.remove();
 }
 window.clearRecentlyViewed = clearRecentlyViewed;
+
+// === SAVE / SHARE ===
+function toggleSaveAgency(slug, name) {
+  try {
+    let saved = JSON.parse(localStorage.getItem('raf_saved') || '[]');
+    const idx = saved.findIndex(s => s.slug === slug);
+    const btn = document.getElementById('saveBtn');
+    if (idx > -1) {
+      saved.splice(idx, 1);
+      if (btn) { btn.innerHTML = svgBookmark(false) + ' Save'; btn.classList.remove('compare-active'); }
+    } else {
+      saved.push({ slug, name, savedAt: Date.now() });
+      if (btn) { btn.innerHTML = svgBookmark(true) + ' Saved'; btn.classList.add('compare-active'); }
+    }
+    localStorage.setItem('raf_saved', JSON.stringify(saved));
+  } catch (e) {}
+}
+window.toggleSaveAgency = toggleSaveAgency;
+
+function isAgencySaved(slug) {
+  try {
+    const saved = JSON.parse(localStorage.getItem('raf_saved') || '[]');
+    return saved.some(s => s.slug === slug);
+  } catch (e) { return false; }
+}
+
+function svgBookmark(filled) {
+  return filled
+    ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>'
+    : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>';
+}
+
+async function shareAgency(name, slug) {
+  const url = `https://www.rentalagencyfinder.com/agency/${slug}`;
+  const title = `${name} | Rental Agency Finder`;
+  if (navigator.share) {
+    try {
+      await navigator.share({ title, url });
+    } catch (e) { /* user cancelled */ }
+  } else {
+    // Fallback: copy link
+    try {
+      await navigator.clipboard.writeText(url);
+      showCompareToast('Link copied to clipboard');
+    } catch (e) {
+      // Last resort: prompt
+      prompt('Copy this link:', url);
+    }
+  }
+}
+window.shareAgency = shareAgency;
 
 // === AGENCY DETAIL ===
 async function loadAgencyDetail() {
@@ -1066,11 +1155,18 @@ async function renderAgencyDetail(agency, reviews) {
 
           <h2 style="margin-bottom:16px;">Reviews (${reviews.length})</h2>
           ${reviewsHtml}
-          <div style="display:flex;gap:12px;margin-top:16px;">
+          <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
             <button class="btn btn-primary" onclick="openReviewModal()">Write a Review</button>
             <button class="btn btn-outline compare-btn" data-slug="${agency.slug}" data-name="${agency.name.replace(/"/g, '&quot;')}" onclick="toggleCompare(this)" style="display:flex;align-items:center;gap:6px;">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5"/><path d="M8 3H3v5"/><path d="M21 3l-7 7"/><path d="M3 3l7 7"/><path d="M16 21h5v-5"/><path d="M8 21H3v-5"/><path d="M21 21l-7-7"/><path d="M3 21l7-7"/></svg>
-              Add to Compare
+              Compare
+            </button>
+            <button id="saveBtn" class="btn btn-outline ${isAgencySaved(agency.slug) ? 'compare-active' : ''}" onclick="toggleSaveAgency('${agency.slug}', '${agency.name.replace(/'/g, "\\'")}')" style="display:flex;align-items:center;gap:6px;">
+              ${svgBookmark(isAgencySaved(agency.slug))} ${isAgencySaved(agency.slug) ? 'Saved' : 'Save'}
+            </button>
+            <button class="btn btn-outline" onclick="shareAgency('${agency.name.replace(/'/g, "\\'")}', '${agency.slug}')" style="display:flex;align-items:center;gap:6px;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+              Share
             </button>
           </div>
         </div>
