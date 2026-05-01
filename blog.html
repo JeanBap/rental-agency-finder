@@ -122,7 +122,7 @@
         const posts = await res.json();
 
         // Classify posts into categories
-        const nicheKeywords = ['student', 'nomad', 'expat', 'pet-friendly', 'furnished', 'family', 'seasonal', 'corporate', 'accessible', 'luxury', 'co-living', 'retirement', 'budget', 'remote-work', 'short-stay', 'relocation', 'credit-history', 'mid-term', 'couple', 'utility', 'scam'];
+        const nicheKeywords = ['student', 'nomad', 'expat', 'pet-friendly', 'furnished', 'family', 'seasonal', 'corporate', 'accessible', 'luxury', 'co-living', 'retirement', 'budget', 'remote-work', 'short-stay', 'relocation', 'credit-history', 'mid-term', 'couple', 'utility', 'scam', 'insurance', 'deposit', 'dispute'];
         posts.forEach(p => {
           if (p.slug === 'complete-guide-rental-agencies-europe') p._category = 'pillar';
           else if (p.slug.startsWith('best-rental-agencies-') && !p.slug.includes('guide')) p._category = 'city';
