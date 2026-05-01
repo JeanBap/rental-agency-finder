@@ -201,12 +201,33 @@ async function loadAgenciesPage() {
   let citySlug = parts[1] || null;
   let countryName = null, cityName = null, countryFlag = '';
 
+  const sort = params.get('sort') || 'featured';
+
   // Build base query
   let query = sb.from('raf_agencies')
     .select('*, raf_cities(name, slug), raf_countries(name, slug, flag_emoji)', { count: 'exact' })
-    .eq('status', 'active')
-    .order('featured', { ascending: false })
-    .order('our_rating', { ascending: false, nullsFirst: false });
+    .eq('status', 'active');
+
+  // Apply sort
+  switch (sort) {
+    case 'rating_desc':
+      query = query.order('our_rating', { ascending: false, nullsFirst: false });
+      break;
+    case 'rating_asc':
+      query = query.order('our_rating', { ascending: true, nullsFirst: false });
+      break;
+    case 'name_asc':
+      query = query.order('name', { ascending: true });
+      break;
+    case 'name_desc':
+      query = query.order('name', { ascending: false });
+      break;
+    case 'reviews':
+      query = query.order('our_review_count', { ascending: false, nullsFirst: false });
+      break;
+    default: // featured
+      query = query.order('featured', { ascending: false }).order('our_rating', { ascending: false, nullsFirst: false });
+  }
 
   let countryData = null, cityData = null;
   if (countrySlug) {
@@ -242,6 +263,82 @@ async function loadAgenciesPage() {
   updatePageHeader(countryName, cityName, countryFlag, countrySlug, citySlug, type, countryData, cityData);
   renderAgencyList(agencies || [], countrySlug, citySlug, type);
   renderPagination();
+
+  // Internal linking: related cities + blog posts
+  if (countryData) {
+    await renderRelatedCities(countryData, citySlug);
+  }
+  if (citySlug || countrySlug) {
+    await renderRelatedBlogPosts(cityName, countryName, countrySlug);
+  }
+}
+
+// === INTERNAL LINKING ===
+async function renderRelatedCities(countryData, currentCitySlug) {
+  const container = document.querySelector('.agency-list') || document.querySelector('main .container');
+  if (!container) return;
+
+  const { data: relatedCities } = await sb.from('raf_cities')
+    .select('name, slug, agency_count')
+    .eq('country_id', countryData.id)
+    .order('agency_count', { ascending: false })
+    .limit(12);
+
+  if (!relatedCities || relatedCities.length <= 1) return;
+
+  const filtered = relatedCities.filter(c => c.slug !== currentCitySlug);
+  if (filtered.length === 0) return;
+
+  const html = `
+    <div class="related-section" style="margin-top:48px;padding-top:32px;border-top:1px solid var(--border);">
+      <h2 style="font-size:1.3rem;margin-bottom:16px;">${currentCitySlug ? 'Other Cities' : 'Cities'} in ${countryData.name}</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;">
+        ${filtered.map(c => `
+          <a href="/agencies/${countryData.slug}/${c.slug}" style="display:flex;align-items:center;gap:8px;padding:12px 16px;border:1px solid var(--border);border-radius:var(--radius);text-decoration:none;color:var(--text);transition:border-color 0.2s;">
+            <span style="font-weight:600;">${c.name}</span>
+            <span style="color:var(--text-light);font-size:0.85rem;margin-left:auto;">${c.agency_count || 0} agencies</span>
+          </a>
+        `).join('')}
+      </div>
+    </div>`;
+  container.insertAdjacentHTML('beforeend', html);
+}
+
+async function renderRelatedBlogPosts(cityName, countryName, countrySlug) {
+  const container = document.querySelector('.agency-list') || document.querySelector('main .container');
+  if (!container) return;
+
+  // Fetch published blog posts and match by city/country name in title or content
+  const { data: posts } = await sb.from('raf_blog_posts')
+    .select('title, slug, meta_description, published_at')
+    .eq('status', 'published')
+    .order('published_at', { ascending: false })
+    .limit(50);
+
+  if (!posts || posts.length === 0) return;
+
+  // Filter to posts relevant to this city or country
+  const searchTerms = [cityName, countryName].filter(Boolean).map(t => t.toLowerCase());
+  const relevant = posts.filter(p => {
+    const titleLower = p.title.toLowerCase();
+    return searchTerms.some(term => titleLower.includes(term));
+  }).slice(0, 4);
+
+  if (relevant.length === 0) return;
+
+  const html = `
+    <div class="related-section" style="margin-top:32px;padding-top:24px;border-top:1px solid var(--border);">
+      <h2 style="font-size:1.3rem;margin-bottom:16px;">Rental Guides</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;">
+        ${relevant.map(p => `
+          <a href="/blog/${p.slug}" style="display:block;padding:16px 20px;border:1px solid var(--border);border-radius:var(--radius);text-decoration:none;color:var(--text);transition:border-color 0.2s;">
+            <h3 style="font-size:1rem;margin-bottom:6px;color:var(--primary);">${p.title}</h3>
+            <p style="font-size:0.85rem;color:var(--text-light);line-height:1.5;margin:0;">${(p.meta_description || '').substring(0, 100)}${p.meta_description && p.meta_description.length > 100 ? '...' : ''}</p>
+          </a>
+        `).join('')}
+      </div>
+    </div>`;
+  container.insertAdjacentHTML('beforeend', html);
 }
 
 function updatePageHeader(countryName, cityName, countryFlag, countrySlug, citySlug, type, countryData, cityData) {
@@ -302,6 +399,46 @@ function updatePageHeader(countryName, cityName, countryFlag, countrySlug, cityS
     if (typeLabel) crumbs += ` / <span>${capitalize(typeLabel)}</span>`;
     else if (!cityName && !countryName) crumbs = '<a href="/">Home</a> / <span>Agencies</span>';
     breadEl.innerHTML = crumbs;
+  }
+
+  // Render FAQ section if city has FAQ data
+  if (cityData && cityData.faq_json && Array.isArray(cityData.faq_json) && cityData.faq_json.length > 0) {
+    let faqEl = document.getElementById('cityFaq');
+    if (!faqEl) {
+      faqEl = document.createElement('div');
+      faqEl.id = 'cityFaq';
+      faqEl.style.cssText = 'max-width:800px;margin:0 auto 32px;text-align:left;';
+      const headerSection = document.querySelector('.page-header .container') || descEl?.parentElement;
+      if (headerSection) headerSection.appendChild(faqEl);
+    }
+    faqEl.innerHTML = `
+      <h2 style="font-size:1.2rem;margin-bottom:16px;color:var(--text);">Frequently Asked Questions About Renting in ${cityName}</h2>
+      ${cityData.faq_json.map(faq => `
+        <details style="margin-bottom:12px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
+          <summary style="padding:14px 18px;cursor:pointer;font-weight:600;font-size:0.95rem;background:var(--bg-light,#f9fafb);list-style:none;display:flex;align-items:center;justify-content:space-between;">
+            ${faq.q}
+            <span style="font-size:1.2rem;transition:transform 0.2s;">+</span>
+          </summary>
+          <div style="padding:14px 18px;font-size:0.9rem;line-height:1.7;color:var(--text-light);">${faq.a}</div>
+        </details>
+      `).join('')}
+    `;
+
+    // Inject FAQPage JSON-LD
+    const faqLd = {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": cityData.faq_json.map(faq => ({
+        "@type": "Question",
+        "name": faq.q,
+        "acceptedAnswer": { "@type": "Answer", "text": faq.a }
+      }))
+    };
+    const faqScript = document.createElement('script');
+    faqScript.type = 'application/ld+json';
+    faqScript.setAttribute('data-raf-jsonld', 'true');
+    faqScript.textContent = JSON.stringify(faqLd);
+    document.head.appendChild(faqScript);
   }
 
   // Inject CollectionPage + BreadcrumbList JSON-LD
@@ -468,10 +605,10 @@ async function loadAgencyDetail() {
     .eq('status', 'approved')
     .order('created_at', { ascending: false });
 
-  renderAgencyDetail(agency, reviews || []);
+  await renderAgencyDetail(agency, reviews || []);
 }
 
-function renderAgencyDetail(agency, reviews) {
+async function renderAgencyDetail(agency, reviews) {
   const main = document.querySelector('main');
   if (!main) return;
 
@@ -547,6 +684,68 @@ function renderAgencyDetail(agency, reviews) {
         </aside>
       </div>
     </div>`;
+
+  // Load other agencies in the same city
+  if (agency.city_id) {
+    const { data: others } = await sb.from('raf_agencies')
+      .select('name, slug, our_rating, our_review_count')
+      .eq('city_id', agency.city_id)
+      .eq('status', 'active')
+      .neq('id', agency.id)
+      .order('our_rating', { ascending: false, nullsFirst: false })
+      .limit(6);
+
+    if (others && others.length > 0) {
+      const othersHtml = `
+        <div style="margin-top:48px;padding-top:32px;border-top:1px solid var(--border);">
+          <h2 style="font-size:1.3rem;margin-bottom:16px;">Other Agencies in ${agency.raf_cities?.name || 'This City'}</h2>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;">
+            ${others.map(o => `
+              <a href="/agency/${o.slug}" style="display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid var(--border);border-radius:var(--radius);text-decoration:none;color:var(--text);transition:border-color 0.2s;">
+                <div style="width:40px;height:40px;border-radius:var(--radius);background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;">${o.name.charAt(0)}</div>
+                <div>
+                  <strong>${o.name}</strong>
+                  <div style="font-size:0.85rem;color:var(--text-light);">${o.our_rating ? '&#9733;'.repeat(Math.round(o.our_rating)) + ' (' + (o.our_review_count || 0) + ')' : 'No ratings'}</div>
+                </div>
+              </a>
+            `).join('')}
+          </div>
+          <a href="/agencies/${agency.raf_countries?.slug}/${agency.raf_cities?.slug}" style="display:inline-block;margin-top:16px;color:var(--primary);text-decoration:none;font-weight:500;">View all agencies in ${agency.raf_cities?.name || 'this city'} &rarr;</a>
+        </div>`;
+      main.querySelector('.container').insertAdjacentHTML('beforeend', othersHtml);
+    }
+  }
+
+  // Related blog posts for agency detail
+  if (agency.raf_cities?.name || agency.raf_countries?.name) {
+    const { data: blogPosts } = await sb.from('raf_blog_posts')
+      .select('title, slug, meta_description')
+      .eq('status', 'published')
+      .limit(50);
+
+    if (blogPosts && blogPosts.length > 0) {
+      const agencyCityName = (agency.raf_cities?.name || '').toLowerCase();
+      const agencyCountryName = (agency.raf_countries?.name || '').toLowerCase();
+      const matched = blogPosts.filter(p => {
+        const t = p.title.toLowerCase();
+        return (agencyCityName && t.includes(agencyCityName)) || (agencyCountryName && t.includes(agencyCountryName));
+      }).slice(0, 3);
+
+      if (matched.length > 0) {
+        const blogHtml = `
+          <div style="margin-top:32px;padding-top:24px;border-top:1px solid var(--border);">
+            <h2 style="font-size:1.3rem;margin-bottom:16px;">Rental Guides</h2>
+            ${matched.map(p => `
+              <a href="/blog/${p.slug}" style="display:block;padding:12px 16px;margin-bottom:8px;border:1px solid var(--border);border-radius:var(--radius);text-decoration:none;color:var(--text);transition:border-color 0.2s;">
+                <strong style="color:var(--primary);">${p.title}</strong>
+                <p style="font-size:0.85rem;color:var(--text-light);margin:4px 0 0;">${(p.meta_description || '').substring(0, 120)}</p>
+              </a>
+            `).join('')}
+          </div>`;
+        main.querySelector('.container').insertAdjacentHTML('beforeend', blogHtml);
+      }
+    }
+  }
 
   // Inject LocalBusiness JSON-LD
   const cityName = agency.raf_cities?.name || '';

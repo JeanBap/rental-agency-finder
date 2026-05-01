@@ -91,6 +91,27 @@
         <button class="btn btn-primary search-btn" id="filterBtn">Filter</button>
       </div>
 
+      <!-- Sort + Quick Filters -->
+      <div id="sortBar" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="filter-chip active" data-type="" onclick="applyTypeFilter('')">All Types</button>
+          <button class="filter-chip" data-type="short_term" onclick="applyTypeFilter('short_term')">Short-term</button>
+          <button class="filter-chip" data-type="mid_term" onclick="applyTypeFilter('mid_term')">Mid-term</button>
+          <button class="filter-chip" data-type="long_term" onclick="applyTypeFilter('long_term')">Long-term</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <label for="sortSelect" style="font-size:0.85rem;color:var(--text-light);white-space:nowrap;">Sort by:</label>
+          <select id="sortSelect" style="padding:6px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:0.85rem;background:#fff;">
+            <option value="featured">Featured</option>
+            <option value="rating_desc">Highest Rated</option>
+            <option value="rating_asc">Lowest Rated</option>
+            <option value="name_asc">Name A-Z</option>
+            <option value="name_desc">Name Z-A</option>
+            <option value="reviews">Most Reviews</option>
+          </select>
+        </div>
+      </div>
+
       <div class="agency-list" id="agencyList">
         <div class="empty-state">
           <p>Loading agencies...</p>
@@ -185,9 +206,41 @@
         if (t) url += `?type=${t}`;
         window.location.href = url;
       });
+      // Set type filter chip from URL
+      const params = new URLSearchParams(window.location.search);
+      const currentType = params.get('type') || '';
+      document.querySelectorAll('.filter-chip').forEach(chip => {
+        chip.classList.toggle('active', chip.dataset.type === currentType);
+      });
+
+      // Set sort from URL
+      const currentSort = params.get('sort') || 'featured';
+      document.getElementById('sortSelect').value = currentSort;
+
+      // Sort change handler
+      document.getElementById('sortSelect').addEventListener('change', (e) => {
+        const p = new URLSearchParams(window.location.search);
+        if (e.target.value === 'featured') p.delete('sort');
+        else p.set('sort', e.target.value);
+        const qs = p.toString();
+        window.location.href = window.location.pathname + (qs ? '?' + qs : '');
+      });
+
       // Load agencies
       await loadAgenciesPage();
     })();
+
+    function applyTypeFilter(type) {
+      const c = document.getElementById('filterCountry').value;
+      const ci = document.getElementById('filterCity').value;
+      let url = '/agencies';
+      if (c) url += '/' + c;
+      if (ci) url += '/' + ci;
+      const p = new URLSearchParams(window.location.search);
+      if (type) p.set('type', type); else p.delete('type');
+      const qs = p.toString();
+      window.location.href = url + (qs ? '?' + qs : '');
+    }
   </script>
 </body>
 </html>
