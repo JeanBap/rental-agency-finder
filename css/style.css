@@ -6,8 +6,8 @@
   --accent: #f59e0b;
   --accent-dark: #d97706;
   --text: #1f2937;
-  --text-light: #6b7280;
-  --text-lighter: #9ca3af;
+  --text-light: #4b5563;
+  --text-lighter: #6b7280;
   --bg: #ffffff;
   --bg-alt: #f8fafc;
   --bg-dark: #0f172a;
@@ -189,9 +189,9 @@ input, select, textarea { font-family: var(--font); font-size: 0.95rem; }
 /* === AGENCY LISTING PAGE === */
 .page-header { background: linear-gradient(135deg, #0f172a, #1e3a5f); color: #fff; padding: 48px 0 40px; }
 .page-header h1 { font-family: var(--font-display); font-size: 2.4rem; margin-bottom: 8px; }
-.page-header p { opacity: 0.8; font-size: 1.05rem; }
-.breadcrumb { font-size: 0.85rem; margin-bottom: 16px; opacity: 0.7; }
-.breadcrumb a { color: rgba(255,255,255,0.7); }
+.page-header p { opacity: 0.9; font-size: 1.05rem; }
+.breadcrumb { font-size: 0.85rem; margin-bottom: 16px; opacity: 0.85; }
+.breadcrumb a { color: rgba(255,255,255,0.85); }
 .breadcrumb a:hover { color: #fff; }
 
 .agency-list { display: grid; gap: 20px; padding: 40px 0; }
