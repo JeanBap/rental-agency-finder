@@ -88,21 +88,22 @@
     </script>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="/" class="nav-logo">Rental Agency Finder</a>
-            <ul class="nav-menu">
-                <li><a href="/agencies/portugal/lisbon/">Lisbon Agencies</a></li>
-                <li><a href="/blog/">Blog</a></li>
-                <li><a href="/guides/">Guides</a></li>
-                <li><a href="/contact/">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <nav class="nav" id="nav" aria-label="Main navigation">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#1a56db"/><path d="M7 20V10l7-4 7 4v10l-7 4-7-4z" stroke="#fff" stroke-width="1.5" fill="none"/><circle cx="14" cy="14" r="3" fill="#fff"/></svg><span>RentalAgencyFinder</span></a>
+      <div class="nav-links" id="navLinks"><a href="/">Home</a><a href="/agencies">Browse Agencies</a><a href="/blog">Blog</a><a href="/tools">Tools</a><a href="/for-agencies" class="nav-cta">For Agencies</a></div>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
 
-    <!-- Main Content -->
-    <main>
+  <section class="page-header">
+    <div class="container">
+      <div class="breadcrumb"><a href="/">Home</a> / <a href="/blog">Blog</a> / <span>Best Rental Agencies in Lisbon 2026</span></div>
+      <h1>Best Rental Agencies in Lisbon 2026: The Complete Expat's Guide</h1>
+    </div>
+  </section>
+  <main id="main-content">
         <section class="container blog-section">
             <article class="blog-content">
                 <header class="article-header">
@@ -569,5 +570,6 @@
             <p>&copy; 2026 Rental Agency Finder. All rights reserved.</p>
         </div>
     </footer>
+  <script>document.getElementById('navToggle')?.addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));</script>
 </body>
 </html>

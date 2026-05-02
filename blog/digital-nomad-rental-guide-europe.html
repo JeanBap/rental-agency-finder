@@ -49,20 +49,25 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <nav class="nav">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <nav class="nav" id="nav" aria-label="Main navigation">
     <div class="container nav-inner">
-      <a href="/" class="nav-brand"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="#4361EE"/><path d="M8 12h16M8 16h12M8 20h14" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg> <span>RentalAgencyFinder</span></a>
-      <div class="nav-links"><a href="/">Home</a><a href="/agencies">Browse Agencies</a><a href="/blog">Blog</a><a href="/for-agencies" class="btn btn-primary btn-sm">For Agencies</a></div>
+      <a href="/" class="nav-logo"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#1a56db"/><path d="M7 20V10l7-4 7 4v10l-7 4-7-4z" stroke="#fff" stroke-width="1.5" fill="none"/><circle cx="14" cy="14" r="3" fill="#fff"/></svg><span>RentalAgencyFinder</span></a>
+      <div class="nav-links" id="navLinks"><a href="/">Home</a><a href="/agencies">Browse Agencies</a><a href="/blog">Blog</a><a href="/tools">Tools</a><a href="/for-agencies" class="nav-cta">For Agencies</a></div>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </nav>
 
-  <main>
-    <article class="container section blog-article" style="max-width:800px;margin:0 auto;">
+  <section class="page-header">
+    <div class="container">
       <div class="breadcrumb"><a href="/">Home</a> / <a href="/blog">Blog</a> / <span>Digital Nomad Rental Guide</span></div>
       <h1>Digital Nomad Rental Guide: Finding Mid-Term Housing in Europe 2026</h1>
       <p class="blog-meta">Published May 1, 2026 | 9 min read</p>
-
-      <p>The rise of remote work has transformed how people live and travel across Europe. Digital nomads, remote employees, and location-independent professionals now make up a significant segment of the European rental market. But finding quality housing for stays of one to six months remains surprisingly difficult: too long for Airbnb (where monthly prices often exceed local rents), too short for traditional year-long leases.</p>
+    </div>
+  </section>
+  <main id="main-content">
+    <article class="container section blog-article" style="max-width:800px;margin:0 auto;">
+<p>The rise of remote work has transformed how people live and travel across Europe. Digital nomads, remote employees, and location-independent professionals now make up a significant segment of the European rental market. But finding quality housing for stays of one to six months remains surprisingly difficult: too long for Airbnb (where monthly prices often exceed local rents), too short for traditional year-long leases.</p>
 
       <p>This is where mid-term rental agencies fill the gap. This guide covers the best European cities for digital nomads in 2026, the <a href="/blog/rental-market-outlook-2026-europe">broader rental market outlook</a>, what to look for in a rental agency, typical costs, and the practical details that make or break a nomad-friendly stay.</p>
 
@@ -131,5 +136,6 @@
     </div>
     <div class="container footer-bottom"><p>&copy; 2026 Rental Agency Finder. All rights reserved. <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p></div>
   </footer>
+  <script>document.getElementById('navToggle')?.addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));</script>
 </body>
 </html>

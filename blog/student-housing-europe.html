@@ -49,20 +49,25 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <nav class="nav">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <nav class="nav" id="nav" aria-label="Main navigation">
     <div class="container nav-inner">
-      <a href="/" class="nav-brand"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" rx="8" fill="#4361EE"/><path d="M8 12h16M8 16h12M8 20h14" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg> <span>RentalAgencyFinder</span></a>
-      <div class="nav-links"><a href="/">Home</a><a href="/agencies">Browse Agencies</a><a href="/blog">Blog</a><a href="/for-agencies" class="btn btn-primary btn-sm">For Agencies</a></div>
+      <a href="/" class="nav-logo"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#1a56db"/><path d="M7 20V10l7-4 7 4v10l-7 4-7-4z" stroke="#fff" stroke-width="1.5" fill="none"/><circle cx="14" cy="14" r="3" fill="#fff"/></svg><span>RentalAgencyFinder</span></a>
+      <div class="nav-links" id="navLinks"><a href="/">Home</a><a href="/agencies">Browse Agencies</a><a href="/blog">Blog</a><a href="/tools">Tools</a><a href="/for-agencies" class="nav-cta">For Agencies</a></div>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </nav>
 
-  <main>
-    <article class="container section blog-article" style="max-width:800px;margin:0 auto;">
+  <section class="page-header">
+    <div class="container">
       <div class="breadcrumb"><a href="/">Home</a> / <a href="/blog">Blog</a> / <span>Student Housing in Europe</span></div>
       <h1>Student Housing in Europe: Complete Rental Guide for 2026</h1>
       <p class="blog-meta">Published May 1, 2026 | 8 min read</p>
-
-      <p>Finding affordable, well-located student accommodation in Europe can feel overwhelming, especially when navigating unfamiliar rental markets in a foreign language. Whether you are heading to Berlin for engineering, Barcelona for a semester abroad, or Amsterdam on an Erasmus exchange, the right rental agency can make the difference between a smooth move-in and weeks of frustration.</p>
+    </div>
+  </section>
+  <main id="main-content">
+    <article class="container section blog-article" style="max-width:800px;margin:0 auto;">
+<p>Finding affordable, well-located student accommodation in Europe can feel overwhelming, especially when navigating unfamiliar rental markets in a foreign language. Whether you are heading to Berlin for engineering, Barcelona for a semester abroad, or Amsterdam on an Erasmus exchange, the right rental agency can make the difference between a smooth move-in and weeks of frustration.</p>
 
       <p>This guide covers what every student needs to know: typical costs, the documents agencies ask for, common scams to avoid, and which cities offer the best value for student renters in 2026.</p>
 
@@ -133,5 +138,6 @@
     </div>
     <div class="container footer-bottom"><p>&copy; 2026 Rental Agency Finder. All rights reserved. <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p></div>
   </footer>
+  <script>document.getElementById('navToggle')?.addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));</script>
 </body>
 </html>

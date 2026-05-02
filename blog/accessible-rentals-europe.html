@@ -30,23 +30,25 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <nav class="nav" id="nav">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <nav class="nav" id="nav" aria-label="Main navigation">
     <div class="container nav-inner">
-      <a href="/" class="nav-logo">
-        <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#1a56db"/><path d="M7 20V10l7-4 7 4v10l-7 4-7-4z" stroke="#fff" stroke-width="1.5" fill="none"/><circle cx="14" cy="14" r="3" fill="#fff"/></svg>
-        <span>RentalAgencyFinder</span>
-      </a>
-      <div class="nav-links" id="navLinks"><a href="/">Home</a><a href="/agencies">Browse Agencies</a><a href="/blog">Blog</a><a href="/for-agencies" class="nav-cta">For Agencies</a></div>
+      <a href="/" class="nav-logo"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#1a56db"/><path d="M7 20V10l7-4 7 4v10l-7 4-7-4z" stroke="#fff" stroke-width="1.5" fill="none"/><circle cx="14" cy="14" r="3" fill="#fff"/></svg><span>RentalAgencyFinder</span></a>
+      <div class="nav-links" id="navLinks"><a href="/">Home</a><a href="/agencies">Browse Agencies</a><a href="/blog">Blog</a><a href="/tools">Tools</a><a href="/for-agencies" class="nav-cta">For Agencies</a></div>
       <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </nav>
+  <section class="page-header">
+    <div class="container">
+      <div class="breadcrumb"><a href="/">Home</a> / <a href="/blog">Blog</a> / <span>Accessible Rentals in Europe</span></div>
+      <h1>Accessible Rentals in Europe: Finding Disability-Friendly Apartments</h1>
+      <p class="blog-meta">Published 1 May 2026 &middot; 8 min read</p>
+    </div>
+  </section>
+
 
   <article class="blog-post section">
     <div class="container" style="max-width:780px;">
-      <div class="breadcrumb" style="margin-bottom:24px;"><a href="/">Home</a> / <a href="/blog">Blog</a> / <span>Accessible Rentals in Europe</span></div>
-      <h1 style="font-family:var(--font-display);font-size:2.2rem;margin-bottom:12px;">Accessible Rentals in Europe: Finding Disability-Friendly Apartments</h1>
-      <p style="color:var(--text-light);margin-bottom:32px;">Published 1 May 2026 &middot; 8 min read</p>
-
       <p>Finding accessible housing in Europe presents unique challenges. Building stock varies enormously across the continent, from centuries-old walk-up apartments with narrow staircases to modern developments built to current accessibility codes. This guide covers what to look for in an accessible rental, how accessibility standards differ across European countries, and how to work with agencies that understand the specific requirements of tenants with disabilities or reduced mobility.</p>
 
       <h2>The Core Challenge: Old Buildings, New Needs</h2>
@@ -92,5 +94,6 @@
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="/js/app.js"></script>
+  <script>document.getElementById('navToggle')?.addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));</script>
 </body>
 </html>

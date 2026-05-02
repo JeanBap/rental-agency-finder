@@ -30,23 +30,25 @@
   <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-  <nav class="nav" id="nav">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <nav class="nav" id="nav" aria-label="Main navigation">
     <div class="container nav-inner">
-      <a href="/" class="nav-logo">
-        <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#1a56db"/><path d="M7 20V10l7-4 7 4v10l-7 4-7-4z" stroke="#fff" stroke-width="1.5" fill="none"/><circle cx="14" cy="14" r="3" fill="#fff"/></svg>
-        <span>RentalAgencyFinder</span>
-      </a>
-      <div class="nav-links" id="navLinks"><a href="/">Home</a><a href="/agencies">Browse Agencies</a><a href="/blog">Blog</a><a href="/for-agencies" class="nav-cta">For Agencies</a></div>
+      <a href="/" class="nav-logo"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#1a56db"/><path d="M7 20V10l7-4 7 4v10l-7 4-7-4z" stroke="#fff" stroke-width="1.5" fill="none"/><circle cx="14" cy="14" r="3" fill="#fff"/></svg><span>RentalAgencyFinder</span></a>
+      <div class="nav-links" id="navLinks"><a href="/">Home</a><a href="/agencies">Browse Agencies</a><a href="/blog">Blog</a><a href="/tools">Tools</a><a href="/for-agencies" class="nav-cta">For Agencies</a></div>
       <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </nav>
+  <section class="page-header">
+    <div class="container">
+      <div class="breadcrumb"><a href="/">Home</a> / <a href="/blog">Blog</a> / <span>Corporate Housing in Europe</span></div>
+      <h1>Corporate Housing in Europe: Business Rentals for Relocations and Assignments</h1>
+      <p class="blog-meta">Published 1 May 2026 &middot; 7 min read</p>
+    </div>
+  </section>
+
 
   <article class="blog-post section">
     <div class="container" style="max-width:780px;">
-      <div class="breadcrumb" style="margin-bottom:24px;"><a href="/">Home</a> / <a href="/blog">Blog</a> / <span>Corporate Housing in Europe</span></div>
-      <h1 style="font-family:var(--font-display);font-size:2.2rem;margin-bottom:12px;">Corporate Housing in Europe: Business Rentals for Relocations and Assignments</h1>
-      <p style="color:var(--text-light);margin-bottom:32px;">Published 1 May 2026 &middot; 7 min read</p>
-
       <p>Corporate housing serves a specific niche in the European rental market: fully furnished, serviced apartments designed for business travellers, employees on temporary assignments, and companies relocating staff across borders. The market sits between hotels (too expensive for stays longer than a week) and standard long-term rentals (too inflexible for business timelines). This guide explains how corporate housing works in Europe, what it costs, and how to find the right provider through local agencies.</p>
 
       <h2>What Corporate Housing Includes</h2>
@@ -93,5 +95,6 @@
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="/js/app.js"></script>
+  <script>document.getElementById('navToggle')?.addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));</script>
 </body>
 </html>

@@ -22,351 +22,26 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            line-height: 1.7;
-            color: #333;
-            background: #fff;
-        }
-        .site-header {
-            background: #fff;
-            border-bottom: 1px solid #e0e0e0;
-            padding: 1.5rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .header-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .logo h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            color: #0066cc;
-        }
-        .logo a {
-            text-decoration: none;
-            color: #0066cc;
-        }
-        .main-nav ul {
-            list-style: none;
-            display: flex;
-            gap: 2rem;
-        }
-        .main-nav a {
-            color: #333;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-        .main-nav a:hover {
-            color: #0066cc;
-        }
-        main {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-        .breadcrumb {
-            font-size: 0.9rem;
-            margin-bottom: 2rem;
-            color: #666;
-        }
-        .breadcrumb a {
-            color: #0066cc;
-            text-decoration: none;
-        }
-        .breadcrumb a:hover {
-            text-decoration: underline;
-        }
-        article {
-            background: #fff;
-        }
-        .blog-header {
-            margin-bottom: 3rem;
-            border-bottom: 3px solid #0066cc;
-            padding-bottom: 2rem;
-        }
-        .blog-header h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            margin: 1rem 0;
-            color: #0066cc;
-            line-height: 1.2;
-        }
-        .blog-meta {
-            color: #666;
-            font-size: 0.95rem;
-            margin-top: 1rem;
-        }
-        .blog-toc {
-            background: #f8f9fa;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 2rem 0;
-        }
-        .blog-toc h2 {
-            margin-top: 0;
-            font-size: 1.3rem;
-            color: #0066cc;
-            margin-bottom: 1rem;
-        }
-        .blog-toc ol {
-            columns: 2;
-            column-gap: 2rem;
-            padding-left: 2rem;
-        }
-        .blog-toc li {
-            margin-bottom: 0.5rem;
-        }
-        .blog-toc a {
-            color: #0066cc;
-            text-decoration: none;
-        }
-        .blog-toc a:hover {
-            text-decoration: underline;
-        }
-        .blog-content {
-            margin-top: 2rem;
-        }
-        .blog-content h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            color: #0066cc;
-            margin-top: 2.5rem;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #e0e0e0;
-        }
-        .blog-content h3 {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #1a1a1a;
-            margin-top: 1.8rem;
-            margin-bottom: 0.8rem;
-        }
-        .blog-content h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #333;
-            margin-top: 1.3rem;
-            margin-bottom: 0.6rem;
-        }
-        .blog-content p {
-            margin-bottom: 1rem;
-            font-size: 1rem;
-        }
-        .blog-content ul, .blog-content ol {
-            margin: 1rem 0;
-            padding-left: 2rem;
-        }
-        .blog-content li {
-            margin-bottom: 0.5rem;
-        }
-        .highlight-box {
-            background: #f0f7ff;
-            border-left: 4px solid #0066cc;
-            padding: 1.2rem;
-            margin: 1.5rem 0;
-            border-radius: 4px;
-        }
-        .highlight-box strong {
-            color: #0066cc;
-        }
-        .warning-box {
-            background: #fff3cd;
-            border-left: 4px solid #ff9800;
-            padding: 1.2rem;
-            margin: 1.5rem 0;
-            border-radius: 4px;
-        }
-        .success-box {
-            background: #d4edda;
-            border-left: 4px solid #28a745;
-            padding: 1.2rem;
-            margin: 1.5rem 0;
-            border-radius: 4px;
-        }
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1.5rem 0;
-            font-size: 0.95rem;
-        }
-        .data-table thead {
-            background: #0066cc;
-            color: white;
-        }
-        .data-table th, .data-table td {
-            padding: 0.8rem;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-        .data-table tbody tr:nth-child(odd) {
-            background: #f8f9fa;
-        }
-        .data-table tbody tr:hover {
-            background: #f0f7ff;
-        }
-        .cta-box {
-            background: #0066cc;
-            color: white;
-            padding: 2rem;
-            border-radius: 8px;
-            text-align: center;
-            margin: 2rem 0;
-        }
-        .cta-box h3 {
-            color: white;
-            margin-top: 0;
-        }
-        .cta-button {
-            display: inline-block;
-            background: white;
-            color: #0066cc;
-            padding: 0.8rem 2rem;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: 1rem;
-            transition: transform 0.2s;
-        }
-        .cta-button:hover {
-            transform: translateY(-2px);
-        }
-        .faq-item {
-            margin: 1.5rem 0;
-            padding: 1rem;
-            border: 1px solid #e0e0e0;
-            border-radius: 4px;
-        }
-        .faq-item h4 {
-            margin-top: 0;
-            color: #0066cc;
-            cursor: pointer;
-        }
-        .faq-item p {
-            margin: 0.5rem 0;
-        }
-        .agency-card {
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-            background: #f9f9f9;
-        }
-        .agency-card h3 {
-            margin-top: 0;
-            color: #0066cc;
-        }
-        .internal-link {
-            color: #0066cc;
-            text-decoration: none;
-        }
-        .internal-link:hover {
-            text-decoration: underline;
-        }
-        .blog-footer {
-            margin-top: 3rem;
-            padding: 2rem;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border-top: 2px solid #e0e0e0;
-        }
-        .footer-columns {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-        .footer-column h4 {
-            color: #0066cc;
-            margin-bottom: 1rem;
-        }
-        .footer-column ul {
-            list-style: none;
-            padding: 0;
-        }
-        .footer-column a {
-            color: #333;
-            text-decoration: none;
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-        .footer-column a:hover {
-            color: #0066cc;
-        }
-    </style>
 </head>
 <body>
-<header class="site-header">
-    <div class="header-container">
-        <div class="logo">
-            <h1><a href="/">Rental Agency Finder</a></h1>
-        </div>
-        <nav class="main-nav">
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/agencies">Browse Agencies</a></li>
-                <li><a href="/blog">Blog</a></li>
-                <li><a href="/contact">For Agencies</a></li>
-            </ul>
-        </nav>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <nav class="nav" id="nav" aria-label="Main navigation">
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#1a56db"/><path d="M7 20V10l7-4 7 4v10l-7 4-7-4z" stroke="#fff" stroke-width="1.5" fill="none"/><circle cx="14" cy="14" r="3" fill="#fff"/></svg><span>RentalAgencyFinder</span></a>
+      <div class="nav-links" id="navLinks"><a href="/">Home</a><a href="/agencies">Browse Agencies</a><a href="/blog">Blog</a><a href="/tools">Tools</a><a href="/for-agencies" class="nav-cta">For Agencies</a></div>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
-</header>
-
-<main>
-    <div class="breadcrumb">
-        <a href="/">Home</a> > <a href="/blog">Blog</a> > Best Rental Agencies in Barcelona
+  </nav>
+  <section class="page-header">
+    <div class="container">
+      <div class="breadcrumb"><a href="/">Home</a> / <a href="/blog">Blog</a> / <span>Best Rental Agencies in Barcelona</span></div>
+      <h1>Best Rental Agencies in Barcelona 2026: Complete Expat Guide</h1>
+      <p class="blog-meta">April 30, 2026 | 14 min read</p>
     </div>
-
-    <article itemscope itemtype="https://schema.org/Article">
-        <div class="blog-header">
-            <h1 itemprop="headline">The Best Rental Agencies in Barcelona 2026: Your Complete Guide to Finding an Apartment</h1>
-            <div class="blog-meta">
-                <span itemprop="author" itemscope itemtype="https://schema.org/Organization">
-                    <span itemprop="name">Rental Agency Finder</span>
-                </span>
-                <span> | </span>
-                <time itemprop="datePublished" datetime="2026-04-30">April 30, 2026</time>
-                <meta itemprop="dateModified" content="2026-04-30">
-                <meta itemprop="image" content="https://rentalagencyfinder.com/images/og-barcelona-agencies.jpg">
-                <span> | 4,500+ words | Complete Neighbourhood Guide</span>
-            </div>
-        </div>
-
-        <div class="blog-toc">
-            <h2>Table of Contents</h2>
-            <ol>
-                <li><a href="#intro">Introduction: Barcelona's Rental Market in 2026</a></li>
-                <li><a href="#how-agencies-work">How Rental Agencies Work in Spain</a></li>
-                <li><a href="#neighbourhood-guide">Barcelona's Best Neighbourhoods for Renters</a></li>
-                <li><a href="#top-agencies">Top Rental Agencies in Barcelona</a></li>
-                <li><a href="#prices-by-area">Average Rental Prices by Neighbourhood</a></li>
-                <li><a href="#expat-digital-nomad">Tips for Expats and Digital Nomads</a></li>
-                <li><a href="#red-flags">Red Flags and Scams to Avoid</a></li>
-                <li><a href="#tenant-rights">Your Rights as a Tenant in Catalonia</a></li>
-                <li><a href="#faq">Frequently Asked Questions</a></li>
-                <li><a href="#conclusion">Conclusion: Your Barcelona Home Awaits</a></li>
-            </ol>
-        </div>
-
-        <div class="blog-content">
-            <section id="intro">
-                <h2>Introduction: Barcelona's Rental Market in 2026</h2>
-                <p>Barcelona remains one of Europe's most desirable cities for expats, digital nomads, and international professionals. Whether you're relocating for work, seeking Mediterranean lifestyle benefits, or exploring a new chapter abroad, finding the right apartment through a reputable rental agency can make all the difference between a smooth transition and months of frustration.</p>
+  </section>
+  <main id="main-content">
+    <article class="container section blog-article" style="max-width:800px;margin:0 auto;">
+      <p>Barcelona remains one of Europe's most desirable cities for expats, digital nomads, and international professionals. Whether you're relocating for work, seeking Mediterranean lifestyle benefits, or exploring a new chapter abroad, finding the right apartment through a reputable rental agency can make all the difference between a smooth transition and months of frustration.</p>
                 
                 <p>The Barcelona rental market has matured significantly since the pandemic. Competition among property owners is fierce, tenant protections are stronger than ever, and the quality of rental agencies has improved dramatically. However, the market remains complex, with price premiums for non-Spanish speakers and common scams targeting international renters.</p>
                 
@@ -827,10 +502,17 @@
             </div>
         </div>
         <p style="margin-top: 2rem; border-top: 1px solid #e0e0e0; padding-top: 1rem; text-align: center; color: #666; font-size: 0.9rem;">Copyright 2026 Rental Agency Finder. All rights reserved.</p>
+    </article>
+  </main>
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="footer-col"><h4>Rental Agency Finder</h4><p>The first European-wide directory for finding and reviewing rental agencies.</p></div>
+      <div class="footer-col"><h4>Browse</h4><a href="/agencies">All Agencies</a><a href="/agencies?type=short_term">Short-Term</a><a href="/agencies?type=long_term">Long-Term</a></div>
+      <div class="footer-col"><h4>Resources</h4><a href="/blog">Blog</a><a href="/about">About</a><a href="/for-agencies">For Agencies</a></div>
+      <div class="footer-col"><h4>Popular</h4><a href="/agencies/spain">Spain</a><a href="/agencies/italy">Italy</a><a href="/agencies/greece">Greece</a></div>
     </div>
-</main>
-
-<script src="https://cdn.jsdelivr.net/npm/supabase@2.38.0/dist/module.min.js"></script>
-<script src="/js/app.js"></script>
+    <div class="container footer-bottom"><p>&copy; 2026 Rental Agency Finder. All rights reserved. <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p></div>
+  </footer>
+  <script>document.getElementById('navToggle')?.addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));</script>
 </body>
 </html>

@@ -57,29 +57,26 @@
   </script>
 </head>
 <body>
-  <nav class="nav" id="nav">
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+  <nav class="nav" id="nav" aria-label="Main navigation">
     <div class="container nav-inner">
-      <a href="/" class="nav-logo">
-        <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#1a56db"/><path d="M7 20V10l7-4 7 4v10l-7 4-7-4z" stroke="#fff" stroke-width="1.5" fill="none"/><circle cx="14" cy="14" r="3" fill="#fff"/></svg>
-        <span>RentalAgencyFinder</span>
-      </a>
-      <div class="nav-links" id="navLinks">
-        <a href="/">Home</a>
-        <a href="/agencies">Browse Agencies</a>
-        <a href="/blog">Blog</a>
-        <a href="/for-agencies" class="nav-cta">For Agencies</a>
-      </div>
-      <button class="nav-toggle" id="navToggle" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
+      <a href="/" class="nav-logo"><svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="6" fill="#1a56db"/><path d="M7 20V10l7-4 7 4v10l-7 4-7-4z" stroke="#fff" stroke-width="1.5" fill="none"/><circle cx="14" cy="14" r="3" fill="#fff"/></svg><span>RentalAgencyFinder</span></a>
+      <div class="nav-links" id="navLinks"><a href="/">Home</a><a href="/agencies">Browse Agencies</a><a href="/blog">Blog</a><a href="/tools">Tools</a><a href="/for-agencies" class="nav-cta">For Agencies</a></div>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </nav>
+  <section class="page-header">
+    <div class="container">
+      <div class="breadcrumb"><a href="/">Home</a> / <a href="/blog">Blog</a> / <span>Best Rental Agencies in Helsinki</span></div>
+      <h1>Best Rental Agencies in Helsinki 2026: Complete Expat Guide</h1>
+      <p class="blog-meta">Published 1 May 2026 | 10 min read</p>
+    </div>
+  </section>
 
   <section class="section">
     <div class="container" style="max-width: 800px;">
       <article>
-        <h1>Best Rental Agencies in Helsinki: A Complete Guide for 2026</h1>
-        <h2>Finding a Rental Agency in Helsinki</h2>
+<h2>Finding a Rental Agency in Helsinki</h2>
         <p>Helsinki is a compact, well-designed capital where nature meets Nordic urbanism. The city's rental market is structured and transparent, backed by strong Finnish tenant protections. Helsinki attracts professionals in gaming (Supercell, Rovio), tech, and the growing startup ecosystem centred around the Slush conference community.</p>
 
         <h3>Understanding Helsinki's Rental Market</h3>
@@ -143,5 +140,6 @@
       <p>&copy; 2026 Rental Agency Finder. All rights reserved. <a href="/privacy">Privacy Policy</a> | <a href="/terms">Terms of Service</a></p>
     </div>
   </footer>
+  <script>document.getElementById('navToggle')?.addEventListener('click',()=>document.getElementById('navLinks').classList.toggle('open'));</script>
 </body>
 </html>
